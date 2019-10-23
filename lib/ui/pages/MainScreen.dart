@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
             var flag = true;
             if (currentNav != MainScreenNavigation.HOME){
               setState(() {
-                currentNav= MainScreenNavigation.HOME;
+                currentNav = MainScreenNavigation.HOME;
                 flag = false;
               });
             }
@@ -55,8 +55,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _createBottomBar () => BottomNavigationBar(
+    selectedItemColor: Theme.of(context).accentColor,
+    //unselectedItemColor: Theme.of(context).,
     items: <BottomNavigationBarItem>[
       BottomNavigationBarItem(
+
         title: Text('Animes'),
         icon: Icon(
           Icons.live_tv,

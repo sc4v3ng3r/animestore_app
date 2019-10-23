@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         title: 'AnimeApp',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+         primarySwatch: Colors.blue,
         ),
         home: FutureBuilder<bool>(
           future: bloc.init(),

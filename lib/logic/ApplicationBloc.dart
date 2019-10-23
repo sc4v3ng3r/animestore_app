@@ -3,22 +3,26 @@ import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 
 
 enum SearchStatus {SEARCHING, DONE, NONE}
+
 class ApplicationBloc {
   static const DEFAULT_PAGES_LOADING = 4;
   static const TIMEOUT = 10000;
   final AniTubeApi api = AniTubeApi();
 
-  BehaviorSubject< List<AnimeItem> > _animesSubject = BehaviorSubject();
+  final BehaviorSubject< List<AnimeItem> > _animesSubject = BehaviorSubject();
   Observable< List<AnimeItem> > get animesObservable => _animesSubject.stream;
 
-  BehaviorSubject<bool> _isLoadingSubject = BehaviorSubject();
+  final BehaviorSubject<bool> _isLoadingSubject = BehaviorSubject();
   Observable<bool> get isLoading => _isLoadingSubject.stream;
 
-  BehaviorSubject<SearchStatus> _searchSubject = BehaviorSubject.seeded(SearchStatus.NONE);
+  final BehaviorSubject<SearchStatus> _searchSubject = BehaviorSubject.seeded(SearchStatus.NONE);
   Observable<SearchStatus> get searchStatus => _searchSubject.stream;
 
-  BehaviorSubject<bool> _isSearchingMoreSubject = BehaviorSubject();
+  final BehaviorSubject<bool> _isSearchingMoreSubject = BehaviorSubject();
   Observable<bool> get isSearchingMore => _isSearchingMoreSubject.stream;
+
+  final BehaviorSubject<String> _searchTextSubject = BehaviorSubject();
+  Observable<String> get searchStream => _searchTextSubject.stream;
 
   int listCurrentPage = 1;
   int maxAnimeListPageNumber = 1;
@@ -35,7 +39,6 @@ class ApplicationBloc {
   int get totalItems => animeDataList.length;
 
   void _addToSink( List<AnimeItem> data) => _animesSubject.sink.add( data );
-  //void _addError(Object error) => _animesSubject.sink.addError(error);
 
   void _addToSearchSink(SearchStatus status) => _searchSubject.sink.add(status);
   void _setIsSearchingMore(bool flag) {
@@ -51,6 +54,7 @@ class ApplicationBloc {
     }
     catch (ex){
       flag= false;
+
     }
 
     return flag;
@@ -101,6 +105,7 @@ class ApplicationBloc {
     _lastSearch = search;
     searchDataList.clear();
     searchPageCounter = 1;
+    _searchTextSubject.sink.add(_lastSearch);
 
     try {
       _addToSearchSink(SearchStatus.SEARCHING);
@@ -161,9 +166,11 @@ class ApplicationBloc {
     _lastSearch = '';
     searchPageCounter = 1;
     _addToSearchSink(SearchStatus.NONE);
+    _searchTextSubject.sink.add(_lastSearch);
   }
 
   void dispose(){
+    _searchTextSubject?.close();
     _isLoadingSubject.drain().then( (_) => _isLoadingSubject.close() );
     _animesSubject.drain().then((_) => _animesSubject.close() );
     _searchSubject.drain().then((_)  => _searchSubject.close());

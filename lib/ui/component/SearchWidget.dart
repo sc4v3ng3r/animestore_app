@@ -1,6 +1,5 @@
 import 'package:anime_app/logic/ApplicationBloc.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
-import 'package:anime_app/ui/component/SearchTextField.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ class SearchWidget extends StatefulWidget {
 class _SearchWidgetState extends State<SearchWidget> {
   ApplicationBloc bloc;
   final ScrollController _controller = ScrollController(initialScrollOffset: .0);
+  final TextEditingController _searchController = TextEditingController(text: '');
 
   @override
   void initState() {
@@ -30,10 +30,11 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   void dispose() {
-    bloc.clearSearchResults();
+     bloc.clearSearchResults();
     _controller.removeListener(  _pagination );
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -41,16 +42,41 @@ class _SearchWidgetState extends State<SearchWidget> {
     final appBar = SliverAppBar(
       expandedHeight: kToolbarHeight,
       title: Center(
-        child: SearchTextField(
-          width: size.width * .8,
-          height: kToolbarHeight - 16,
-          onConfirm: (str){
-            if (str.isNotEmpty)
-              bloc.search(str);
-          },
-          onClear: (){
-            bloc.clearSearchResults();
-          },
+        child: StreamBuilder<String>(
+          stream: bloc.searchStream,
+          initialData: _searchController.text,
+          builder: (_, snapshot) {
+
+            _searchController.text = snapshot.data;
+            return Container(
+              width: size.width,
+              height: kToolbarHeight - 16,
+              child: TextField(
+                autofocus: false,
+                controller: _searchController,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) {
+                  if (_searchController.text.isNotEmpty)
+                    bloc.search(_searchController.text);
+                },
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        bloc.clearSearchResults();
+                      },
+                    ),
+                    hintText: 'Anime, Estudio, Genero...',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16.0)
+                ),
+              ),
+            );
+          }
         ),
       ),
       snap: false,

@@ -11,25 +11,27 @@ class AnimeDetailsScreen extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String heroTag;
+  final String animeId;
 
   static final _defaultSectionStyle = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w700,
   );
 
-  const AnimeDetailsScreen({Key key, this.title, this.heroTag, this.imageUrl})
+  const AnimeDetailsScreen(this.animeId, {Key key, this.title, this.heroTag, this.imageUrl})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     var applicationStore = Provider.of<ApplicationStore>(context);
-    final future = applicationStore.getAnimeDetails(heroTag);
+    final future = applicationStore.getAnimeDetails(animeId);
 
     final appBar = SliverAppBar(
       floating: false,
       pinned: false,
       snap: false,
-      expandedHeight: 350,
+      expandedHeight: size.width * .9,
       backgroundColor: IMAGE_BACKGROUND_COLOR,
       flexibleSpace: FlexibleSpaceBar(
         background: Hero(

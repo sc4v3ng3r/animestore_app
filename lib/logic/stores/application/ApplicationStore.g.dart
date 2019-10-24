@@ -26,6 +26,60 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
     }, _$mainAnimeListAtom, name: '${_$mainAnimeListAtom.name}_set');
   }
 
+  final _$mostRecentAnimeListAtom =
+      Atom(name: '_ApplicationStore.mostRecentAnimeList');
+
+  @override
+  ObservableList<AnimeItem> get mostRecentAnimeList {
+    _$mostRecentAnimeListAtom.context
+        .enforceReadPolicy(_$mostRecentAnimeListAtom);
+    _$mostRecentAnimeListAtom.reportObserved();
+    return super.mostRecentAnimeList;
+  }
+
+  @override
+  set mostRecentAnimeList(ObservableList<AnimeItem> value) {
+    _$mostRecentAnimeListAtom.context.conditionallyRunInAction(() {
+      super.mostRecentAnimeList = value;
+      _$mostRecentAnimeListAtom.reportChanged();
+    }, _$mostRecentAnimeListAtom,
+        name: '${_$mostRecentAnimeListAtom.name}_set');
+  }
+
+  final _$topAnimeListAtom = Atom(name: '_ApplicationStore.topAnimeList');
+
+  @override
+  ObservableList<AnimeItem> get topAnimeList {
+    _$topAnimeListAtom.context.enforceReadPolicy(_$topAnimeListAtom);
+    _$topAnimeListAtom.reportObserved();
+    return super.topAnimeList;
+  }
+
+  @override
+  set topAnimeList(ObservableList<AnimeItem> value) {
+    _$topAnimeListAtom.context.conditionallyRunInAction(() {
+      super.topAnimeList = value;
+      _$topAnimeListAtom.reportChanged();
+    }, _$topAnimeListAtom, name: '${_$topAnimeListAtom.name}_set');
+  }
+
+  final _$dayReleaseListAtom = Atom(name: '_ApplicationStore.dayReleaseList');
+
+  @override
+  ObservableList<AnimeItem> get dayReleaseList {
+    _$dayReleaseListAtom.context.enforceReadPolicy(_$dayReleaseListAtom);
+    _$dayReleaseListAtom.reportObserved();
+    return super.dayReleaseList;
+  }
+
+  @override
+  set dayReleaseList(ObservableList<AnimeItem> value) {
+    _$dayReleaseListAtom.context.conditionallyRunInAction(() {
+      super.dayReleaseList = value;
+      _$dayReleaseListAtom.reportChanged();
+    }, _$dayReleaseListAtom, name: '${_$dayReleaseListAtom.name}_set');
+  }
+
   final _$animeListLoadingStatusAtom =
       Atom(name: '_ApplicationStore.animeListLoadingStatus');
 
@@ -91,6 +145,36 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction();
     try {
       return super.setAppInitialization(status);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setMostRecentAnimeList(List<AnimeItem> data) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.setMostRecentAnimeList(data);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setDailyReleases(List<AnimeItem> data) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.setDailyReleases(data);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setTopAnimeList(List<AnimeItem> data) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.setTopAnimeList(data);
     } finally {
       _$_ApplicationStoreActionController.endAction(_$actionInfo);
     }

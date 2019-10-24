@@ -197,6 +197,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) =>
                         AnimeDetailsScreen(
+                          items[index].id,
                           title: items[index].title,
                           imageUrl: items[index].imageUrl,
                           heroTag: items[index].id,

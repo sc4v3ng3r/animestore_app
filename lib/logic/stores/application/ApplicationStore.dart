@@ -15,6 +15,15 @@ abstract class _ApplicationStore with Store {
   @observable
   ObservableList<AnimeItem> mainAnimeList = ObservableList();
 
+  @observable
+  ObservableList<AnimeItem> mostRecentAnimeList = ObservableList();
+
+  @observable
+  ObservableList<AnimeItem> topAnimeList = ObservableList();
+
+  @observable
+  ObservableList<AnimeItem> dayReleaseList = ObservableList();
+
   /// counter of main animes list pages.
   int mainAnimesPageCounter = 1;
   int maxMainAnimesPageNumber = 1;
@@ -34,9 +43,20 @@ abstract class _ApplicationStore with Store {
   @action
   setAppInitialization(AppInitStatus status) => appInitStatus = status;
 
+  @action
+  setMostRecentAnimeList(List<AnimeItem> data) => mostRecentAnimeList.addAll(data);
+  
+  @action
+  setDailyReleases( List<AnimeItem> data ) => dayReleaseList.addAll(data );
+
+  @action
+  setTopAnimeList ( List<AnimeItem> data) => topAnimeList.addAll( data );
+
   // init application method
   void initApp() async {
     try {
+      await getHomePageInfo();
+
       await loadAnimeList();
       setAppInitialization(AppInitStatus.INITIALIZED);
     }
@@ -81,4 +101,12 @@ abstract class _ApplicationStore with Store {
 
   Future<AnimeDetails> getAnimeDetails(String id, ) =>
       api.getAnimeDetails(id, timeout: TIMEOUT);
+
+  Future<void> getHomePageInfo() async{
+    var homePageData = await api.getHomePageData();
+    setDailyReleases( homePageData.dayReleases );
+    setMostRecentAnimeList( homePageData.mostRecentAnimes );
+    setTopAnimeList( homePageData.mostShowedAnimes);
+
+  }
 }

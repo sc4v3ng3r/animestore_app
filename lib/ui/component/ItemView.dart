@@ -10,6 +10,7 @@ class ItemView extends StatelessWidget {
   final OnTap onTap;
   final double width, height;
   final String heroTag;
+  final double borderRadius;
 
   const ItemView({
     @required this.width,
@@ -18,15 +19,14 @@ class ItemView extends StatelessWidget {
     this.imageUrl,
     this.onTap,
     this.heroTag,
+    this.borderRadius = 12.0,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    final double radius = 12.0;
-
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
+      borderRadius: BorderRadius.circular(this.borderRadius ?? .0),
       clipBehavior: Clip.antiAlias,
       child: Container(
         width: width,

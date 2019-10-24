@@ -87,6 +87,7 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AnimeDetailsScreen(
+                                  appStore.mainAnimeList[index].id,
                                   title: appStore.mainAnimeList[index].title,
                                   imageUrl: appStore.mainAnimeList[index].imageUrl,
                                   heroTag: appStore.mainAnimeList[index].id,

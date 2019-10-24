@@ -1,4 +1,4 @@
-import 'package:anime_app/logic/ApplicationBloc.dart';
+import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/InfoWidget.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
@@ -11,6 +11,7 @@ class AnimeDetailsScreen extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String heroTag;
+
   static final _defaultSectionStyle = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w700,
@@ -21,8 +22,8 @@ class AnimeDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var bloc = Provider.of<ApplicationBloc>(context);
-    final future = bloc.getAnimeDetails(heroTag);
+    var applicationStore = Provider.of<ApplicationStore>(context);
+    final future = applicationStore.getAnimeDetails(heroTag);
 
     final appBar = SliverAppBar(
       floating: false,

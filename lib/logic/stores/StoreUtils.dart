@@ -1,0 +1,3 @@
+enum LoadingStatus { NONE, LOADING, DONE, ERROR }
+
+enum AppInitStatus { INITIALIZING, INITIALIZED, ERROR}

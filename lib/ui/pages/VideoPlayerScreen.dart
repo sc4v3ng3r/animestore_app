@@ -1,9 +1,8 @@
-import 'dart:async';
-
-import 'package:anime_app/logic/ApplicationBloc.dart';
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
+import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -21,21 +20,75 @@ class VideoPlayerScreen extends StatefulWidget {
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   static const _DEFAULT_ASPECT_RATIO = 3/2;
 
+  ApplicationStore appStore;
+  VideoPlayerStore videoPlayerStore;
   VideoPlayerController _playerController;
   ChewieController _chewieController;
-  ApplicationBloc _bloc;
 
-  Future<void> _initializeVideoPlayerFuture;
-  EpisodeDetails _episodeDetails;
-  Stream<String> episodeSubscription;
+  @override
+  void initState() {
+    super.initState();
+    appStore = Provider.of<ApplicationStore>(context, listen: false);
+    videoPlayerStore = VideoPlayerStore(appStore);
+    videoPlayerStore.loadEpisodeDetails(widget.episodeId);
+  }
 
-  Future<void> _initEpisode( )  async {
-    try {
-     _episodeDetails = await _bloc.getEpisodeDetails( widget.episodeId, );
+  @override
+  Widget build(BuildContext context) {
 
-      _playerController = VideoPlayerController.network( _episodeDetails.streamingUrl );
+    return WillPopScope(
+      onWillPop: () async {
+        if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.LOADING)
+          videoPlayerStore.cancelEpisodeLoading();
+        return true;
+      },
 
-      _chewieController = ChewieController(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Observer(
+          builder: (context){
+            if(videoPlayerStore.episodeLoadingStatus == EpisodeLoading.LOADING)
+              return Center(child: CircularProgressIndicator(),);
+
+            if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.ERROR)
+              return Center(child: Text('Erro'),);
+
+            if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.CANCELED) {
+              print('episode loading cancelled');
+              return Container();
+            }
+
+            if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.DONE){
+              _playerController ??= _createPlayerController(videoPlayerStore.currentEpisode.streamingUrl);
+              _chewieController ??= _createChewieController();
+            }
+            return Chewie(controller: _chewieController,);
+
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    print('disposing video player');
+    _chewieController?.dispose();
+    _playerController?.dispose();
+    super.dispose();
+  }
+
+  void playNext(){
+
+  }
+
+  void playPrevious(){}
+
+  VideoPlayerController _createPlayerController(String streamUrl) =>
+      VideoPlayerController.network(streamUrl);
+
+  ChewieController _createChewieController() =>
+      ChewieController(
         videoPlayerController: _playerController,
         aspectRatio: _DEFAULT_ASPECT_RATIO,
         autoPlay: true,
@@ -47,63 +100,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         fullScreenByDefault: false,
         showControlsOnInitialize: true,
       );
-      return Future.value();
-    }
 
-    catch( ex ){
-
-    }
-
-    return Future.error('Error carregando episodio.');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _bloc = Provider.of<ApplicationBloc>(context, listen: false);
-     _initializeVideoPlayerFuture = _initEpisode();
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return WillPopScope(
-      onWillPop: () async {
-        //_playerController?.pause();
-        return true;
-      },
-
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: FutureBuilder<void>(
-          future: _initializeVideoPlayerFuture,
-
-          builder: (context, snapshot){
-            if (snapshot.connectionState == ConnectionState.done){
-
-              if (snapshot.hasError)
-                return Center(child: Text('Erro'),);
-
-              return Chewie(controller: _chewieController);
-            }
-            return Center(child: CircularProgressIndicator(),);
-
-          },
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
+  void _clearControllers(){
     _chewieController?.dispose();
     _playerController?.dispose();
-    print('disposing video player');
-    super.dispose();
+    _chewieController = null;
+    _playerController = null;
   }
-
-  void playNext(){}
-
-  void playPrevious(){}
 }

@@ -56,7 +56,6 @@ class ApplicationBloc {
       flag= false;
 
     }
-
     return flag;
   }
 

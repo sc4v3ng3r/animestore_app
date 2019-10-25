@@ -1,4 +1,3 @@
-import 'package:anime_app/logic/ApplicationBloc.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
 import 'package:anime_app/ui/component/SearchWidget.dart';
@@ -16,13 +15,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
   MainScreenNavigation currentNav = MainScreenNavigation.HOME;
-  ApplicationBloc bloc;
   ApplicationStore appStore;
   @override
   void initState() {
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
-    bloc = Provider.of<ApplicationBloc>(context, listen: false);
   }
 
   @override

@@ -27,7 +27,7 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   void dispose() {
-     //bloc.clearSearchResults();
+
     _controller.removeListener(  _pagination );
     super.dispose();
   }
@@ -181,7 +181,6 @@ class _SearchWidgetState extends State<SearchWidget> {
 
         delegate: SliverChildBuilderDelegate(
               (context, index) {
-            print('Creating $index');
             return ItemView(
               width: itemWidth,
               height: itemHeight,

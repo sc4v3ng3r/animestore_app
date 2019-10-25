@@ -74,7 +74,6 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                   childAspectRatio: (itemWidth / itemHeight)),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  print('Creating $index');
                   return Tooltip(
                     message:  appStore.mainAnimeList[index].title,
                     child: ItemView(

@@ -14,27 +14,8 @@ class MyApp extends StatelessWidget {
   final SearchStore searchStore = SearchStore(appStore);
 
   @override
-  Widget build(BuildContext context) {
-
-    Observer(
-        builder: (context){
-          var widget;
-          switch(appStore.appInitStatus){
-            case AppInitStatus.INITIALIZING:
-              widget = SplashScreen();
-              break;
-            case AppInitStatus.INITIALIZED:
-              widget = MainScreen();
-              break;
-            case AppInitStatus.ERROR:
-              widget = Container(color: Colors.red,);
-              break;
-          }
-          return widget;
-        }
-    );
-
-    return MultiProvider(
+  Widget build(BuildContext context) =>
+    MultiProvider(
         providers: [
           Provider<ApplicationStore>.value(value: appStore),
           Provider<SearchStore>.value(value: searchStore),
@@ -66,5 +47,4 @@ class MyApp extends StatelessWidget {
         )
       ),
     );
-  }
 }

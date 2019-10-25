@@ -1,54 +1,79 @@
+import 'dart:ui';
+import 'package:anime_app/logic/stores/StoreUtils.dart';
+import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/ui/component/InfoWidget.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:anime_app/logic/Constants.dart';
 
-class AnimeDetailsScreen extends StatelessWidget {
+class AnimeDetailsScreen extends StatefulWidget {
   final String title;
   final String imageUrl;
   final String heroTag;
   final String animeId;
+
+  const AnimeDetailsScreen(this.animeId, {Key key, this.title, this.heroTag, this.imageUrl})
+      : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _AnimeDetailsScreen();
+
+}
+
+class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
+  ApplicationStore applicationStore;
+  AnimeDetailsStore detailsStore;
 
   static final _defaultSectionStyle = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w700,
   );
 
-  const AnimeDetailsScreen(this.animeId, {Key key, this.title, this.heroTag, this.imageUrl})
-      : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    applicationStore = Provider.of<ApplicationStore>(context, listen: false);
+    detailsStore = AnimeDetailsStore(applicationStore);
+    detailsStore.loadAnimeDetails(widget.animeId);
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    var applicationStore = Provider.of<ApplicationStore>(context);
-    final future = applicationStore.getAnimeDetails(animeId);
+    final expandedHeight = size.width * .9;
 
-    final appBar = SliverAppBar(
-      floating: false,
-      pinned: false,
-      snap: false,
-      expandedHeight: size.width * .9,
-      backgroundColor: IMAGE_BACKGROUND_COLOR,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Hero(
-          tag: this.heroTag ?? UniqueKey().toString(),
-          child: Image(
-              fit: BoxFit.fill,
-              image: AdvancedNetworkImage(
-                imageUrl,
-                useDiskCache: true,
-                retryLimit: 5,
-              )
+    final provider = AdvancedNetworkImage(
+      widget.imageUrl,
+      useDiskCache: true,
+      retryLimit: 5,
+    );
+
+    final image = Image(
+      fit: BoxFit.fill,
+      image: provider,
+    );
+
+    final appBar = Observer(
+      builder: (_) => SliverAppBar(
+        floating: false,
+        pinned: false,
+        snap: false,
+        expandedHeight: expandedHeight,
+        backgroundColor: detailsStore.backgroundColor,
+        flexibleSpace: FlexibleSpaceBar(
+          background: Hero(
+            tag: widget.heroTag ?? UniqueKey().toString(),
+            child: image,
           ),
         ),
-      ),
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios),
-        onPressed: () => Navigator.pop(context),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
     );
 
@@ -59,50 +84,39 @@ class AnimeDetailsScreen extends StatelessWidget {
           appBar,
 
           SliverToBoxAdapter(
-              child: FutureBuilder<AnimeDetails>(
-                future: future,
-                builder: (context, snapshot) {
+              child: Observer(
+                builder: (context){
 
-                  if (snapshot.hasError)
-                    return InfoWidget(
-                      size: 250,
-                      icon: Icons.clear,
-                      iconColor: ERROR_COLOR,
-                      textColor: ERROR_COLOR,
-                      text: 'Não há dados...',
+                  if (detailsStore.loadingStatus == LoadingStatus.ERROR)
+                    return Center(child: Text('Erro'));
+
+
+                  if (detailsStore.loadingStatus == LoadingStatus.LOADING)
+                    return Container(
+                      height: 200,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[ CircularProgressIndicator(), ],
+                      ),
                     );
 
-              if (!snapshot.hasData)
-                return Container(
-                  height: 200,
-                  child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[ CircularProgressIndicator(), ],
-                  ),
-                );
+                  return Column(
+                    children: <Widget>[
+                      buildDetailsSection(detailsStore.animeDetails),
+                      buildResumeSection(detailsStore.animeDetails.resume),
 
-              if (snapshot.hasError)
-                return Center(child: Text('Erro'));
+                    ],
+                  );
+                },
+              )),
 
-              var data  = snapshot.data;
+          Observer(
+              builder: (context) {
+                if (detailsStore.loadingStatus == LoadingStatus.DONE) {
 
-              return Column(
-                children: <Widget>[
-                  buildDetailsSection(data),
-                  buildResumeSection(data.resume),
-
-                ],
-              );
-            },
-          )),
-
-          FutureBuilder<AnimeDetails>(
-              future: future,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data.episodes.isEmpty) {
+                  if (detailsStore.animeDetails.episodes.isEmpty) {
                     return SliverToBoxAdapter(
                       child: Container(
                         child: Column(
@@ -122,21 +136,20 @@ class AnimeDetailsScreen extends StatelessWidget {
                       return ListTile(
                         leading: Icon(Icons.play_circle_filled, color: Colors
                             .black,),
-                        title: Text(snapshot.data.episodes[index].title),
+                        title: Text(detailsStore.animeDetails.episodes[index].title),
                         onTap: () async {
                           Navigator.push(context,
                               MaterialPageRoute(
                                   builder: (context) =>
                                       VideoPlayerScreen(
-                                        episodeId: snapshot.data.episodes[index]
-                                            .id,
+                                        episodeId: detailsStore.animeDetails.episodes[index].id,
                                       )
                               )
                           );
                         },
                       );
                     },
-                    childCount: snapshot.data.episodes.length,
+                    childCount: detailsStore.animeDetails.episodes.length,
                   ));
                 }
                 else
@@ -186,36 +199,36 @@ class AnimeDetailsScreen extends StatelessWidget {
   );
 
   Widget buildResumeSection(String resume) =>
-    Container(
-      margin: EdgeInsets.only(bottom: 8.0),
-      child: ExpansionTile(
-        title: Text('Sinopse',),
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Flexible(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 8.0),
-                    child: Text(resume ?? '----',
-                      maxLines: 24,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        letterSpacing: .2
+      Container(
+        margin: EdgeInsets.only(bottom: 8.0),
+        child: ExpansionTile(
+          title: Text('Sinopse',),
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Flexible(
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 8.0),
+                      child: Text(resume ?? '----',
+                        maxLines: 24,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                            letterSpacing: .2
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
 
-      ),
-    );
+        ),
+      );
 
   Widget _buildInfoRow(String key, String value) {
     return Container(

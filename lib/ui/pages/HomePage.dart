@@ -14,7 +14,6 @@ class HomePage extends StatelessWidget {
   static const _RELEASE_TAG = 'RELEASE';
   static const _CAROUSEL_TAG = 'CAROUSEL';
 
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -33,29 +32,12 @@ class HomePage extends StatelessWidget {
         centerTitle: false,
         backgroundColor: Colors.white.withOpacity(.3),
         flexibleSpace: FlexibleSpaceBar(
-            background: Carousel(
-              showIndicator: true,
-              autoplay: false,
-              animationCurve: Curves.easeIn,
-              boxFit: BoxFit.fill,
-              dotSize: 6.0,
-              overlayShadow: true,
-
-              images: List.generate(
-                  appStore.dayReleaseList.length,
-                      (index){
-                        return ItemView(
-                          borderRadius: .0,
-                          imageUrl: appStore.dayReleaseList[index].imageUrl,
-                          width: size.width,
-                          height: expandedHeight,
-                          onTap: () => _openAnimeDetailsPage(context,appStore.dayReleaseList[index],
-                              '${appStore.dayReleaseList[index].id}$_CAROUSEL_TAG'
-                          ),
-                        );
-                  }
-              ),
-            ),
+            background: _createDayReleaseCarousel(
+              context: context,
+              width: size.width,
+              height: expandedHeight,
+              appStore: appStore,
+            )
         )
     );
 
@@ -150,13 +132,41 @@ class HomePage extends StatelessWidget {
     void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag) =>
         Navigator.push(context,
             MaterialPageRoute(
-                builder: (context)
-                => AnimeDetailsScreen(
+                builder: (context) => AnimeDetailsScreen(
                   anime.id,
                   title: anime.title,
                   imageUrl: anime.imageUrl,
                   heroTag: heroTag,
                 )
             )
+        );
+
+    Widget _createDayReleaseCarousel({BuildContext context, ApplicationStore appStore, double width, height}) =>
+        Carousel(
+          showIndicator: true,
+          autoplay: true,
+          autoplayDuration: Duration(seconds: 6),
+          animationCurve: Curves.easeIn,
+          boxFit: BoxFit.fill,
+          dotSize: 6.0,
+          overlayShadow: true,
+
+          images: List.generate(
+              appStore.dayReleaseList.length,
+                  (index){
+                var heroTag = '${appStore.dayReleaseList[index].id}$_CAROUSEL_TAG';
+                return ItemView(
+                  borderRadius: .0,
+
+                  imageUrl: appStore.dayReleaseList[index].imageUrl,
+                  width: width,
+                  heroTag: heroTag,
+                  height: height,
+                  onTap: () => _openAnimeDetailsPage(
+                      context,
+                      appStore.dayReleaseList[index], heroTag),
+                );
+              }
+          ),
         );
 }

@@ -28,6 +28,8 @@ abstract class _ApplicationStore with Store {
   int mainAnimesPageCounter = 1;
   int maxMainAnimesPageNumber = 1;
 
+  int mainCarouselCurrentPosition = 1;
+
   @observable
   LoadingStatus animeListLoadingStatus = LoadingStatus.NONE;
 

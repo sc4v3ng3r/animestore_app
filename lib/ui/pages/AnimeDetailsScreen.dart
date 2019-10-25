@@ -101,19 +101,36 @@ class AnimeDetailsScreen extends StatelessWidget {
           FutureBuilder<AnimeDetails>(
               future: future,
               builder: (context, snapshot) {
-                if (snapshot.hasData)
-                  return SliverList(delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.episodes.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: Container(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.do_not_disturb_alt, size: 52,),
+                            Text('Episódios indisponíveis...'),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
 
+                  return SliverList(delegate: SliverChildBuilderDelegate(
+                        (context, index) {
                       return ListTile(
-                        leading: Icon(Icons.play_circle_filled, color: Colors.black,),
+                        leading: Icon(Icons.play_circle_filled, color: Colors
+                            .black,),
                         title: Text(snapshot.data.episodes[index].title),
                         onTap: () async {
                           Navigator.push(context,
                               MaterialPageRoute(
-                                builder: (context) => VideoPlayerScreen(
-                                  episodeId: snapshot.data.episodes[index].id,
-                                )
+                                  builder: (context) =>
+                                      VideoPlayerScreen(
+                                        episodeId: snapshot.data.episodes[index]
+                                            .id,
+                                      )
                               )
                           );
                         },
@@ -121,7 +138,7 @@ class AnimeDetailsScreen extends StatelessWidget {
                     },
                     childCount: snapshot.data.episodes.length,
                   ));
-
+                }
                 else
                   return SliverToBoxAdapter(
                     child: Container(),

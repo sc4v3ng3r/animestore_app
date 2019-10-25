@@ -14,7 +14,7 @@ packages:
       name: anitube_crawler_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2+1"
   archive:
     dependency: transitive
     description:

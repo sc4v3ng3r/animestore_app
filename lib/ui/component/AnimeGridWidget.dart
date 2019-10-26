@@ -1,7 +1,8 @@
-import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
-import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
+import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
+import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -64,18 +65,12 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
       slivers: <Widget>[
         appBar,
         Observer(builder: (context) {
-          return SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8.0,
-                  crossAxisSpacing: 6.0,
-                  childAspectRatio: (itemWidth / itemHeight)),
+          return SliverGridItemView(
+              childAspectRatio: (itemWidth / itemHeight),
               delegate: SliverChildBuilderDelegate(
-                (context, index) {
+                    (context, index) {
                   return Tooltip(
-                    message:  appStore.mainAnimeList[index].title,
+                    message: appStore.mainAnimeList[index].title,
                     child: ItemView(
                       width: itemWidth,
                       height: itemHeight,
@@ -99,7 +94,7 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                 },
                 childCount: appStore.mainAnimeList.length,
               ),
-            ),
+
           );
         }),
 

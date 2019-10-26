@@ -1,6 +1,7 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
+import 'package:anime_app/ui/pages/GenreGridPage.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,9 +48,10 @@ class HomePage extends StatelessWidget {
       slivers: <Widget>[
         appBar,
 
-        _createHeaderSection(
+        _createHeaderSection(context,
             leading: Icon(Icons.star, ),
-            header: 'Top Animes'
+            header: 'Top Animes',
+
         ),
 
         _createHorizontaAnimelList(
@@ -58,7 +60,7 @@ class HomePage extends StatelessWidget {
           tag: _UPDATE_TAG,
         ),
 
-        _createHeaderSection(
+        _createHeaderSection(context,
             leading: Icon(Icons.update),
             header: 'Mais recentes'
         ),
@@ -69,9 +71,16 @@ class HomePage extends StatelessWidget {
           tag: _RELEASE_TAG,
         ),
 
-        _createHeaderSection(
+        _createHeaderSection(context,
             leading: Icon(Icons.explore),
-            header: 'Explorar Gêneros'
+            header: 'Explorar Gêneros',
+            onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(
+                    builder: (context) => GenreGridPage()
+                ),
+              );
+            },
         ),
 
         _createHorizontalGenreList(
@@ -82,25 +91,26 @@ class HomePage extends StatelessWidget {
     );
   }
 
-
-
-  SliverPadding _createHeaderSection({Widget leading,  String header}) =>
+  SliverPadding _createHeaderSection(BuildContext context,{Widget leading, String header, Function onTap}) =>
       SliverPadding(
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         sliver: SliverToBoxAdapter(
-          child: Row(
+          child: GestureDetector(
+            child: Row(
 
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(right: (leading == null) ? .0 : 8.0),
-                child: leading,
-              ),
-              Text(header, style: TextStyle(
-                fontSize: 18,),
-              ),
-            ],
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(right: (leading == null) ? .0 : 8.0),
+                  child: leading,
+                ),
+                Text(header, style: TextStyle(
+                  fontSize: 18,),
+                ),
+              ],
+            ),
+            onTap: onTap,
           ),
           ),
         );
@@ -139,57 +149,56 @@ class HomePage extends StatelessWidget {
       );
 
 
-  SliverToBoxAdapter _createHorizontalGenreList({
+  SliverToBoxAdapter _createHorizontalGenreList( {
     List<String>  data, double width, String tag}) =>
       SliverToBoxAdapter(
         child: Container(
-          height: width * .9,
-          child: Observer(
-            builder: (context){
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  //var anime = data[index];
-                  //var heroTag = '${anime.id}$tag';
+            height: width * .9,
+            child: Observer(
+              builder: (context){
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    //var anime = data[index];
+                    //var heroTag = '${anime.id}$tag';
 
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
-                    child: ItemView(
-                      width: width * 1.3,
-                      height: width * .9,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Expanded(
-                              child: Text(data[index],
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 25,
-                                ),
-                              )
-                          )
-                        ],
-                      ),
-                      backgroundColor: _randomColor.randomColor(
-                        colorHue: ColorHue.multiple(
-                          colorHues: [ ColorHue.orange, ColorHue.blue],
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
+                      child: ItemView(
+                        width: width * 1.3,
+                        height: width * .9,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Expanded(
+                                child: Text(data[index],
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 25,
+                                  ),
+                                )
+                            )
+                          ],
                         ),
-                        colorBrightness: ColorBrightness.primary,
+                        backgroundColor: _randomColor.randomColor(
+                          colorHue: ColorHue.multiple(
+                            colorHues: [ ColorHue.orange, ColorHue.blue],
+                          ),
+                          colorBrightness: ColorBrightness.primary,
+                        ),
+                        onTap: () {},
                       ),
-                      onTap: () {},
-                    ),
-                  );
-                },
-
-                scrollDirection: Axis.horizontal,
-                itemCount: data.length,
-                physics: BouncingScrollPhysics(),
-              );
-            },
+                    );
+                  },
+                  scrollDirection: Axis.horizontal,
+                  itemCount: data.length,
+                  physics: BouncingScrollPhysics(),
+                );
+              },
+            ),
           ),
-        ),
       );
 
     void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag) =>
@@ -220,7 +229,6 @@ class HomePage extends StatelessWidget {
                 var heroTag = '${appStore.dayReleaseList[index].id}$_CAROUSEL_TAG';
                 return ItemView(
                   borderRadius: .0,
-
                   imageUrl: appStore.dayReleaseList[index].imageUrl,
                   width: width,
                   heroTag: heroTag,

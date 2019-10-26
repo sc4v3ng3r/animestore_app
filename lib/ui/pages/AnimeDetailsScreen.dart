@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
@@ -69,7 +68,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
         flexibleSpace: FlexibleSpaceBar(
           background: Hero(
             tag: widget.heroTag ?? UniqueKey().toString(),
-            child: image,
+            child:image ,
           ),
         ),
         leading: IconButton(
@@ -107,7 +106,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
                     children: <Widget>[
                       buildDetailsSection(detailsStore.animeDetails),
                       buildResumeSection(detailsStore.animeDetails.resume),
-
                     ],
                   );
                 },

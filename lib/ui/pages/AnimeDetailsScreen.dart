@@ -90,7 +90,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
                   if (detailsStore.loadingStatus == LoadingStatus.ERROR)
                     return Center(child: Text('Erro'));
 
-
                   if (detailsStore.loadingStatus == LoadingStatus.LOADING)
                     return Container(
                       height: 200,

@@ -7,10 +7,12 @@ typedef OnTap = void Function();
 
 class ItemView extends StatelessWidget {
   final String imageUrl;
+  final Widget child;
   final OnTap onTap;
   final double width, height;
   final String heroTag;
   final double borderRadius;
+  final Color backgroundColor;
 
   const ItemView({
     @required this.width,
@@ -18,6 +20,8 @@ class ItemView extends StatelessWidget {
     Key key,
     this.imageUrl,
     this.onTap,
+    this.backgroundColor,
+    this.child,
     this.heroTag,
     this.borderRadius = 12.0,
   }) : super(key: key);
@@ -32,12 +36,20 @@ class ItemView extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: IMAGE_BACKGROUND_COLOR,
+          color: backgroundColor ?? IMAGE_BACKGROUND_COLOR,
         ),
 
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
+
+            (imageUrl == null)
+                ?
+                  Align(
+                   alignment: Alignment.center,
+                   child: child,
+                  )
+                :
 
             Positioned.fill(
               child: Hero(

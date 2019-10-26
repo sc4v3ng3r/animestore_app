@@ -24,6 +24,9 @@ abstract class _ApplicationStore with Store {
   @observable
   ObservableList<AnimeItem> dayReleaseList = ObservableList();
 
+  @observable
+  ObservableList<String> genreList = ObservableList();
+
   /// counter of main animes list pages.
   int mainAnimesPageCounter = 1;
   int maxMainAnimesPageNumber = 1;
@@ -54,12 +57,15 @@ abstract class _ApplicationStore with Store {
   @action
   setTopAnimeList ( List<AnimeItem> data) => topAnimeList.addAll( data );
 
+  @action
+  setGenreList( List<String>  data) => genreList.addAll( data );
+
   // init application method
   void initApp() async {
     try {
       await getHomePageInfo();
-
       await loadAnimeList();
+      await getGenresAvailable();
       setAppInitialization(AppInitStatus.INITIALIZED);
     }
 
@@ -110,5 +116,10 @@ abstract class _ApplicationStore with Store {
     setMostRecentAnimeList( homePageData.mostRecentAnimes );
     setTopAnimeList( homePageData.mostShowedAnimes);
 
+  }
+
+  Future<void> getGenresAvailable() async {
+    List<String> data = await api.getGenresAvailable(timeout: TIMEOUT);
+    setGenreList(data);
   }
 }

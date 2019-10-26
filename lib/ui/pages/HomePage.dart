@@ -7,13 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:random_color/random_color.dart';
 
 class HomePage extends StatelessWidget {
 
   static const _UPDATE_TAG = 'UPDATE';
   static const _RELEASE_TAG = 'RELEASE';
   static const _CAROUSEL_TAG = 'CAROUSEL';
-
+  final RandomColor _randomColor = RandomColor();
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -67,6 +68,16 @@ class HomePage extends StatelessWidget {
           width: size.width * .42,
           tag: _RELEASE_TAG,
         ),
+
+        _createHeaderSection(
+            leading: Icon(Icons.explore),
+            header: 'Explorar Gêneros'
+        ),
+
+        _createHorizontalGenreList(
+          width: size.width * .42,
+          data: appStore.genreList,
+        )
       ],
     );
   }
@@ -103,7 +114,6 @@ class HomePage extends StatelessWidget {
             builder: (context){
               return ListView.builder(
                 itemBuilder: (context, index) {
-                  print('Build the list box');
                   var anime = data[index];
                   var heroTag = '${anime.id}$tag';
 
@@ -129,6 +139,59 @@ class HomePage extends StatelessWidget {
       );
 
 
+  SliverToBoxAdapter _createHorizontalGenreList({
+    List<String>  data, double width, String tag}) =>
+      SliverToBoxAdapter(
+        child: Container(
+          height: width * .9,
+          child: Observer(
+            builder: (context){
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  //var anime = data[index];
+                  //var heroTag = '${anime.id}$tag';
+
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
+                    child: ItemView(
+                      width: width * 1.3,
+                      height: width * .9,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                              child: Text(data[index],
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 25,
+                                ),
+                              )
+                          )
+                        ],
+                      ),
+                      backgroundColor: _randomColor.randomColor(
+                        colorHue: ColorHue.multiple(
+                          colorHues: [ ColorHue.orange, ColorHue.blue],
+                        ),
+                        colorBrightness: ColorBrightness.primary,
+                      ),
+                      onTap: () {},
+                    ),
+                  );
+                },
+
+                scrollDirection: Axis.horizontal,
+                itemCount: data.length,
+                physics: BouncingScrollPhysics(),
+              );
+            },
+          ),
+        ),
+      );
+
     void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag) =>
         Navigator.push(context,
             MaterialPageRoute(
@@ -144,8 +207,8 @@ class HomePage extends StatelessWidget {
     Widget _createDayReleaseCarousel({BuildContext context, ApplicationStore appStore, double width, height}) =>
         Carousel(
           showIndicator: true,
-          autoplay: true,
-          autoplayDuration: Duration(seconds: 6),
+          autoplay: false,
+          //autoplayDuration: Duration(seconds: 6),
           animationCurve: Curves.easeIn,
           boxFit: BoxFit.fill,
           dotSize: 6.0,
@@ -169,4 +232,6 @@ class HomePage extends StatelessWidget {
               }
           ),
         );
+
+
 }

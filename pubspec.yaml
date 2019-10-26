@@ -31,6 +31,7 @@ dependencies:
   shimmer: ^1.0.1
   carousel_pro: ^1.0.0
   palette_generator: ^0.2.0
+  random_color: ^1.0.3
   mobx: ^0.3.8+1
   flutter_mobx: ^0.3.3+1
   mobx_codegen: ^0.3.9+1

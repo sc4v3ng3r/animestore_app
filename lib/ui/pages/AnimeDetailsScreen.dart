@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
@@ -40,7 +41,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
     detailsStore.loadAnimeDetails(widget.animeId);
   }
 
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -50,6 +50,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
       widget.imageUrl,
       useDiskCache: true,
       retryLimit: 5,
+      // not available for now..
+      //postProcessing: detailsStore.extractDominantColor,
     );
 
     final image = Image(

@@ -117,8 +117,14 @@ abstract class _SearchStore with Store {
   }
 
   Future< AnimeListPageInfo > _loadData(String query, int number) async {
-    var searchPage = await applicationStore.api.search(
-      query, pageNumber: number);
+    var searchPage;
+    if (query.length == 1)
+      searchPage = await applicationStore.api
+          .getAnimeListPageData(
+        startWith: query, pageNumber: number,);
+    else
+     searchPage = await applicationStore.api.search(query, pageNumber: number);
+
     return searchPage;
   }
 }

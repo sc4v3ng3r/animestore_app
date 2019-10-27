@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:anime_app/logic/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
@@ -10,7 +11,7 @@ class ItemView extends StatelessWidget {
   final Widget child;
   final OnTap onTap;
   final double width, height;
-  final String heroTag;
+  final String imageHeroTag;
   final double borderRadius;
   final Color backgroundColor;
 
@@ -22,7 +23,7 @@ class ItemView extends StatelessWidget {
     this.onTap,
     this.backgroundColor,
     this.child,
-    this.heroTag,
+    this.imageHeroTag,
     this.borderRadius = 12.0,
   }) : super(key: key);
 
@@ -53,7 +54,7 @@ class ItemView extends StatelessWidget {
 
             Positioned.fill(
               child: Hero(
-                tag: this.heroTag ?? UniqueKey().toString(),
+                tag: this.imageHeroTag ?? UniqueKey().toString(),
                 child: Image(
                     fit: BoxFit.fill,
                     image: AdvancedNetworkImage(

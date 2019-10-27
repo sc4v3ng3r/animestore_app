@@ -1,7 +1,10 @@
+import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/ui/UiUtils.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
+import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -13,12 +16,11 @@ import 'package:random_color/random_color.dart';
 
 class HomePage extends StatelessWidget {
 
-  static const _UPDATE_TAG = 'UPDATE';
-  static const _RELEASE_TAG = 'RELEASE';
-  static const _CAROUSEL_TAG = 'CAROUSEL';
-  static const _MY_LIST_TAG = 'MYLISTTAG';
-
   final RandomColor _randomColor = RandomColor();
+
+  static const _SECTION_STYLE = TextStyle(
+    fontSize: 18, );
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -32,9 +34,9 @@ class HomePage extends StatelessWidget {
         elevation: 0.0,
         pinned: false,
         snap: false,
-        primary: true,
-        centerTitle: false,
+        centerTitle: true,
         backgroundColor: Colors.white.withOpacity(.3),
+        //title: Text('AppBar', style: TextStyle(color: Colors.black),),
         flexibleSpace: FlexibleSpaceBar(
             background: _createDayReleaseCarousel(
               context: context,
@@ -42,7 +44,45 @@ class HomePage extends StatelessWidget {
               height: expandedHeight,
               appStore: appStore,
             )
-        )
+        ),
+    );
+
+    final topAnimesHeader = _createHeaderSection(context,
+      title: 'Top Animes',
+      iconData: Icons.star,
+      iconColor: Colors.amberAccent,
+      heroTag: 'TopAnimesTag',
+//      leading: Icon(, ),
+//      header: 'Top Animes',
+    );
+
+    final genresHeader = _createHeaderSection(context,
+      iconData:Icons.explore,
+      title: 'Explorar Gêneros',
+      onTap: () {
+        Navigator.push(context,
+          MaterialPageRoute(
+              builder: (context) => GenreGridPage()
+          ),
+        );
+      },
+    );
+
+    final myListHeader = Observer(
+      builder: (context) =>
+      (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
+          :
+      _createHeaderSection(context,
+          title: 'Minha Lista',
+          iconData: Icons.live_tv,
+          onTap: () =>_openAnimeItemGridPage(context, appStore.myAnimeMap.values.toList(),),
+      ),
+    );
+
+    final mostRecentsHeader = _createHeaderSection(context,
+      iconData: Icons.update,
+      title: 'Mais recentes',
+      onTap: () => _openAnimeItemGridPage(context, appStore.mostRecentAnimeList,),
     );
 
     return CustomScrollView(
@@ -50,41 +90,26 @@ class HomePage extends StatelessWidget {
       slivers: <Widget>[
         appBar,
 
-        _createHeaderSection(context,
-            leading: Icon(Icons.star, ),
-            header: 'Top Animes',
-        ),
+        topAnimesHeader,
 
         _createHorizontaAnimelList(
           appStore,
           data:appStore.topAnimeList,
           width: size.width * .42,
-          tag: _UPDATE_TAG,
+          tag: HERO_TAG_UPDATE,
         ),
 
-        _createHeaderSection(context,
-            leading: Icon(Icons.update),
-            header: 'Mais recentes'
-        ),
+        mostRecentsHeader,
 
         _createHorizontaAnimelList(
           appStore,
           data:appStore.mostRecentAnimeList,
           width: size.width * .42,
-          tag: _RELEASE_TAG,
+          tag: HERO_TAG_RELEASE,
         ),
 
-        _createHeaderSection(context,
-            leading: Icon(Icons.explore),
-            header: 'Explorar Gêneros',
-            onTap: () {
-              Navigator.push(context,
-                MaterialPageRoute(
-                    builder: (context) => GenreGridPage()
-                ),
-              );
-            },
-        ),
+
+        genresHeader,
 
         _createHorizontalGenreList(
           width: size.width * .42,
@@ -92,15 +117,7 @@ class HomePage extends StatelessWidget {
         ),
 
 
-        Observer(
-          builder: (context) =>
-            (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
-                :
-            _createHeaderSection(context,
-                leading: Icon(Icons.live_tv),
-                header: 'Minha Lista'
-            ),
-        ),
+        myListHeader,
 
         Observer(
           builder: (context) =>
@@ -109,7 +126,7 @@ class HomePage extends StatelessWidget {
           _createHorizontaCustomAnimelList(
             appStore,
             width: size.width * .42,
-            tag: _MY_LIST_TAG,
+            tag: HERO_TAG_MY_LIST,
           ),
         ),
 
@@ -117,29 +134,30 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  SliverPadding _createHeaderSection(BuildContext context,{Widget leading, String header, Function onTap}) =>
+  SliverPadding _createHeaderSection(BuildContext context,{
+    IconData iconData,
+    Color iconColor,
+    String title,
+
+    Widget leading,
+    String header,
+    String heroTag,
+    Function onTap}) =>
       SliverPadding(
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         sliver: SliverToBoxAdapter(
           child: GestureDetector(
-            child: Row(
-
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(right: (leading == null) ? .0 : 8.0),
-                  child: leading,
-                ),
-                Text(header, style: TextStyle(
-                  fontSize: 18,),
-                ),
-              ],
+            child: UiUtils.createAppBarTitleWidget(
+              iconData: iconData,
+              iconColor:iconColor,
+              title: title,
+              heroTag: heroTag,
+              style: _SECTION_STYLE,
             ),
             onTap: onTap,
           ),
-          ),
-        );
+        ),
+      );
 
   SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore, {
     List<AnimeItem>  data, double width, String tag,}) =>
@@ -157,7 +175,7 @@ class HomePage extends StatelessWidget {
                       width: width,
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
-                      heroTag: heroTag,
+                      imageHeroTag: heroTag,
                       onTap: () => _openAnimeDetailsPage(context, anime, heroTag, appStore),
                     ),
                   );
@@ -189,7 +207,7 @@ class HomePage extends StatelessWidget {
                       width: width,
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
-                      heroTag: heroTag,
+                      imageHeroTag: heroTag,
                       onTap: () => _openAnimeDetailsPage(context, anime, heroTag, appStore),
                     ),
                   );
@@ -278,12 +296,12 @@ class HomePage extends StatelessWidget {
           images: List.generate(
               appStore.dayReleaseList.length,
                   (index){
-                var heroTag = '${appStore.dayReleaseList[index].id}$_CAROUSEL_TAG';
+                var heroTag = '${appStore.dayReleaseList[index].id}$HER_TAG_CAROUSEL';
                 return ItemView(
                   borderRadius: .0,
                   imageUrl: appStore.dayReleaseList[index].imageUrl,
                   width: width,
-                  heroTag: heroTag,
+                  imageHeroTag: heroTag,
                   height: height,
                   onTap: () => _openAnimeDetailsPage(
                       context,
@@ -293,4 +311,12 @@ class HomePage extends StatelessWidget {
           ),
         );
 
+  void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,) {
+    Navigator.push(context, MaterialPageRoute(
+        builder: (_) => DefaultAnimeItemGridPage(
+          gridItems: data,
+        )
+    ));
+  }
 }
+

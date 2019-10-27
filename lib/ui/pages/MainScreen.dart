@@ -69,36 +69,45 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Widget _createBottomBar () => BottomNavigationBar(
+  Widget _createBottomBar () => Container(
+//    decoration: BoxDecoration(boxShadow: [
+//      BoxShadow(
+//        color: Colors.blue,
+//        offset: Offset(0, 2.0),
+//        blurRadius: 8.0,
+//      )
+//    ]),
+    child: BottomNavigationBar(
+      selectedItemColor: Theme.of(context).accentColor,
+      //unselectedItemColor: Theme.of(context).,
+      items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
 
-    selectedItemColor: Theme.of(context).accentColor,
-    //unselectedItemColor: Theme.of(context).,
-    items: <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-
-        title: Text('Home'),
-        icon: Icon(
-          Icons.home,
+          title: Text('Home'),
+          icon: Icon(
+            Icons.home,
+          ),
         ),
-      ),
 
-      BottomNavigationBarItem(
+        BottomNavigationBarItem(
 
-        title: Text('Animes'),
-        icon: Icon(
-          Icons.live_tv,
+          title: Text('Animes'),
+          icon: Icon(
+            Icons.live_tv,
+          ),
         ),
-      ),
 
-      BottomNavigationBarItem(
-        title: Text('Buscar'),
-        icon: Icon(
-          Icons.search,
+        BottomNavigationBarItem(
+          title: Text('Buscar'),
+          icon: Icon(
+            Icons.search,
+          ),
         ),
-      ),
-    ],
+      ],
 
-    onTap: _changePageBody,
-    currentIndex: currentNav.index,
+      onTap: _changePageBody,
+      currentIndex: currentNav.index,
+      elevation: .0,
+    ),
   );
 }

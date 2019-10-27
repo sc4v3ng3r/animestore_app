@@ -186,7 +186,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               width: itemWidth,
               height: itemHeight,
               imageUrl: items[index].imageUrl,
-              heroTag: items[index].id,
+              imageHeroTag: items[index].id,
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) =>

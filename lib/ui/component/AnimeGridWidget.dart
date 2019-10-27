@@ -76,7 +76,7 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                       width: itemWidth,
                       height: itemHeight,
                       imageUrl: appStore.mainAnimeList[index].imageUrl,
-                      heroTag: appStore.mainAnimeList[index].id,
+                      imageHeroTag: appStore.mainAnimeList[index].id,
                       onTap: () {
                         Navigator.push(
                             context,

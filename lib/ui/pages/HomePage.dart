@@ -1,3 +1,4 @@
+import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
@@ -15,6 +16,8 @@ class HomePage extends StatelessWidget {
   static const _UPDATE_TAG = 'UPDATE';
   static const _RELEASE_TAG = 'RELEASE';
   static const _CAROUSEL_TAG = 'CAROUSEL';
+  static const _MY_LIST_TAG = 'MYLISTTAG';
+
   final RandomColor _randomColor = RandomColor();
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,6 @@ class HomePage extends StatelessWidget {
     final appStore = Provider.of<ApplicationStore>(context);
 
     final expandedHeight = size.width * .9;
-
 
     final appBar = SliverAppBar(
         expandedHeight: expandedHeight,
@@ -51,10 +53,10 @@ class HomePage extends StatelessWidget {
         _createHeaderSection(context,
             leading: Icon(Icons.star, ),
             header: 'Top Animes',
-
         ),
 
         _createHorizontaAnimelList(
+          appStore,
           data:appStore.topAnimeList,
           width: size.width * .42,
           tag: _UPDATE_TAG,
@@ -66,6 +68,7 @@ class HomePage extends StatelessWidget {
         ),
 
         _createHorizontaAnimelList(
+          appStore,
           data:appStore.mostRecentAnimeList,
           width: size.width * .42,
           tag: _RELEASE_TAG,
@@ -86,7 +89,30 @@ class HomePage extends StatelessWidget {
         _createHorizontalGenreList(
           width: size.width * .42,
           data: appStore.genreList,
-        )
+        ),
+
+
+        Observer(
+          builder: (context) =>
+            (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
+                :
+            _createHeaderSection(context,
+                leading: Icon(Icons.live_tv),
+                header: 'Minha Lista'
+            ),
+        ),
+
+        Observer(
+          builder: (context) =>
+          (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
+              :
+          _createHorizontaCustomAnimelList(
+            appStore,
+            width: size.width * .42,
+            tag: _MY_LIST_TAG,
+          ),
+        ),
+
       ],
     );
   }
@@ -115,13 +141,43 @@ class HomePage extends StatelessWidget {
           ),
         );
 
-  SliverToBoxAdapter _createHorizontaAnimelList({
-    List<AnimeItem>  data, double width, String tag}) =>
+  SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore, {
+    List<AnimeItem>  data, double width, String tag,}) =>
+      SliverToBoxAdapter(
+        child: Container(
+          height: width * 1.4,
+          child: ListView.builder(
+                itemBuilder: (context, index) {
+                  var anime = data[index];
+                  var heroTag = '${anime.id}$tag';
+
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
+                    child: ItemView(
+                      width: width,
+                      height: width * 1.4,
+                      imageUrl: anime.imageUrl,
+                      heroTag: heroTag,
+                      onTap: () => _openAnimeDetailsPage(context, anime, heroTag, appStore),
+                    ),
+                  );
+                },
+
+                scrollDirection: Axis.horizontal,
+                itemCount: data.length,
+                physics: BouncingScrollPhysics(),
+              ),
+        ),
+      );
+
+  SliverToBoxAdapter _createHorizontaCustomAnimelList(ApplicationStore appStore, {
+    double width, String tag,}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width * 1.4,
           child: Observer(
-            builder: (context){
+            builder: (_) {
+              var data = appStore.myAnimeMap.values.toList();
               return ListView.builder(
                 itemBuilder: (context, index) {
                   var anime = data[index];
@@ -134,7 +190,7 @@ class HomePage extends StatelessWidget {
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
                       heroTag: heroTag,
-                      onTap: () => _openAnimeDetailsPage(context, anime, heroTag),
+                      onTap: () => _openAnimeDetailsPage(context, anime, heroTag, appStore),
                     ),
                   );
                 },
@@ -144,10 +200,10 @@ class HomePage extends StatelessWidget {
                 physics: BouncingScrollPhysics(),
               );
             },
+
           ),
         ),
       );
-
 
   SliverToBoxAdapter _createHorizontalGenreList( {
     List<String>  data, double width, String tag}) =>
@@ -158,8 +214,6 @@ class HomePage extends StatelessWidget {
               builder: (context){
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    //var anime = data[index];
-                    //var heroTag = '${anime.id}$tag';
 
                     return Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
@@ -201,15 +255,14 @@ class HomePage extends StatelessWidget {
           ),
       );
 
-    void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag) =>
+    void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag,
+        ApplicationStore appStore) =>
         Navigator.push(context,
             MaterialPageRoute(
-                builder: (context) => AnimeDetailsScreen(
-                  anime.id,
-                  title: anime.title,
-                  imageUrl: anime.imageUrl,
-                  heroTag: heroTag,
-                )
+                builder: (context) => Provider<AnimeDetailsStore>(
+                  builder: (_) => AnimeDetailsStore(appStore, anime),
+                  child: AnimeDetailsScreen(heroTag: heroTag,),
+                ),
             )
         );
 
@@ -217,7 +270,6 @@ class HomePage extends StatelessWidget {
         Carousel(
           showIndicator: true,
           autoplay: false,
-          //autoplayDuration: Duration(seconds: 6),
           animationCurve: Curves.easeIn,
           boxFit: BoxFit.fill,
           dotSize: 6.0,
@@ -235,11 +287,10 @@ class HomePage extends StatelessWidget {
                   height: height,
                   onTap: () => _openAnimeDetailsPage(
                       context,
-                      appStore.dayReleaseList[index], heroTag),
+                      appStore.dayReleaseList[index], heroTag, appStore),
                 );
               }
           ),
         );
-
 
 }

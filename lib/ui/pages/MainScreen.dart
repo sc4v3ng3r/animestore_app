@@ -70,6 +70,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _createBottomBar () => BottomNavigationBar(
+
     selectedItemColor: Theme.of(context).accentColor,
     //unselectedItemColor: Theme.of(context).,
     items: <BottomNavigationBarItem>[

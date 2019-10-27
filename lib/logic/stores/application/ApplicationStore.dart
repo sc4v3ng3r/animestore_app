@@ -1,3 +1,4 @@
+import 'package:anime_app/database/DatabaseProvider.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
@@ -9,6 +10,7 @@ class ApplicationStore = _ApplicationStore with _$ApplicationStore;
 abstract class _ApplicationStore with Store {
 
   final AniTubeApi api = AniTubeApi();
+  final DatabaseProvider databaseProvider = DatabaseProvider();
   static const DEFAULT_PAGES_LOADING = 4;
   static const TIMEOUT = 10000;
 
@@ -27,10 +29,12 @@ abstract class _ApplicationStore with Store {
   @observable
   ObservableList<String> genreList = ObservableList();
 
+  @observable
+  ObservableMap<String, AnimeItem> myAnimeMap = ObservableMap();
+
   /// counter of main animes list pages.
   int mainAnimesPageCounter = 1;
   int maxMainAnimesPageNumber = 1;
-
   int mainCarouselCurrentPosition = 1;
 
   @observable
@@ -49,30 +53,52 @@ abstract class _ApplicationStore with Store {
   setAppInitialization(AppInitStatus status) => appInitStatus = status;
 
   @action
-  setMostRecentAnimeList(List<AnimeItem> data) => mostRecentAnimeList.addAll(data);
+  setMostRecentAnimeList(List<AnimeItem> data) => mostRecentAnimeList = ObservableList.of(data);
   
   @action
-  setDailyReleases( List<AnimeItem> data ) => dayReleaseList.addAll(data );
+  setDailyReleases( List<AnimeItem> data ) => dayReleaseList = ObservableList.of(data);
 
   @action
-  setTopAnimeList ( List<AnimeItem> data) => topAnimeList.addAll( data );
+  setTopAnimeList ( List<AnimeItem> data) => topAnimeList = ObservableList.of(data);
 
   @action
-  setGenreList( List<String>  data) => genreList.addAll( data );
+  setGenreList( List<String>  data) => genreList = ObservableList.of(data);
 
-  // init application method
+  @action
+  setMyAnimeMap( Map<String,AnimeItem> data) => myAnimeMap = ObservableMap.of(data);
+
+  @action
+  addToAnimeMap(String key, AnimeItem data) => myAnimeMap.putIfAbsent(
+      key,
+          () {
+            databaseProvider.insert(key, data);
+            return data;
+          });
+
+  @action
+  removeFromAnimeMap(String id) {
+    myAnimeMap.remove(id);
+    databaseProvider.remove(id);
+  }
+
   void initApp() async {
-    try {
-      await getHomePageInfo();
-      await loadAnimeList();
-      await getGenresAvailable();
-      setAppInitialization(AppInitStatus.INITIALIZED);
-    }
+    if (appInitStatus == AppInitStatus.INITIALIZED)
+      return;
 
-    on CrawlerApiException catch(ex){
-      print(ex);
-      setAppInitialization(AppInitStatus.ERROR);
-    }
+      try {
+        await databaseProvider.init();
+        await loadMyAnimeMap();
+        await getHomePageInfo();
+        await loadAnimeList();
+        await getGenresAvailable();
+        setAppInitialization(AppInitStatus.INITIALIZED);
+      }
+
+      on CrawlerApiException catch(ex){
+        print(ex);
+        setAppInitialization(AppInitStatus.ERROR);
+      }
+
   }
 
   // This method load the main anime list and handles also the pagination.
@@ -122,4 +148,11 @@ abstract class _ApplicationStore with Store {
     List<String> data = await api.getGenresAvailable(timeout: TIMEOUT);
     setGenreList(data);
   }
+
+  Future<void> loadMyAnimeMap() async {
+    Map<String,AnimeItem> data = await databaseProvider.load();
+    //print('Loaded from LOCAL $data');
+    setMyAnimeMap(data);
+  }
+
 }

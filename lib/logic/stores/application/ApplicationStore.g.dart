@@ -80,6 +80,40 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
     }, _$dayReleaseListAtom, name: '${_$dayReleaseListAtom.name}_set');
   }
 
+  final _$genreListAtom = Atom(name: '_ApplicationStore.genreList');
+
+  @override
+  ObservableList<String> get genreList {
+    _$genreListAtom.context.enforceReadPolicy(_$genreListAtom);
+    _$genreListAtom.reportObserved();
+    return super.genreList;
+  }
+
+  @override
+  set genreList(ObservableList<String> value) {
+    _$genreListAtom.context.conditionallyRunInAction(() {
+      super.genreList = value;
+      _$genreListAtom.reportChanged();
+    }, _$genreListAtom, name: '${_$genreListAtom.name}_set');
+  }
+
+  final _$myAnimeMapAtom = Atom(name: '_ApplicationStore.myAnimeMap');
+
+  @override
+  ObservableMap<String, AnimeItem> get myAnimeMap {
+    _$myAnimeMapAtom.context.enforceReadPolicy(_$myAnimeMapAtom);
+    _$myAnimeMapAtom.reportObserved();
+    return super.myAnimeMap;
+  }
+
+  @override
+  set myAnimeMap(ObservableMap<String, AnimeItem> value) {
+    _$myAnimeMapAtom.context.conditionallyRunInAction(() {
+      super.myAnimeMap = value;
+      _$myAnimeMapAtom.reportChanged();
+    }, _$myAnimeMapAtom, name: '${_$myAnimeMapAtom.name}_set');
+  }
+
   final _$animeListLoadingStatusAtom =
       Atom(name: '_ApplicationStore.animeListLoadingStatus');
 
@@ -175,6 +209,46 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction();
     try {
       return super.setTopAnimeList(data);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setGenreList(List<String> data) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.setGenreList(data);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setMyAnimeMap(Map<String, AnimeItem> data) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.setMyAnimeMap(data);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addToAnimeMap(String key, AnimeItem data) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.addToAnimeMap(key, data);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeFromAnimeMap(String id) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.removeFromAnimeMap(id);
     } finally {
       _$_ApplicationStoreActionController.endAction(_$actionInfo);
     }

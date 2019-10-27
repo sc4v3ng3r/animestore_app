@@ -16,6 +16,7 @@ class AnimeDetailsStore = _AnimeDetailsStore with _$AnimeDetailsStore;
 abstract class _AnimeDetailsStore with Store {
 
   final ApplicationStore applicationStore;
+  final AnimeItem currentAnimeItem;
 
   @observable
   Color backgroundColor = IMAGE_BACKGROUND_COLOR;
@@ -28,7 +29,7 @@ abstract class _AnimeDetailsStore with Store {
 
   AnimeDetails animeDetails;
 
-  _AnimeDetailsStore(this.applicationStore);
+  _AnimeDetailsStore(this.applicationStore, this.currentAnimeItem);
 
   @action setLoadingStatus(LoadingStatus data) => loadingStatus = data;
 
@@ -36,13 +37,13 @@ abstract class _AnimeDetailsStore with Store {
 
   @action setBackgroundColor(Color color) => backgroundColor = color;
 
-  void loadAnimeDetails(String id) async {
+  void loadAnimeDetails() async {
     if (loadingStatus == LoadingStatus.LOADING)
       return;
 
     try {
       setLoadingStatus(LoadingStatus.LOADING);
-      animeDetails = await applicationStore.getAnimeDetails(id);
+      animeDetails = await applicationStore.getAnimeDetails(currentAnimeItem.id);
       setLoadingStatus(LoadingStatus.DONE);
     }
     on CrawlerApiException catch (ex) {

@@ -1,4 +1,5 @@
 import 'package:anime_app/logic/stores/StoreUtils.dart';
+import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
@@ -80,12 +81,15 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AnimeDetailsScreen(
-                                  appStore.mainAnimeList[index].id,
-                                  title: appStore.mainAnimeList[index].title,
-                                  imageUrl: appStore.mainAnimeList[index].imageUrl,
-                                  heroTag: appStore.mainAnimeList[index].id,
-                                )
+                                builder: (context) => Provider<AnimeDetailsStore>(
+                                  builder: (_) => AnimeDetailsStore(
+                                    Provider.of<ApplicationStore>(context),
+                                    appStore.mainAnimeList[index],
+                                  ),
+                                  child: AnimeDetailsScreen(
+                                    heroTag: appStore.mainAnimeList[index].id,
+                                  ),
+                                ),
                             )
                         );
                       },

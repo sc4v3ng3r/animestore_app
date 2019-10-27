@@ -1,3 +1,5 @@
+import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
+import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
@@ -13,7 +15,6 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  //ApplicationBloc bloc;
   final ScrollController _controller = ScrollController(initialScrollOffset: .0);
   final TextEditingController _searchController = TextEditingController(text: '');
   SearchStore searchStore;
@@ -189,11 +190,14 @@ class _SearchWidgetState extends State<SearchWidget> {
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) =>
-                        AnimeDetailsScreen(
-                          items[index].id,
-                          title: items[index].title,
-                          imageUrl: items[index].imageUrl,
-                          heroTag: items[index].id,
+                        Provider<AnimeDetailsStore>(
+                          builder: (_) => AnimeDetailsStore(
+                            Provider.of<ApplicationStore>(context),
+                              items[index],
+                          ),
+                          child: AnimeDetailsScreen(
+                            heroTag: items[index].id,
+                          ),
                         ),
                     ),
                 );

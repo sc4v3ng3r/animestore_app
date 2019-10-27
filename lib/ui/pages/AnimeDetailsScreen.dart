@@ -4,19 +4,16 @@ import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dar
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
-  final String title;
-  final String imageUrl;
   final String heroTag;
-  final String animeId;
 
-  const AnimeDetailsScreen(this.animeId, {Key key, this.title, this.heroTag, this.imageUrl})
-      : super(key: key);
+  const AnimeDetailsScreen({Key key, this.heroTag}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AnimeDetailsScreen();
@@ -36,8 +33,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
   void initState() {
     super.initState();
     applicationStore = Provider.of<ApplicationStore>(context, listen: false);
-    detailsStore = AnimeDetailsStore(applicationStore);
-    detailsStore.loadAnimeDetails(widget.animeId);
+    detailsStore = Provider.of<AnimeDetailsStore>(context, listen: false);
+    detailsStore.loadAnimeDetails();
   }
 
   @override
@@ -46,7 +43,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
     final expandedHeight = size.width * .9;
 
     final provider = AdvancedNetworkImage(
-      widget.imageUrl,
+      detailsStore.currentAnimeItem.imageUrl,
       useDiskCache: true,
       retryLimit: 5,
       // not available for now..
@@ -58,8 +55,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
       image: provider,
     );
 
-    final appBar = Observer(
-      builder: (_) => SliverAppBar(
+    // in the future add an Observer widget to
+    // handle the  image predominant color as background color
+    //detailsStore.backgroundColor
+    final appBar = SliverAppBar(
         floating: false,
         pinned: false,
         snap: false,
@@ -75,7 +74,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
-      ),
     );
 
     return Scaffold(
@@ -132,6 +130,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
 
                   return SliverList(delegate: SliverChildBuilderDelegate(
                         (context, index) {
+                          if (index == detailsStore.animeDetails.episodes.length )
+                            return Container(height: 56.0,);
                       return ListTile(
                         leading: Icon(Icons.play_circle_filled, color: Colors
                             .black,),
@@ -148,7 +148,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
                         },
                       );
                     },
-                    childCount: detailsStore.animeDetails.episodes.length,
+                    childCount: detailsStore.animeDetails.episodes.length + 1,
+
                   ));
                 }
                 else
@@ -157,6 +158,27 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
                   );
               }),
         ],
+      ),
+
+      floatingActionButton: Observer(
+        builder: (_) {
+          bool isInList = (applicationStore.myAnimeMap.containsKey(detailsStore.currentAnimeItem.id) );
+
+         return  FloatingActionButton.extended(
+            onPressed: () {
+              (isInList)
+                  ?
+                applicationStore.removeFromAnimeMap(detailsStore.currentAnimeItem.id)
+                  :
+              applicationStore.addToAnimeMap(
+                  detailsStore.currentAnimeItem.id,
+                  detailsStore.currentAnimeItem
+              );
+            },
+            label: Text('Minha Lista'),
+            icon: Icon( (isInList) ?  Icons.remove_circle_outline : Icons.add_circle_outline ),
+          );
+        }
       ),
     );
   }

@@ -1,5 +1,5 @@
-import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
+import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
 import 'package:anime_app/ui/pages/MainScreen.dart';
 import 'package:anime_app/ui/pages/SplashScreen.dart';
@@ -10,15 +10,14 @@ import 'package:provider/provider.dart';
 void main() => runApp( MyApp() );
 
 class MyApp extends StatelessWidget {
-  static final ApplicationStore appStore = ApplicationStore()..initApp();
-  final SearchStore searchStore = SearchStore(appStore);
+  final ApplicationStore appStore = ApplicationStore();
 
   @override
   Widget build(BuildContext context) =>
     MultiProvider(
         providers: [
           Provider<ApplicationStore>.value(value: appStore),
-          Provider<SearchStore>.value(value: searchStore),
+          Provider<SearchStore>.value(value: SearchStore(appStore)),
         ],
 
       child: MaterialApp(

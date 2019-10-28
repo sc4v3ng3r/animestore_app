@@ -1,11 +1,13 @@
 import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/ui/UiUtils.dart';
+import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';
+import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
@@ -95,7 +97,7 @@ class HomePage extends StatelessWidget {
           :
       _createHeaderSection(context,
           title: 'Minha Lista',
-          iconData: Icons.live_tv,
+          iconData: Icons.video_library,
           onTap: () =>_openAnimeItemGridPage(context, appStore.myAnimeMap.values.toList(),),
       ),
     );
@@ -104,6 +106,13 @@ class HomePage extends StatelessWidget {
       iconData: Icons.update,
       title: 'Mais recentes',
       onTap: () => _openAnimeItemGridPage(context, appStore.mostRecentAnimeList,),
+    );
+
+    final latestEpisodesHeader = _createHeaderSection(
+        context,
+      iconData: Icons.ondemand_video,
+      title: 'Últimos Episódios',
+      onTap: () => _openLatestEpisodePage(context),
     );
 
     return CustomScrollView(
@@ -155,6 +164,12 @@ class HomePage extends StatelessWidget {
           ),
         ),
 
+        latestEpisodesHeader,
+        _createHorizontalEpisodeList(
+          data: appStore.latestEpisodes,
+          width: size.width * .42,
+
+        )
       ],
     );
   }
@@ -163,23 +178,24 @@ class HomePage extends StatelessWidget {
     IconData iconData,
     Color iconColor,
     String title,
-
-    Widget leading,
-    String header,
+    List<Widget> actions,
     String heroTag,
     Function onTap}) =>
       SliverPadding(
         padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
         sliver: SliverToBoxAdapter(
-          child: GestureDetector(
-            child: UiUtils.createAppBarTitleWidget(
-              iconData: iconData,
-              iconColor:iconColor,
-              title: title,
-              heroTag: heroTag,
-              style: _SECTION_STYLE,
-            ),
-            onTap: onTap,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              TitleHeaderWidget(
+                iconData: iconData,
+                iconColor:iconColor,
+                title: title,
+                heroTag: heroTag,
+                style: _SECTION_STYLE,
+                onTap: onTap,
+              ),
+            ]..addAll(actions ?? []),
           ),
         ),
       );
@@ -239,7 +255,6 @@ class HomePage extends StatelessWidget {
                     ),
                   );
                 },
-
                 scrollDirection: Axis.horizontal,
                 itemCount: data.length,
                 physics: BouncingScrollPhysics(),
@@ -301,7 +316,37 @@ class HomePage extends StatelessWidget {
           ),
       );
 
-    void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag,
+
+  SliverToBoxAdapter _createHorizontalEpisodeList({
+    List<EpisodeItem>  data, double width, String tag, ScrollController controller}) => SliverToBoxAdapter(
+      child: Container(
+        height: width + 24,
+        child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index){
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
+                child: EpisodeItemView(
+                  width: width * 1.3,
+                  height: width * .9,
+                  imageUrl: data[index].imageUrl,
+                  title: data[index].title,
+                  onTap: (){},
+                ),
+              );
+            },
+          itemCount: data.length ~/ 8,
+        ),
+      ),
+    );
+
+  void _openLatestEpisodePage(BuildContext context) =>
+      Navigator.push(context, MaterialPageRoute(
+          builder: (context) => RecentEpisodeListPage())
+      );
+
+  void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag,
         ApplicationStore appStore) =>
         Navigator.push(context,
             MaterialPageRoute(

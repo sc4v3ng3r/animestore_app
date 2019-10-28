@@ -138,7 +138,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     );
   }
 
-  SliverToBoxAdapter _centerDecoration  (Size size, IconData icon, String text) =>
+  SliverToBoxAdapter _centerDecoration (Size size, IconData icon, String text) =>
       SliverToBoxAdapter(
         child: Container(
           height: size.height *.7,

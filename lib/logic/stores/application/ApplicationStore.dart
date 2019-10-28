@@ -36,6 +36,9 @@ abstract class _ApplicationStore with Store {
   @observable
   ObservableMap<String, AnimeItem> myAnimeMap = ObservableMap();
 
+  @observable
+  ObservableList<EpisodeItem> latestEpisodes = ObservableList();
+
   /// counter of main animes list pages.
   int mainAnimesPageCounter = 1;
   int maxMainAnimesPageNumber = 1;
@@ -46,6 +49,9 @@ abstract class _ApplicationStore with Store {
 
   @observable
   AppInitStatus appInitStatus = AppInitStatus.INITIALIZING;
+
+  @action
+  setLatestEpisodes(List<EpisodeItem> data) => latestEpisodes = ObservableList.of(data);
 
   @action
   setAnimeListLoadingStatus(LoadingStatus status) => animeListLoadingStatus = status;
@@ -142,15 +148,17 @@ abstract class _ApplicationStore with Store {
 
   Future<void> getHomePageInfo() async{
     var homePageData = await api.getHomePageData();
-    setDailyReleases( homePageData.dayReleases );
     setMostRecentAnimeList( homePageData.mostRecentAnimes );
     setTopAnimeList( homePageData.mostShowedAnimes);
+    setLatestEpisodes(  homePageData.latestEpisodes
+      ..removeWhere( (item) => item.title.contains('anúncios')) );
+    setDailyReleases( homePageData.dayReleases);
 
   }
 
   Future<void> getGenresAvailable() async {
     List<String> data = await api.getGenresAvailable(timeout: TIMEOUT);
-    setGenreList(data);
+    setGenreList(data );
   }
 
   Future<void> loadMyAnimeMap() async {
@@ -158,5 +166,4 @@ abstract class _ApplicationStore with Store {
     //print('Loaded from LOCAL $data');
     setMyAnimeMap(data);
   }
-
 }

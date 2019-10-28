@@ -114,6 +114,23 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
     }, _$myAnimeMapAtom, name: '${_$myAnimeMapAtom.name}_set');
   }
 
+  final _$latestEpisodesAtom = Atom(name: '_ApplicationStore.latestEpisodes');
+
+  @override
+  ObservableList<EpisodeItem> get latestEpisodes {
+    _$latestEpisodesAtom.context.enforceReadPolicy(_$latestEpisodesAtom);
+    _$latestEpisodesAtom.reportObserved();
+    return super.latestEpisodes;
+  }
+
+  @override
+  set latestEpisodes(ObservableList<EpisodeItem> value) {
+    _$latestEpisodesAtom.context.conditionallyRunInAction(() {
+      super.latestEpisodes = value;
+      _$latestEpisodesAtom.reportChanged();
+    }, _$latestEpisodesAtom, name: '${_$latestEpisodesAtom.name}_set');
+  }
+
   final _$animeListLoadingStatusAtom =
       Atom(name: '_ApplicationStore.animeListLoadingStatus');
 
@@ -153,6 +170,16 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
 
   final _$_ApplicationStoreActionController =
       ActionController(name: '_ApplicationStore');
+
+  @override
+  dynamic setLatestEpisodes(List<EpisodeItem> data) {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.setLatestEpisodes(data);
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic setAnimeListLoadingStatus(LoadingStatus status) {

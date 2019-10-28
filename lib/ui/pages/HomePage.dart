@@ -8,6 +8,7 @@ import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';
 import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
+import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
@@ -166,6 +167,7 @@ class HomePage extends StatelessWidget {
 
         latestEpisodesHeader,
         _createHorizontalEpisodeList(
+          context,
           data: appStore.latestEpisodes,
           width: size.width * .42,
 
@@ -317,7 +319,7 @@ class HomePage extends StatelessWidget {
       );
 
 
-  SliverToBoxAdapter _createHorizontalEpisodeList({
+  SliverToBoxAdapter _createHorizontalEpisodeList(BuildContext context, {
     List<EpisodeItem>  data, double width, String tag, ScrollController controller}) => SliverToBoxAdapter(
       child: Container(
         height: width + 24,
@@ -332,7 +334,7 @@ class HomePage extends StatelessWidget {
                   height: width * .9,
                   imageUrl: data[index].imageUrl,
                   title: data[index].title,
-                  onTap: (){},
+                  onTap: () => _playEpisode(context, data[index].id),
                 ),
               );
             },
@@ -390,6 +392,18 @@ class HomePage extends StatelessWidget {
           gridItems: data,
         )
     ));
+  }
+
+  void _playEpisode(BuildContext context, String episodeId) {
+      Navigator.push(context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  VideoPlayerScreen(
+                    episodeId: episodeId,
+                  )
+          )
+      );
+
   }
 }
 

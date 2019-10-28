@@ -1,5 +1,6 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
+import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,9 +60,7 @@ class RecentEpisodeListPage extends StatelessWidget {
                         imageUrl: data[index].imageUrl,
                         fontSize: 18,
                         fontColor: Colors.white,
-                        onTap: (){
-                          print(data[index].title);
-                        },
+                        onTap: ()=> _playEpisode(context, data[index].id),
                       );
                     },
 
@@ -72,5 +71,17 @@ class RecentEpisodeListPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _playEpisode(BuildContext context, String episodeId) {
+    Navigator.push(context,
+        MaterialPageRoute(
+            builder: (context) =>
+                VideoPlayerScreen(
+                  episodeId: episodeId,
+                )
+        )
+    );
+
   }
 }

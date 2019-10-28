@@ -1,7 +1,7 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
-import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -51,7 +51,27 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               return Center(child: CircularProgressIndicator(),);
 
             if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.ERROR)
-              return Center(child: Text('Erro'),);
+              return Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Center(child: Icon(Icons.error, color: Colors.red, size: 82,)),
+                  Container(height: 10,),
+                  Text(
+                    'Vídeo Indisponível..',
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: TextStyle(color: Colors.red,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),),
+
+                  RaisedButton(
+                    child: Text('Voltar'),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ],
+              );
 
             if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.CANCELED) {
               print('episode loading cancelled');

@@ -26,6 +26,27 @@ class HomePage extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
     final appStore = Provider.of<ApplicationStore>(context);
 
+    final ScrollController topAnimesController = ScrollController(
+      initialScrollOffset: appStore.topAnimeOffset
+    );
+    topAnimesController.addListener( () => appStore.topAnimeOffset = topAnimesController.position.pixels);
+
+    final ScrollController mostRecentController = ScrollController(
+      initialScrollOffset: appStore.mostRecentOffset
+    );
+    mostRecentController.addListener( () => appStore.mostRecentOffset = mostRecentController.position.pixels );
+
+    final ScrollController genresController = ScrollController(
+      initialScrollOffset: appStore.genreListOffset
+    );
+    genresController.addListener(() => appStore.genreListOffset = genresController.position.pixels);
+
+    final ScrollController myListController = ScrollController(
+      initialScrollOffset: appStore.myListOffset,
+    );
+    myListController.addListener(() => appStore.myListOffset = myListController.position.pixels);
+
+
     final expandedHeight = size.width * .9;
 
     final appBar = SliverAppBar(
@@ -97,6 +118,7 @@ class HomePage extends StatelessWidget {
           data:appStore.topAnimeList,
           width: size.width * .42,
           tag: HERO_TAG_UPDATE,
+          controller: topAnimesController
         ),
 
         mostRecentsHeader,
@@ -106,6 +128,7 @@ class HomePage extends StatelessWidget {
           data:appStore.mostRecentAnimeList,
           width: size.width * .42,
           tag: HERO_TAG_RELEASE,
+          controller: mostRecentController
         ),
 
 
@@ -114,6 +137,7 @@ class HomePage extends StatelessWidget {
         _createHorizontalGenreList(
           width: size.width * .42,
           data: appStore.genreList,
+          controller: genresController,
         ),
 
 
@@ -127,6 +151,7 @@ class HomePage extends StatelessWidget {
             appStore,
             width: size.width * .42,
             tag: HERO_TAG_MY_LIST,
+            controller: myListController,
           ),
         ),
 
@@ -160,11 +185,12 @@ class HomePage extends StatelessWidget {
       );
 
   SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore, {
-    List<AnimeItem>  data, double width, String tag,}) =>
+    List<AnimeItem>  data, double width, String tag, ScrollController controller}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width * 1.4,
           child: ListView.builder(
+                controller: controller,
                 itemBuilder: (context, index) {
                   var anime = data[index];
                   var heroTag = '${anime.id}$tag';
@@ -189,7 +215,7 @@ class HomePage extends StatelessWidget {
       );
 
   SliverToBoxAdapter _createHorizontaCustomAnimelList(ApplicationStore appStore, {
-    double width, String tag,}) =>
+    double width, String tag, ScrollController controller}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width * 1.4,
@@ -197,6 +223,7 @@ class HomePage extends StatelessWidget {
             builder: (_) {
               var data = appStore.myAnimeMap.values.toList();
               return ListView.builder(
+                controller: controller,
                 itemBuilder: (context, index) {
                   var anime = data[index];
                   var heroTag = '${anime.id}$tag';
@@ -224,13 +251,14 @@ class HomePage extends StatelessWidget {
       );
 
   SliverToBoxAdapter _createHorizontalGenreList( {
-    List<String>  data, double width, String tag}) =>
+    List<String>  data, double width, String tag, ScrollController controller}) =>
       SliverToBoxAdapter(
         child: Container(
             height: width * .9,
             child: Observer(
               builder: (context){
                 return ListView.builder(
+                  controller: controller,
                   itemBuilder: (context, index) {
 
                     return Padding(

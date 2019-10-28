@@ -17,6 +17,7 @@ abstract class _SearchStore with Store {
 
   int _pageNumberToLoad = 1;
   int _maxPageNumber = 1;
+  double searchListOffset = .0;
 
   @observable
   bool isLoadingMore = false;
@@ -47,6 +48,7 @@ abstract class _SearchStore with Store {
     setSearchItems([]); // try clear method
     _pageNumberToLoad = 1;
     _maxPageNumber = 1;
+    searchListOffset = .0;
     setSearchStatus(SearchState.NONE);
   }
 

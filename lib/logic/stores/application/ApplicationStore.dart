@@ -14,6 +14,10 @@ abstract class _ApplicationStore with Store {
   static const DEFAULT_PAGES_LOADING = 4;
   static const TIMEOUT = 10000;
 
+  double topAnimeOffset =0, myListOffset =0,
+      mainAnimeListOffset =0, mostRecentOffset =0, genreListOffset =.0;
+
+
   @observable
   ObservableList<AnimeItem> mainAnimeList = ObservableList();
 

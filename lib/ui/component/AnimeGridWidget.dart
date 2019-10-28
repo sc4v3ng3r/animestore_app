@@ -16,18 +16,19 @@ class AnimeGridWidget extends StatefulWidget {
 class _AnimeGridWidgetState extends State<AnimeGridWidget> {
   ApplicationStore appStore;
 
-  final ScrollController _controller = ScrollController(
-    initialScrollOffset: 0,
-  );
+  ScrollController _controller;
 
   @override
   void initState() {
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
+    _controller = ScrollController(initialScrollOffset: appStore.mainAnimeListOffset);
     _controller.addListener(_listener);
   }
 
   void _listener() async {
+    appStore.mainAnimeListOffset = _controller.position.pixels;
+
     if (_controller.position.pixels >
         (_controller.position.maxScrollExtent -
             (_controller.position.maxScrollExtent / 4))) await appStore.loadAnimeList();

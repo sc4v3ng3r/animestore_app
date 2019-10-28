@@ -15,7 +15,7 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  final ScrollController _controller = ScrollController(initialScrollOffset: .0);
+  ScrollController _controller;
   final TextEditingController _searchController = TextEditingController(text: '');
   SearchStore searchStore;
 
@@ -23,6 +23,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   void initState() {
     super.initState();
     searchStore = Provider.of<SearchStore>(context, listen: false);
+    _controller = ScrollController(initialScrollOffset: searchStore.searchListOffset);
     _controller.addListener(_pagination);
   }
 
@@ -212,7 +213,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   void _pagination() async {
-
+    searchStore.searchListOffset = _controller.position.pixels;
     if (_controller.position.pixels >  (_controller.position.maxScrollExtent
         - (_controller.position.maxScrollExtent/4)) ){
        await searchStore.loadMore();

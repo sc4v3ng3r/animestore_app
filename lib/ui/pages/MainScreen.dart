@@ -27,9 +27,7 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
       body: WillPopScope(
-
           child: _getCurrentPage(),
-
           onWillPop: () async {
             var flag = true;
             if (currentNav != MainScreenNavigation.HOME){
@@ -40,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
             }
             return flag;
           }
-      ),
+          ),
 
       bottomNavigationBar: _createBottomBar(),
     );
@@ -72,13 +70,15 @@ class _MainScreenState extends State<MainScreen> {
   Widget _createBottomBar () => Container(
 //    decoration: BoxDecoration(boxShadow: [
 //      BoxShadow(
-//        color: Colors.blue,
-//        offset: Offset(0, 2.0),
-//        blurRadius: 8.0,
+//        color: secondaryLight,
+//        offset: Offset(.0, 10.0),
+//        blurRadius: 20.0,
 //      )
 //    ]),
     child: BottomNavigationBar(
-      selectedItemColor: Theme.of(context).accentColor,
+//      selectedItemColor: secondaryLight,
+//      backgroundColor: primaryColor,
+//      unselectedItemColor: Colors.white,
       //unselectedItemColor: Theme.of(context).,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -90,7 +90,6 @@ class _MainScreenState extends State<MainScreen> {
         ),
 
         BottomNavigationBarItem(
-
           title: Text('Animes'),
           icon: Icon(
             Icons.live_tv,
@@ -107,7 +106,6 @@ class _MainScreenState extends State<MainScreen> {
 
       onTap: _changePageBody,
       currentIndex: currentNav.index,
-      elevation: .0,
     ),
   );
 }

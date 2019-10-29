@@ -18,6 +18,7 @@ class TitleHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: onTap,
       child: Hero(
@@ -29,7 +30,7 @@ class TitleHeaderWidget extends StatelessWidget {
             Container(width: 4.0,),
             Text('$title', style: style,),
             (onTap != null) ?
-                Icon(Icons.navigate_next, color: iconColor, size: 28,)
+                Icon(Icons.navigate_next, color: iconColor , size: 28,)
                 : Container(),
           ],
         ),

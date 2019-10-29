@@ -73,6 +73,7 @@ class HomePage extends StatelessWidget {
 
     final topAnimesHeader = _createHeaderSection(context,
       title: 'Top Animes',
+
       iconData: Icons.star,
       iconColor: Colors.amberAccent,
       heroTag: 'TopAnimesTag',
@@ -82,6 +83,7 @@ class HomePage extends StatelessWidget {
 
     final genresHeader = _createHeaderSection(context,
       iconData:Icons.explore,
+
       title: 'Explorar Gêneros',
       onTap: () {
         Navigator.push(context,
@@ -390,7 +392,7 @@ class HomePage extends StatelessWidget {
     Navigator.push(context, MaterialPageRoute(
         builder: (_) => DefaultAnimeItemGridPage(
           gridItems: data,
-        )
+        ),
     ));
   }
 

@@ -132,19 +132,24 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
                         (context, index) {
                           if (index == detailsStore.animeDetails.episodes.length )
                             return Container(height: 56.0,);
+                          var episodeId = detailsStore.animeDetails.episodes[index].id;
+                          var animeId = detailsStore.currentAnimeItem.id;
+                          var isWatched = applicationStore.isEpisodeWatched(animeId, episodeId);
                       return ListTile(
-                        leading: Icon(Icons.play_circle_filled, color: Colors
-                            .black,),
+                        leading: Icon(Icons.play_circle_filled, color: (isWatched)
+                            ? Colors.green : Colors.black,),
                         title: Text(detailsStore.animeDetails.episodes[index].title),
                         onTap: () async {
                           Navigator.push(context,
                               MaterialPageRoute(
                                   builder: (context) =>
                                       VideoPlayerScreen(
-                                        episodeId: detailsStore.animeDetails.episodes[index].id,
+                                        episodeId: episodeId,
                                       )
                               )
                           );
+
+                          applicationStore.addWatchedEpisode(animeId, episodeId);
                         },
                       );
                     },

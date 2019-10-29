@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     Provider.of<ApplicationStore>(context).initApp();
 
     return Material(

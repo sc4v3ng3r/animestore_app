@@ -87,7 +87,7 @@ class HomePage extends StatelessWidget {
       title: 'Explorar Gêneros',
       onTap: () {
         Navigator.push(context,
-          MaterialPageRoute(
+          CupertinoPageRoute(
               builder: (context) => GenreGridPage()
           ),
         );
@@ -346,14 +346,14 @@ class HomePage extends StatelessWidget {
     );
 
   void _openLatestEpisodePage(BuildContext context) =>
-      Navigator.push(context, MaterialPageRoute(
+      Navigator.push(context, CupertinoPageRoute(
           builder: (context) => RecentEpisodeListPage())
       );
 
   void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag,
         ApplicationStore appStore) =>
         Navigator.push(context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) => Provider<AnimeDetailsStore>(
                   builder: (_) => AnimeDetailsStore(appStore, anime),
                   child: AnimeDetailsScreen(heroTag: heroTag,),
@@ -389,7 +389,7 @@ class HomePage extends StatelessWidget {
         );
 
   void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,) {
-    Navigator.push(context, MaterialPageRoute(
+    Navigator.push(context, CupertinoPageRoute(
         builder: (_) => DefaultAnimeItemGridPage(
           gridItems: data,
         ),

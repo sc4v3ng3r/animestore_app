@@ -4,6 +4,7 @@ import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +45,7 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
                       onTap: () {
                         Navigator.push(
                             context,
-                            MaterialPageRoute(
+                            CupertinoPageRoute(
                               builder: (context) => Provider<AnimeDetailsStore>(
                                 builder: (_) => AnimeDetailsStore(
                                   Provider.of<ApplicationStore>(context),

@@ -1,6 +1,7 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

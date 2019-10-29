@@ -4,6 +4,7 @@ import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -190,7 +191,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               imageHeroTag: items[index].id,
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>
+                    CupertinoPageRoute(builder: (context) =>
                         Provider<AnimeDetailsStore>(
                           builder: (_) => AnimeDetailsStore(
                             Provider.of<ApplicationStore>(context),

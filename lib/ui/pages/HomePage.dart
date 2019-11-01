@@ -6,6 +6,7 @@ import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
+import 'package:anime_app/ui/pages/GenreAnimePage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';
 import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
@@ -307,7 +308,14 @@ class HomePage extends StatelessWidget {
                           ),
                           colorBrightness: ColorBrightness.primary,
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context,
+                              CupertinoPageRoute(
+                                  builder: (context) =>
+                                      GenreAnimePage(genreName: data[index])
+                              )
+                          );
+                        },
                       ),
                     );
                   },

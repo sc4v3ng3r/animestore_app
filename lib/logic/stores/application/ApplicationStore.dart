@@ -152,6 +152,7 @@ abstract class _ApplicationStore with Store {
 
       try {
         await databaseProvider.init();
+
         await loadMyAnimeMap();
         await loadWatchedEpisodes();
         await getHomePageInfo();

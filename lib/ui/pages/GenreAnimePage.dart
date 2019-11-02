@@ -45,6 +45,7 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
       return await store.loadMore();
 
   }
+
   @override
   Widget build(BuildContext context) {
 

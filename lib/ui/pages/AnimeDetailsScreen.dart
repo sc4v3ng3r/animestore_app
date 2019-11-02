@@ -141,7 +141,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
                         title: Text(detailsStore.animeDetails.episodes[index].title),
                         onTap: () async {
                           Navigator.push(context,
-                              MaterialPageRoute(
+                              CupertinoPageRoute(
                                   builder: (context) =>
                                       VideoPlayerScreen(
                                         episodeId: episodeId,

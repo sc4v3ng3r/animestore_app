@@ -76,7 +76,7 @@ class RecentEpisodeListPage extends StatelessWidget {
 
   void _playEpisode(BuildContext context, String episodeId) {
     Navigator.push(context,
-        MaterialPageRoute(
+        CupertinoPageRoute(
             builder: (context) =>
                 VideoPlayerScreen(
                   episodeId: episodeId,

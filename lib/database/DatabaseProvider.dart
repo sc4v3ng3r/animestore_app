@@ -5,6 +5,8 @@ import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+
+
 class DatabaseProvider {
   Database _db;
   String _DB_NAME = 'AnimeAppDB.db';
@@ -18,11 +20,28 @@ class DatabaseProvider {
   static const _ANIME_ID = 'animeId';
   static const _EPISODE_ID = 'episodeId';
 
+  var _dbPath;
+  // Sql scripts versions.
+  static const _SCRIPTS = [
+    [sql1],
+    [sql1,sql2],
+  ];
+
+  // user anime list [MY_LIST]
+  static const sql1 = 'CREATE TABLE $_TABLE_MY_LIST '
+      ' (id INTEGER PRIMARY KEY,'
+      ' imageUrl TEXT)';
+
+  static const sql2 = 'CREATE TABLE $_TABLE_ANIME_EPISODE_TRACK '
+  '(id INTEGER PRIMARY KEY AUTOINCREMENT,'
+  ' $_ANIME_ID TEXT,'
+  ' $_EPISODE_ID TEXT)';
+
   Future<void> init() async {
     var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, _DB_NAME);
+    _dbPath = join(databasesPath, _DB_NAME);
 
-    _db = await  openDatabase(path,
+    _db = await  openDatabase(_dbPath,
       version: _CURRENT_VERSION,
       onCreate: _createDataBase,
       onUpgrade: _onUpgrade,
@@ -30,20 +49,28 @@ class DatabaseProvider {
   }
 
   Future<void> _createDataBase(Database db, int version) async {
-    String sql = 'CREATE TABLE $_TABLE_MY_LIST '
-        ' (id INTEGER PRIMARY KEY,'
-        ' imageUrl TEXT)';
+    var exists = await databaseExists(_dbPath);
+    print('ON CREATE');
+    if (exists) {
+      _SCRIPTS[version - 1].forEach(
+              (sql) async => await db.execute(sql)
+      );
+    }
+    else
+      await db.execute(_SCRIPTS[0][0]);
 
-    return await db.execute(sql);
+
+    //return await db.execute(sql);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    final String sql = 'CREATE TABLE $_TABLE_ANIME_EPISODE_TRACK '
-        '(id INTEGER PRIMARY KEY AUTOINCREMENT,'
-        ' $_ANIME_ID TEXT,'
-        ' $_EPISODE_ID TEXT)';
+//    final String sql = 'CREATE TABLE $_TABLE_ANIME_EPISODE_TRACK '
+//        '(id INTEGER PRIMARY KEY AUTOINCREMENT,'
+//        ' $_ANIME_ID TEXT,'
+//        ' $_EPISODE_ID TEXT)';
 
-    return await db.execute(sql);
+  print('On UPGRADE');
+    return await db.execute(sql2);
   }
 
   Future<Map<String, List<String>>> loadWatchedEpisodes() async {

@@ -10,6 +10,7 @@ import 'package:anime_app/ui/pages/GenreAnimePage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';
 import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
+import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,7 +61,7 @@ class HomePage extends StatelessWidget {
         pinned: false,
         snap: false,
         centerTitle: true,
-        backgroundColor: Colors.white.withOpacity(.3),
+        backgroundColor: primaryColor.withOpacity(.9),
         //title: Text('AppBar', style: TextStyle(color: Colors.black),),
         flexibleSpace: FlexibleSpaceBar(
             background: _createDayReleaseCarousel(
@@ -74,7 +75,6 @@ class HomePage extends StatelessWidget {
 
     final topAnimesHeader = _createHeaderSection(context,
       title: 'Top Animes',
-
       iconData: Icons.star,
       iconColor: Colors.amberAccent,
       heroTag: 'TopAnimesTag',
@@ -84,7 +84,7 @@ class HomePage extends StatelessWidget {
 
     final genresHeader = _createHeaderSection(context,
       iconData:Icons.explore,
-
+      iconColor: accentColor,
       title: 'Explorar Gêneros',
       onTap: () {
         Navigator.push(context,
@@ -101,6 +101,7 @@ class HomePage extends StatelessWidget {
           :
       _createHeaderSection(context,
           title: 'Minha Lista',
+          iconColor: accentColor,
           iconData: Icons.video_library,
           onTap: () =>_openAnimeItemGridPage(context, appStore.myAnimeMap.values.toList(),),
       ),
@@ -108,6 +109,7 @@ class HomePage extends StatelessWidget {
 
     final mostRecentsHeader = _createHeaderSection(context,
       iconData: Icons.update,
+      iconColor: accentColor,
       title: 'Mais recentes',
       onTap: () => _openAnimeItemGridPage(context, appStore.mostRecentAnimeList,),
     );
@@ -116,6 +118,7 @@ class HomePage extends StatelessWidget {
         context,
       iconData: Icons.ondemand_video,
       title: 'Últimos Episódios',
+      iconColor: accentColor,
       onTap: () => _openLatestEpisodePage(context),
     );
 
@@ -304,9 +307,9 @@ class HomePage extends StatelessWidget {
                         ),
                         backgroundColor: _randomColor.randomColor(
                           colorHue: ColorHue.multiple(
-                            colorHues: [ ColorHue.orange, ColorHue.blue],
+                            colorHues: [ ColorHue.blue,],
                           ),
-                          colorBrightness: ColorBrightness.primary,
+                          colorBrightness: ColorBrightness.dark,
                         ),
                         onTap: () {
                           Navigator.push(context,

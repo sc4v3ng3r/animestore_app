@@ -16,7 +16,6 @@ class GenreGridPage extends StatelessWidget {
     var width = size.width * 1.3;
     var height =  size.width * .9;
     return Scaffold(
-      backgroundColor: Colors.black,
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[

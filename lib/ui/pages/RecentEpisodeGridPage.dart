@@ -44,7 +44,6 @@ class RecentEpisodeListPage extends StatelessWidget {
     var data = applicationStore.latestEpisodes;
 
     return Scaffold(
-      backgroundColor: Colors.black,
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[

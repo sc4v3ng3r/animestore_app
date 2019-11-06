@@ -1,8 +1,8 @@
-
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
+import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class AnimeDetailsScreen extends StatefulWidget {
 
 }
 
-class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
+class _AnimeDetailsScreen extends State<AnimeDetailsScreen> {
   ApplicationStore applicationStore;
   AnimeDetailsStore detailsStore;
 
@@ -63,7 +63,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
         pinned: false,
         snap: false,
         expandedHeight: expandedHeight,
-        backgroundColor: detailsStore.backgroundColor,
+        backgroundColor: primaryColor, //detailsStore.backgroundColor,
         flexibleSpace: FlexibleSpaceBar(
           background: Hero(
             tag: widget.heroTag ?? UniqueKey().toString(),
@@ -137,15 +137,13 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
                           var isWatched = applicationStore.isEpisodeWatched(animeId, episodeId);
                       return ListTile(
                         leading: Icon(Icons.play_circle_filled, color: (isWatched)
-                            ? Colors.green : Colors.black,),
+                            ? Colors.green : accentColor,),
                         title: Text(detailsStore.animeDetails.episodes[index].title),
                         onTap: () async {
                           Navigator.push(context,
                               CupertinoPageRoute(
                                   builder: (context) =>
-                                      VideoPlayerScreen(
-                                        episodeId: episodeId,
-                                      )
+                                      VideoPlayerScreen(episodeId: episodeId,)
                               )
                           );
 
@@ -170,6 +168,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>{
           bool isInList = (applicationStore.myAnimeMap.containsKey(detailsStore.currentAnimeItem.id) );
 
          return  FloatingActionButton.extended(
+           backgroundColor: accentColor,
             onPressed: () {
               (isInList)
                   ?

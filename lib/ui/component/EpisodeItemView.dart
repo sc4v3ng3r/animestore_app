@@ -1,3 +1,4 @@
+import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 
@@ -85,7 +86,7 @@ class EpisodeItemView extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: fontSize ?? 14,
-                      color: fontColor ?? Colors.black,
+                      color: fontColor ?? textPrimaryColor,
                     ),
                   ),
                 )

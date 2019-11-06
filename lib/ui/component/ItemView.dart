@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:anime_app/logic/Constants.dart';
+import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 
@@ -37,7 +37,7 @@ class ItemView extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: backgroundColor ?? IMAGE_BACKGROUND_COLOR,
+          color: backgroundColor ?? secondaryColor,
         ),
 
         child: Stack(

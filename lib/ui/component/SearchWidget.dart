@@ -3,6 +3,7 @@ import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
+import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     final size = MediaQuery.of(context).size;
 
     final appBar = SliverAppBar(
+      backgroundColor: primaryColor,
       expandedHeight: kToolbarHeight,
       title: Center(
         child: Observer(
@@ -51,6 +53,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                 height: kToolbarHeight - 16,
                 child: TextField(
                   autofocus: false,
+                  style: TextStyle(
+                    color: accentColor,
+                  ),
                   enabled: (searchStore.searchState != SearchState.SEARCHING),
                   controller: _searchController,
                   textInputAction: TextInputAction.done,
@@ -64,11 +69,13 @@ class _SearchWidgetState extends State<SearchWidget> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
+
                       suffixIcon: IconButton(
                         icon: Icon(Icons.clear),
                         onPressed: () => searchStore.clearSearch(),
                       ),
                       hintText: 'Anime, Estudio, Genero...',
+                      hintStyle: TextStyle(color: secondaryColor),
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.0)
                   ),
                 ),

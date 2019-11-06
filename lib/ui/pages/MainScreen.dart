@@ -2,6 +2,7 @@ import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
 import 'package:anime_app/ui/component/SearchWidget.dart';
 import 'package:anime_app/ui/pages/HomePage.dart';
+import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,10 +77,9 @@ class _MainScreenState extends State<MainScreen> {
 //      )
 //    ]),
     child: BottomNavigationBar(
-//      selectedItemColor: secondaryLight,
-//      backgroundColor: primaryColor,
-//      unselectedItemColor: Colors.white,
-      //unselectedItemColor: Theme.of(context).,
+      selectedItemColor: accentColor,
+      backgroundColor: primaryColor,
+      unselectedItemColor: secondaryColor,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
 

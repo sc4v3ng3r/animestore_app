@@ -34,10 +34,12 @@ dependencies:
   random_color: ^1.0.3
   sqflite: ^1.1.7+1
   path: ^1.6.4
+  bot_toast: ^2.1.0
   mobx: ^0.3.8+1
   flutter_mobx: ^0.3.3+1
   mobx_codegen: ^0.3.9+1
   build_runner: 1.7.0
+
 
 dev_dependencies:
   flutter_test:

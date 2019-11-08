@@ -188,6 +188,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
 
       floatingActionButton: Observer(
         builder: (_) {
+          if (detailsStore.loadingStatus != LoadingStatus.DONE)
+            return Container();
           bool isInList = (applicationStore.myAnimeMap.containsKey(detailsStore.currentAnimeItem.id) );
 
          return  FloatingActionButton.extended(

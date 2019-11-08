@@ -1,8 +1,11 @@
 import 'package:anime_app/logic/stores/StoreUtils.dart';
+import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/genre_anime_store/GenreAnimeStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
+import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -53,27 +56,6 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2.5;
     final double itemWidth = size.width / 2;
-//
-//    final appBar = SliverAppBar(
-//      centerTitle: true,
-//      title: Row(
-//          mainAxisSize: MainAxisSize.min,
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            Icon(
-//              Icons.ondemand_video,
-//            ),
-//            Container(
-//              width: 4.0,
-//            ),
-//            Text('${widget.genreName}'),
-//          ],
-//        ),
-//
-//      snap: false,
-//      floating: true,
-//      pinned: false,
-//    );
 
     return Scaffold(
       body: CustomScrollView(
@@ -106,14 +88,25 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
                         delegate: SliverChildBuilderDelegate(
                             (context, index){
                               var anime = store.animeItems[index];
+                              var heroTag = '${anime.id}-$index';
 
                           return Tooltip(
                             message: anime.title ,
                             child: ItemView(
+                              imageHeroTag: heroTag,
                               width: itemWidth,
                               height: itemHeight,
                               imageUrl: anime.imageUrl,
-                              onTap: (){},
+                              onTap: (){
+                                Navigator.push(context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => Provider<AnimeDetailsStore>(
+                                        builder: (_) => AnimeDetailsStore(appStore, anime),
+                                        child: AnimeDetailsScreen(heroTag: heroTag,),
+                                      ),
+                                    )
+                                );
+                              },
                             ),
                           );
                         },

@@ -11,6 +11,8 @@ import 'package:palette_generator/palette_generator.dart';
 
 part 'AnimeDetailsStore.g.dart';
 
+enum TabChoice{EPISODES, RESUME}
+
 class AnimeDetailsStore = _AnimeDetailsStore with _$AnimeDetailsStore;
 
 abstract class _AnimeDetailsStore with Store {
@@ -27,6 +29,9 @@ abstract class _AnimeDetailsStore with Store {
   @observable
   ObservableList<String> visualizedEps = ObservableList();
 
+  @observable
+  TabChoice tabChoice = TabChoice.EPISODES;
+
   AnimeDetails animeDetails;
 
   _AnimeDetailsStore(this.applicationStore, this.currentAnimeItem);
@@ -36,6 +41,9 @@ abstract class _AnimeDetailsStore with Store {
   @action addVisualizedEp(String episodeId) => visualizedEps.add(episodeId);
 
   @action setBackgroundColor(Color color) => backgroundColor = color;
+
+
+  @action setTabChoice(TabChoice choice) => tabChoice = choice;
 
   void loadAnimeDetails() async {
     if (loadingStatus == LoadingStatus.LOADING)

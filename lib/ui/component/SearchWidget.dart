@@ -54,7 +54,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 child: TextField(
                   autofocus: false,
                   style: TextStyle(
-                    color: accentColor,
+                    color: primaryColor,
                   ),
                   enabled: (searchStore.searchState != SearchState.SEARCHING),
                   controller: _searchController,

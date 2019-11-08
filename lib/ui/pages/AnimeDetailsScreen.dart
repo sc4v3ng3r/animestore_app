@@ -10,7 +10,7 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-class AnimeDetailsScreen extends StatefulWidget {
+class AnimeDetailsScreen extends StatefulWidget  {
   final String heroTag;
 
   const AnimeDetailsScreen({Key key, this.heroTag}) : super(key: key);
@@ -20,10 +20,11 @@ class AnimeDetailsScreen extends StatefulWidget {
 
 }
 
-class _AnimeDetailsScreen extends State<AnimeDetailsScreen> {
+class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderStateMixin {
   ApplicationStore applicationStore;
   AnimeDetailsStore detailsStore;
 
+  TabController tabController;
   static final _defaultSectionStyle = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w700,
@@ -32,8 +33,11 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    applicationStore = Provider.of<ApplicationStore>(context, listen: false);
     detailsStore = Provider.of<AnimeDetailsStore>(context, listen: false);
+    tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+
+    applicationStore = Provider.of<ApplicationStore>(context, listen: false);
+
     detailsStore.loadAnimeDetails();
   }
 
@@ -62,6 +66,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> {
         floating: false,
         pinned: false,
         snap: false,
+        leading: Container(),
         expandedHeight: expandedHeight,
         backgroundColor: primaryColor, //detailsStore.backgroundColor,
         flexibleSpace: FlexibleSpaceBar(
@@ -70,98 +75,116 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> {
             child:image ,
           ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
-        ),
     );
 
     return Scaffold(
       body: CustomScrollView(
-        slivers: <Widget>[
+          slivers: <Widget>[
+            appBar,
 
-          appBar,
+            SliverToBoxAdapter(
+                child: Observer(
+                  builder: (context){
 
-          SliverToBoxAdapter(
-              child: Observer(
-                builder: (context){
+                    if (detailsStore.loadingStatus == LoadingStatus.ERROR)
+                      return Center(child: Text('Erro'));
 
-                  if (detailsStore.loadingStatus == LoadingStatus.ERROR)
-                    return Center(child: Text('Erro'));
-
-                  if (detailsStore.loadingStatus == LoadingStatus.LOADING)
-                    return Container(
-                      height: 200,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[ CircularProgressIndicator(), ],
-                      ),
-                    );
-
-                  return Column(
-                    children: <Widget>[
-                      buildDetailsSection(detailsStore.animeDetails),
-                      buildResumeSection(detailsStore.animeDetails.resume),
-                    ],
-                  );
-                },
-              )),
-
-          Observer(
-              builder: (context) {
-                if (detailsStore.loadingStatus == LoadingStatus.DONE) {
-
-                  if (detailsStore.animeDetails.episodes.isEmpty) {
-                    return SliverToBoxAdapter(
-                      child: Container(
+                    if (detailsStore.loadingStatus == LoadingStatus.LOADING)
+                      return Container(
+                        height: 200,
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.do_not_disturb_alt, size: 52,),
-                            Text('Episódios indisponíveis...'),
-                          ],
+                          children: <Widget>[ CircularProgressIndicator(), ],
                         ),
-                      ),
-                    );
-                  }
-
-                  return SliverList(delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (index == detailsStore.animeDetails.episodes.length )
-                            return Container(height: 56.0,);
-                          var episodeId = detailsStore.animeDetails.episodes[index].id;
-                          var animeId = detailsStore.currentAnimeItem.id;
-                          var isWatched = applicationStore.isEpisodeWatched(animeId, episodeId);
-                      return ListTile(
-                        leading: Icon(Icons.play_circle_filled, color: (isWatched)
-                            ? Colors.green : accentColor,),
-                        title: Text(detailsStore.animeDetails.episodes[index].title),
-                        onTap: () async {
-                          Navigator.push(context,
-                              CupertinoPageRoute(
-                                  builder: (context) =>
-                                      VideoPlayerScreen(episodeId: episodeId,)
-                              )
-                          );
-
-                          applicationStore.addWatchedEpisode(animeId, episodeId);
-                        },
                       );
-                    },
-                    childCount: detailsStore.animeDetails.episodes.length + 1,
 
-                  ));
-                }
-                else
-                  return SliverToBoxAdapter(
-                    child: Container(),
-                  );
-              }),
-        ],
-      ),
+                    return animeTitleSection(detailsStore.animeDetails.title);
+                  },
+                )),
+
+            Observer(
+              builder: (context){
+                if (detailsStore.loadingStatus != LoadingStatus.DONE)
+                  return emptySliver;
+
+                return SliverToBoxAdapter(
+                  child: TabBar(
+                    onTap: (index) => detailsStore.setTabChoice(TabChoice.values[index]),
+                        controller: tabController,
+                          tabs: [
+                            Tab(text: 'Episodios',),
+                            Tab(text: 'Detalhes',),
+                          ],
+                      ),
+                );
+              },
+            ),
+
+            Observer(
+                builder: (context) {
+                  if (detailsStore.loadingStatus == LoadingStatus.DONE) {
+                    if (detailsStore.animeDetails.episodes.isEmpty) {
+                      return SliverToBoxAdapter(
+                        child: Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.do_not_disturb_alt, size: 52,),
+                              Text('Episódios indisponíveis...'),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (detailsStore.tabChoice == TabChoice.EPISODES)
+                      return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                                (context, index) {
+                            if (index == detailsStore.animeDetails.episodes.length )
+                              return Container(height: 56.0,);
+                            var episodeId = detailsStore.animeDetails.episodes[index].id;
+                            var animeId = detailsStore.currentAnimeItem.id;
+                            var isWatched = applicationStore.isEpisodeWatched(animeId, episodeId);
+                        return ListTile(
+                          leading: Icon(Icons.play_circle_filled, color: (isWatched)
+                              ? Colors.green : accentColor,),
+                          title: Text(detailsStore.animeDetails.episodes[index].title),
+                          onTap: () async {
+
+                            Navigator.push(context,
+                                CupertinoPageRoute(
+                                    builder: (context) =>
+                                        VideoPlayerScreen(episodeId: episodeId,)
+                                )
+                            );
+
+                            applicationStore.addWatchedEpisode(animeId, episodeId);
+                          },
+                        );
+                      },
+                      childCount: detailsStore.animeDetails.episodes.length + 1,
+                    ));
+
+                    else
+                      return SliverList(
+                          delegate: SliverChildListDelegate.fixed(
+                            [
+                              buildDetailsSection(detailsStore.animeDetails),
+                              buildResumeSection(detailsStore.animeDetails.resume),
+                              Container(height: 56.0,),
+                            ],
+                          ),
+                      );
+                  }
+                  else
+                    return emptySliver;
+                }),
+          ],
+        ),
 
       floatingActionButton: Observer(
         builder: (_) {
@@ -187,30 +210,35 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> {
     );
   }
 
-  Widget buildDetailsSection(AnimeDetails data) => ExpansionTile(
-    title: Text('Detalhes'),
-    children: <Widget>[
+
+  Widget animeTitleSection(String title) =>
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          margin: EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Flexible(
+                child: Text(
+                  title,
+                  style: _defaultSectionStyle,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+
+  Widget buildDetailsSection(AnimeDetails data) =>
       Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              margin: EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    child: Text(
-                      data.title,
-                      style: _defaultSectionStyle,
-                      textAlign: TextAlign.center,
-                      maxLines: 3,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             _buildInfoRow('Genero: ', data.genre),
             _buildInfoRow('Estudio: ', data.studio),
             _buildInfoRow('Autor: ', data.author),
@@ -219,41 +247,37 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> {
             _buildInfoRow('Episodios: ', data.episodesNumber),
           ],
         ),
-      )
-    ],
-  );
-
-  Widget buildResumeSection(String resume) =>
-      Container(
-        margin: EdgeInsets.only(bottom: 8.0),
-        child: ExpansionTile(
-          title: Text('Sinopse',),
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Flexible(
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 8.0),
-                      child: Text(resume ?? '----',
-                        maxLines: 24,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(
-                            letterSpacing: .2
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-
-        ),
       );
+
+  Widget buildResumeSection(String resume) => Column(
+              children: <Widget>[
+                Text('Sinopse',),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Flexible(
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 8.0),
+                          child: Text(resume ?? '----',
+                            maxLines: 24,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                                letterSpacing: .2
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+
+      );
+
+  Widget get emptySliver => SliverToBoxAdapter( child: Container(), );
 
   Widget _buildInfoRow(String key, String value) {
     return Container(

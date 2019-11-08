@@ -61,6 +61,23 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     }, _$visualizedEpsAtom, name: '${_$visualizedEpsAtom.name}_set');
   }
 
+  final _$tabChoiceAtom = Atom(name: '_AnimeDetailsStore.tabChoice');
+
+  @override
+  TabChoice get tabChoice {
+    _$tabChoiceAtom.context.enforceReadPolicy(_$tabChoiceAtom);
+    _$tabChoiceAtom.reportObserved();
+    return super.tabChoice;
+  }
+
+  @override
+  set tabChoice(TabChoice value) {
+    _$tabChoiceAtom.context.conditionallyRunInAction(() {
+      super.tabChoice = value;
+      _$tabChoiceAtom.reportChanged();
+    }, _$tabChoiceAtom, name: '${_$tabChoiceAtom.name}_set');
+  }
+
   final _$_AnimeDetailsStoreActionController =
       ActionController(name: '_AnimeDetailsStore');
 
@@ -89,6 +106,16 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     final _$actionInfo = _$_AnimeDetailsStoreActionController.startAction();
     try {
       return super.setBackgroundColor(color);
+    } finally {
+      _$_AnimeDetailsStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setTabChoice(TabChoice choice) {
+    final _$actionInfo = _$_AnimeDetailsStoreActionController.startAction();
+    try {
+      return super.setTabChoice(choice);
     } finally {
       _$_AnimeDetailsStoreActionController.endAction(_$actionInfo);
     }

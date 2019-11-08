@@ -69,13 +69,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _createBottomBar () => Container(
-//    decoration: BoxDecoration(boxShadow: [
-//      BoxShadow(
-//        color: secondaryLight,
-//        offset: Offset(.0, 10.0),
-//        blurRadius: 20.0,
-//      )
-//    ]),
+    decoration: BoxDecoration(
+        boxShadow: [
+      BoxShadow(
+        color: accentColor,
+        offset: Offset(.0, 5.0),
+        blurRadius: 12.0,
+      )
+    ]),
     child: BottomNavigationBar(
       selectedItemColor: accentColor,
       backgroundColor: primaryColor,
@@ -97,7 +98,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
 
         BottomNavigationBarItem(
-          title: Text('Buscar'),
+          title: Text('Buscar',),
           icon: Icon(
             Icons.search,
           ),

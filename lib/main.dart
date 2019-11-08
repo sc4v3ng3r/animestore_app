@@ -35,14 +35,16 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData().copyWith(
           brightness: Brightness.light,
-          //backgroundColor: Colors.white,
+
           scaffoldBackgroundColor: primaryColor,
           accentColor: accentColor,
+
+          // text theme
           textTheme: TextTheme().copyWith(
             body1: TextStyle(
               color: textPrimaryColor
             )
-          )
+          ),
         ),
 
         home: Observer(

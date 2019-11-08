@@ -147,7 +147,6 @@ class HomePage extends StatelessWidget {
           controller: mostRecentController
         ),
 
-
         genresHeader,
 
         _createHorizontalGenreList(
@@ -155,7 +154,6 @@ class HomePage extends StatelessWidget {
           data: appStore.genreList,
           controller: genresController,
         ),
-
 
         myListHeader,
 
@@ -307,7 +305,7 @@ class HomePage extends StatelessWidget {
                         ),
                         backgroundColor: _randomColor.randomColor(
                           colorHue: ColorHue.multiple(
-                            colorHues: [ ColorHue.blue,],
+                            colorHues: [ ColorHue.blue, ],
                           ),
                           colorBrightness: ColorBrightness.dark,
                         ),

@@ -1,6 +1,8 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
+import 'package:anime_app/ui/pages/GenreAnimePage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
@@ -44,11 +46,17 @@ class GenreGridPage extends StatelessWidget {
                     ),
                     backgroundColor: _randomColor.randomColor(
                       colorHue: ColorHue.multiple(
-                        colorHues: [ ColorHue.orange, ColorHue.blue],
+                        colorHues: [ ColorHue.blue],
                       ),
-                      colorBrightness: ColorBrightness.primary,
+                      colorBrightness: ColorBrightness.dark,
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context,
+                        CupertinoPageRoute(builder: (context)
+                          => GenreAnimePage(genreName: applicationStore.genreList[index])
+                        ),
+                      );
+                    },
                   );
                 },
               childCount: applicationStore.genreList.length,

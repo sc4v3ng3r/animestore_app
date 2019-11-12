@@ -79,9 +79,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             }
 
             if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.DONE){
-              _playerController ??= _createPlayerController(videoPlayerStore.currentEpisode.streamingUrl);
+              _playerController ??= _createPlayerController(
+                  videoPlayerStore.currentEpisode.streamingUrl, );
               _chewieController ??= _createChewieController();
             }
+
             return Chewie(controller: _chewieController,);
 
           },
@@ -105,7 +107,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void playPrevious(){}
 
   VideoPlayerController _createPlayerController(String streamUrl) =>
-      VideoPlayerController.network(streamUrl);
+      VideoPlayerController.network(streamUrl,
+
+          httpHeaders: {'Referer': videoPlayerStore.currentEpisode.referer} );
+
 
   ChewieController _createChewieController() =>
       ChewieController(

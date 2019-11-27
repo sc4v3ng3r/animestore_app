@@ -1,11 +1,14 @@
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/ui/component/notification/CustomListNotification.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -196,16 +199,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
 
          return  FloatingActionButton.extended(
            backgroundColor: accentColor,
-            onPressed: () {
-              (isInList)
-                  ?
-                applicationStore.removeFromAnimeMap(detailsStore.currentAnimeItem.id)
-                  :
-              applicationStore.addToAnimeMap(
-                  detailsStore.currentAnimeItem.id,
-                  detailsStore.currentAnimeItem
-              );
-            },
+            onPressed: () => (isInList) ? _removeFromList() : _addToList(),
             label: Text('Minha Lista'),
             icon: Icon( (isInList) ?  Icons.remove_circle_outline : Icons.add_circle_outline ),
           );
@@ -214,6 +208,34 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
     );
   }
 
+
+  void _removeFromList() {
+    applicationStore.removeFromAnimeMap(detailsStore.currentAnimeItem.id);
+    _showNotificationToast('Removido da lista', false);
+  }
+
+  void _addToList(){
+    applicationStore.addToAnimeMap(
+        detailsStore.currentAnimeItem.id,
+        detailsStore.currentAnimeItem
+    );
+    _showNotificationToast('Adicionado a lista', true);
+  }
+
+  void _showNotificationToast(String message, bool flag){
+    BotToast.showCustomNotification(
+        dismissDirections: [DismissDirection.horizontal],
+        onlyOne: true,
+        toastBuilder: (_){
+          return CustomListNotification(
+            imagePath: detailsStore.currentAnimeItem.imageUrl,
+            title: detailsStore.currentAnimeItem.title,
+            subtitle: message,
+            flag: flag,
+          );
+        }
+    );
+  }
 
   Widget animeTitleSection(String title) =>
       Container(

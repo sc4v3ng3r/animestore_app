@@ -17,9 +17,21 @@ class CustomListNotification extends StatelessWidget {
       color: primaryColor.withOpacity(.6),
       child: ListTile(
 
-        leading: Image(
-          image: AdvancedNetworkImage(imagePath, useDiskCache: true,),
-          fit: BoxFit.fill,
+        leading: Container(
+          child: Image(
+            image: AdvancedNetworkImage(imagePath, useDiskCache: true,),
+            fit: BoxFit.fill,
+          ),
+
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.white,
+                offset: Offset.zero,// (2.0, 2.0),
+                blurRadius: 5.0,
+              ),
+            ],
+          ),
         ),
 
         title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,),

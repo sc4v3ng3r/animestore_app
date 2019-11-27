@@ -111,6 +111,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
 
                 return SliverToBoxAdapter(
                   child: TabBar(
+
                     onTap: (index) => detailsStore.setTabChoice(TabChoice.values[index]),
                         controller: tabController,
                           tabs: [
@@ -141,6 +142,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
                     }
 
                     if (detailsStore.tabChoice == TabChoice.EPISODES)
+
                       return SliverList(
                           delegate: SliverChildBuilderDelegate(
                                 (context, index) {
@@ -177,7 +179,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
                               buildResumeSection(detailsStore.animeDetails.resume),
                               Container(height: 56.0,),
                             ],
-                          ),
+                          ) ,
                       );
                   }
                   else

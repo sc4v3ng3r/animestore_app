@@ -2,6 +2,7 @@ import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
 import 'package:anime_app/ui/pages/MainScreen.dart';
+import 'package:anime_app/ui/pages/RetryPage.dart';
 import 'package:anime_app/ui/pages/SplashScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,8 @@ class MyApp extends StatelessWidget {
                 case AppInitStatus.INITIALIZED:
                   widget = MainScreen();
                   break;
-                case AppInitStatus.ERROR:
-                  widget = Container(color: Colors.red,);
+                case AppInitStatus.INIT_ERROR:
+                  widget = RetryPage();
                   break;
               }
               return widget;

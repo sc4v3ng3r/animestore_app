@@ -152,22 +152,40 @@ abstract class _ApplicationStore with Store {
 
       try {
         await databaseProvider.init();
-
-        await loadMyAnimeMap();
-        await loadWatchedEpisodes();
-        await getHomePageInfo();
-        await loadAnimeList();
-        await getGenresAvailable();
+        await _initDataFromNetwork();
         setAppInitialization(AppInitStatus.INITIALIZED);
       }
 
       on CrawlerApiException catch(ex){
         print(ex);
-        setAppInitialization(AppInitStatus.ERROR);
+        setAppInitialization(AppInitStatus.INIT_ERROR);
       }
 
   }
 
+  Future<void> _initDataFromNetwork() async {
+    await loadMyAnimeMap();
+    await loadWatchedEpisodes();
+    await getHomePageInfo();
+    await loadAnimeList();
+    await getGenresAvailable();
+  }
+
+  void appRetry() async {
+    if (appInitStatus != AppInitStatus.INIT_ERROR)
+      return;
+
+    try {
+      setAppInitialization(AppInitStatus.INITIALIZING);
+      await _initDataFromNetwork();
+      setAppInitialization(AppInitStatus.INITIALIZED);
+    }
+
+    on CrawlerApiException catch (ex){
+      print(ex);
+      setAppInitialization(AppInitStatus.INIT_ERROR);
+    }
+  }
   // This method load the main anime list and handles also the pagination.
   // We must always load main anime list data with this method.
   Future<void> loadAnimeList() async {

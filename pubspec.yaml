@@ -50,6 +50,7 @@ dependencies:
   sqflite: ^1.1.7+1
   path: ^1.6.4
   bot_toast: ^2.1.0
+  flutter_svg: ^0.14.2
   mobx: ^0.3.8+1
   flutter_mobx: ^0.3.3+1
   mobx_codegen: ^0.3.9+1
@@ -72,10 +73,19 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-#  fonts:
-#   - family: Poppins
-#      fonts:
-#        - asset: assets/fonts/Poppins-Black.ttf
+  assets:
+    - assets/icons/
+    - assets/font/
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/font/Poppins-Black.ttf
+        - asset: assets/font/Poppins-Bold.ttf
+        - asset: assets/font/Poppins-Regular.ttf
+  #fonts:
+   #- family: Poppins
+   #   fonts:
+   #     - asset: assets/fonts/Poppins-Black.ttf
 #        - asset: assets/fonts/Poppins-Bold.ttf
 #        - asset: assets/fonts/Poppins-Regular.ttf
   # To add assets to your application, add an assets section, like this:
@@ -94,10 +104,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+   #fonts:
+   #  - family: Poppins
+   #    fonts:
+   #      - asset: assets/fonts/Poppins-Black.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

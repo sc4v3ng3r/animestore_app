@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
 
       child: BotToastInit(
         child: MaterialApp(
-          title: 'AnimeApp',
+          title: 'AniStore',
           navigatorObservers: [BotToastNavigatorObserver()],
           debugShowCheckedModeBanner: false,
           theme: ThemeData().copyWith(

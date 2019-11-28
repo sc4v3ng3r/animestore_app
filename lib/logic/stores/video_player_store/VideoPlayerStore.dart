@@ -7,6 +7,7 @@ part 'VideoPlayerStore.g.dart';
 class VideoPlayerStore = _VideoPlayerStore with _$VideoPlayerStore;
 
 enum EpisodeLoading {LOADING, DONE, CANCELED, ERROR}
+
 abstract class _VideoPlayerStore with Store {
 
   final ApplicationStore appStore;

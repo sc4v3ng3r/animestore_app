@@ -7,3 +7,6 @@ course that will be happening on SIMCIT event at UNIFACS University.
 All the application data are comming from the brazilian anime stream 
 site [Anitube](https://www.anitube.site/). The crawler api used to 
 fetch the web site data can be founded [here](https://github.com/sc4v3ng3r/anitube_crawler_api).
+
+//flutter packages pub run build_runner build --delete-conflicting-outputs
+//flutter packages pub run build_runner watch --delete-conflicting-outputs

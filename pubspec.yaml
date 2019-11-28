@@ -23,13 +23,38 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  anitube_crawler_api: ^0.1.1
-  rxdart: ^0.22.3
+  anitube_crawler_api:
+    git:
+      url: git@github.com:sc4v3ng3r/anitube_crawler_api.git
+      ref: 91a41802c94339d92b24e9313ba82946dead2aa4
+
   provider: ^3.1.0
-  flutter_advanced_networkimage: ^0.5.0
-  chewie: ^0.9.8+1
-  video_player: ^0.10.2+3
+  flutter_advanced_networkimage: ^0.6.0-alpha.1
+  video_player:
+    git:
+      url: git@github.com:sc4v3ng3r/flutter-plugins.git
+      ref: eedec50bbc65374ed322c38ae729bc6f306f1a71
+      path: packages/video_player
+
+  #video_player: ^0.10.2+5
+
+  chewie:
+    git:
+      url: git@github.com:sc4v3ng3r/chewie.git
+      ref: 84f991dfb679f9eec9f0dc3fad90c80bd2ab29c0
+
   shimmer: ^1.0.1
+  carousel_pro: ^1.0.0
+  palette_generator: ^0.2.0
+  random_color: ^1.0.3
+  sqflite: ^1.1.7+1
+  path: ^1.6.4
+  bot_toast: ^2.1.0
+  mobx: ^0.3.8+1
+  flutter_mobx: ^0.3.3+1
+  mobx_codegen: ^0.3.9+1
+  build_runner: 1.7.0
+
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +72,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+#  fonts:
+#   - family: Poppins
+#      fonts:
+#        - asset: assets/fonts/Poppins-Black.ttf
+#        - asset: assets/fonts/Poppins-Bold.ttf
+#        - asset: assets/fonts/Poppins-Regular.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

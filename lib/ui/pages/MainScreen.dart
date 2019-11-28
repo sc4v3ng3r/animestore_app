@@ -1,10 +1,12 @@
-import 'package:anime_app/logic/ApplicationBloc.dart';
+import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
 import 'package:anime_app/ui/component/SearchWidget.dart';
+import 'package:anime_app/ui/pages/HomePage.dart';
+import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum MainScreenNavigation { HOME, SEARCH }
+enum MainScreenNavigation { HOME, ANIME_LIST, SEARCH}
 
 class MainScreen extends StatefulWidget {
   @override
@@ -14,22 +16,19 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
   MainScreenNavigation currentNav = MainScreenNavigation.HOME;
-  ApplicationBloc bloc;
-
+  ApplicationStore appStore;
   @override
   void initState() {
     super.initState();
-    bloc = Provider.of<ApplicationBloc>(context, listen: false);
+    appStore = Provider.of<ApplicationStore>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body:  WillPopScope(
-          child: (currentNav == MainScreenNavigation.HOME)
-        ? AnimeGridWidget()
-        : SearchWidget(),
+      body: WillPopScope(
+          child: _getCurrentPage(),
           onWillPop: () async {
             var flag = true;
             if (currentNav != MainScreenNavigation.HOME){
@@ -40,12 +39,27 @@ class _MainScreenState extends State<MainScreen> {
             }
             return flag;
           }
-      ),
+          ),
 
       bottomNavigationBar: _createBottomBar(),
     );
   }
 
+  Widget _getCurrentPage() {
+    var widget;
+    switch(currentNav){
+      case MainScreenNavigation.HOME:
+       widget = HomePage();
+        break;
+      case MainScreenNavigation.ANIME_LIST:
+        widget = AnimeGridWidget();
+        break;
+      case MainScreenNavigation.SEARCH:
+        widget = SearchWidget();
+        break;
+    }
+    return widget;
+  }
 
   void _changePageBody(int index){
 
@@ -54,27 +68,46 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Widget _createBottomBar () => BottomNavigationBar(
-    selectedItemColor: Theme.of(context).accentColor,
-    //unselectedItemColor: Theme.of(context).,
-    items: <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
+  Widget _createBottomBar () => Container(
+    decoration: BoxDecoration(
+        boxShadow: [
+      BoxShadow(
+        color: accentColor,
+        offset: Offset(.0, 5.0),
+        blurRadius: 12.0,
+      )
+    ]),
 
-        title: Text('Animes'),
-        icon: Icon(
-          Icons.live_tv,
+    child: BottomNavigationBar(
+      selectedItemColor: accentColor,
+      backgroundColor: primaryColor,
+      unselectedItemColor: secondaryColor,
+      items: <BottomNavigationBarItem>[
+
+        BottomNavigationBarItem(
+          title: Text('Home'),
+          icon: Icon(
+            Icons.home,
+          ),
         ),
-      ),
 
-      BottomNavigationBarItem(
-        title: Text('Buscar'),
-        icon: Icon(
-          Icons.search,
+        BottomNavigationBarItem(
+          title: Text('Animes'),
+          icon: Icon(
+            Icons.live_tv,
+          ),
         ),
-      ),
-    ],
 
-    onTap: _changePageBody,
-    currentIndex: currentNav.index,
+        BottomNavigationBarItem(
+          title: Text('Buscar',),
+          icon: Icon(
+            Icons.search,
+          ),
+        ),
+      ],
+
+      onTap: _changePageBody,
+      currentIndex: currentNav.index,
+    ),
   );
 }

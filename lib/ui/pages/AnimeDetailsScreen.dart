@@ -90,7 +90,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
                   builder: (context){
 
                     if (detailsStore.loadingStatus == LoadingStatus.ERROR)
-                      return Center(child: Text('Erro'));
+                      return buildErrorWidget();
 
                     if (detailsStore.loadingStatus == LoadingStatus.LOADING)
                       return Container(
@@ -207,7 +207,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
       ),
     );
   }
-
 
   void _removeFromList() {
     applicationStore.removeFromAnimeMap(detailsStore.currentAnimeItem.id);
@@ -327,4 +326,40 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
       ),
     );
   }
+
+  Widget buildErrorWidget() =>
+      Center(
+        child: Container(
+          margin: EdgeInsets.only(top: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+
+              Icon(
+                Icons.clear, color: Colors.red,
+                size: 100,
+              ),
+
+              Text('Dados Indisponiveis...'),
+
+              Container(
+                margin: EdgeInsets.only(top: 16),
+                child: RaisedButton.icon(
+                  onPressed: () => detailsStore.loadAnimeDetails(),
+                  icon: Icon(Icons.refresh, color: Colors.white,),
+                  label: Text('Tentar Novamente', style: TextStyle(
+                      color: textPrimaryColor
+                  ),),
+                  color: accentColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25)
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }

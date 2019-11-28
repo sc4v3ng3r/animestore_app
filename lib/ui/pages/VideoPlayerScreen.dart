@@ -2,6 +2,7 @@ import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -27,6 +28,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+    );
+
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
     videoPlayerStore = VideoPlayerStore(appStore);
@@ -94,9 +99,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
+    SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp,]);
     print('disposing video player');
-    _chewieController?.dispose();
-    _playerController?.dispose();
+    _clearControllers();
     super.dispose();
   }
 

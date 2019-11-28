@@ -13,12 +13,15 @@ import 'package:provider/provider.dart';
 
 void main() {
 
-  runApp( MyApp() );
+  runApp(new MyApp());
+
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.black,
-    )
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.black,
+      )
   );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
 }
 
 class MyApp extends StatelessWidget {

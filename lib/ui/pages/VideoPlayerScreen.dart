@@ -28,6 +28,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void initState() {
+
     SystemChrome.setPreferredOrientations( DeviceOrientation.values );
 
     super.initState();
@@ -123,7 +124,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         videoPlayerController: _playerController,
         aspectRatio: _DEFAULT_ASPECT_RATIO,
         allowFullScreen: true,
-        fullScreenByDefault: true,
+        fullScreenByDefault: false,
         autoPlay: true,
         looping: false,
         showControls: true,

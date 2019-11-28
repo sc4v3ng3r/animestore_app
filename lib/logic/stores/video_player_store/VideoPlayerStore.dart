@@ -19,7 +19,7 @@ abstract class _VideoPlayerStore with Store {
   EpisodeDetails currentEpisode;
 
   void cancelEpisodeLoading() =>
-      setEpisodeLoadingStatus(EpisodeLoading.ERROR);
+      setEpisodeLoadingStatus(EpisodeLoading.CANCELED);
 
   @action
   setEpisodeLoadingStatus(EpisodeLoading status)

@@ -28,10 +28,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
-    );
-
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
     videoPlayerStore = VideoPlayerStore(appStore);
@@ -43,8 +39,17 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.LOADING)
+        if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.LOADING) {
           videoPlayerStore.cancelEpisodeLoading();
+        }
+
+        if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.DONE){
+          if (_chewieController.isFullScreen){
+            _chewieController.exitFullScreen();
+            return false;
+          }
+        }
+
         return true;
       },
 
@@ -101,7 +106,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void dispose() {
     SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp,]);
-    print('disposing video player');
     _clearControllers();
     super.dispose();
   }

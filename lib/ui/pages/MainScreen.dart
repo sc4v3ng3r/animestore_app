@@ -77,13 +77,14 @@ class _MainScreenState extends State<MainScreen> {
         blurRadius: 12.0,
       )
     ]),
+
     child: BottomNavigationBar(
       selectedItemColor: accentColor,
       backgroundColor: primaryColor,
       unselectedItemColor: secondaryColor,
       items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
 
+        BottomNavigationBarItem(
           title: Text('Home'),
           icon: Icon(
             Icons.home,

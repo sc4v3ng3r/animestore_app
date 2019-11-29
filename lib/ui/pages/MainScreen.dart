@@ -1,3 +1,4 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
 import 'package:anime_app/ui/component/SearchWidget.dart';
@@ -17,6 +18,8 @@ class _MainScreenState extends State<MainScreen> {
 
   MainScreenNavigation currentNav = MainScreenNavigation.HOME;
   ApplicationStore appStore;
+  AnimeStoreLocalization locale;
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +28,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    locale = AnimeStoreLocalization.of(context);
 
     return Scaffold(
       body: WillPopScope(
@@ -85,21 +89,21 @@ class _MainScreenState extends State<MainScreen> {
       items: <BottomNavigationBarItem>[
 
         BottomNavigationBarItem(
-          title: Text('Home'),
+          title: Text(locale.home),
           icon: Icon(
             Icons.home,
           ),
         ),
 
         BottomNavigationBarItem(
-          title: Text('Animes'),
+          title: Text(locale.animes),
           icon: Icon(
             Icons.live_tv,
           ),
         ),
 
         BottomNavigationBarItem(
-          title: Text('Buscar',),
+          title: Text(locale.search,),
           icon: Icon(
             Icons.search,
           ),

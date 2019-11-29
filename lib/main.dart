@@ -1,3 +1,4 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
@@ -8,6 +9,7 @@ import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -52,6 +54,17 @@ class MyApp extends StatelessWidget {
               )
             ),
           ),
+
+          localizationsDelegates: [
+            const AnimeStoreLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+
+          supportedLocales: [
+            const Locale('en'),
+            const Locale('pt'),
+          ],
 
           home: Observer(
               builder: (context){

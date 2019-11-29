@@ -1,3 +1,4 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class RetryPage extends StatelessWidget {
     var appStore = Provider.of<ApplicationStore>(context);
     var size = MediaQuery.of(context).size;
     final defaultMargin = 10.0;
+    final locale = AnimeStoreLocalization.of(context);
 
     return Container(
       width: size.width,
@@ -32,8 +34,7 @@ class RetryPage extends StatelessWidget {
 
                 Container(
                   margin: EdgeInsets.only(top: defaultMargin),
-                  child: Text('Problemas ao conectar-se com o server.'
-                      ' Tente novamente mais tarde.',
+                  child: Text(locale.problemsWithTheServer,
                     maxLines: 4,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -52,7 +53,7 @@ class RetryPage extends StatelessWidget {
                       ),
                       color: Colors.white,
                       icon: Icon(Icons.refresh, color: Colors.green,),
-                      label: Text('Tentar Novamente'),
+                      label: Text(locale.tryAgain),
                   ),
                 )
               ],

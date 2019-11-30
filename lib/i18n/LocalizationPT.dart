@@ -90,4 +90,7 @@ class LocalizationPT extends AnimeStoreLocalization {
   @override
   String get searchErrorMessage => 'Erro na Busca!';
 
+  @override
+  String get viewAll => 'Ver todos';
+
 }

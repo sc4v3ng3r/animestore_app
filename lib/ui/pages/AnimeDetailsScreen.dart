@@ -1,3 +1,4 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
@@ -26,7 +27,7 @@ class AnimeDetailsScreen extends StatefulWidget  {
 class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderStateMixin {
   ApplicationStore applicationStore;
   AnimeDetailsStore detailsStore;
-
+  AnimeStoreLocalization locale;
   TabController tabController;
   static final _defaultSectionStyle = TextStyle(
     fontSize: 22,
@@ -46,6 +47,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
+    locale = AnimeStoreLocalization.of(context);
+
     final size = MediaQuery.of(context).size;
     final expandedHeight = size.width * .9;
 
@@ -118,8 +121,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
                     onTap: (index) => detailsStore.setTabChoice(TabChoice.values[index]),
                         controller: tabController,
                           tabs: [
-                            Tab(text: 'Episodios',),
-                            Tab(text: 'Detalhes',),
+                            Tab(text: locale.episodes,),
+                            Tab(text: locale.animeDetails,),
                           ],
                       ),
                 );
@@ -137,7 +140,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Icon(Icons.do_not_disturb_alt, size: 52,),
-                              Text('Episódios indisponíveis...'),
+                              Text(locale.episodesUnavailable),
                             ],
                           ),
                         ),
@@ -200,7 +203,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
          return  FloatingActionButton.extended(
            backgroundColor: accentColor,
             onPressed: () => (isInList) ? _removeFromList() : _addToList(),
-            label: Text('Minha Lista'),
+            label: Text( (isInList) ? locale.removeFromList : locale.addToList ),
             icon: Icon( (isInList) ?  Icons.remove_circle_outline : Icons.add_circle_outline ),
           );
         }
@@ -210,7 +213,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
 
   void _removeFromList() {
     applicationStore.removeFromAnimeMap(detailsStore.currentAnimeItem.id);
-    _showNotificationToast('Removido da lista', false);
+    _showNotificationToast(locale.removedFromList, false);
   }
 
   void _addToList(){
@@ -218,7 +221,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
         detailsStore.currentAnimeItem.id,
         detailsStore.currentAnimeItem
     );
-    _showNotificationToast('Adicionado a lista', true);
+    _showNotificationToast(locale.addedToList, true);
   }
 
   void _showNotificationToast(String message, bool flag){
@@ -264,21 +267,24 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
         margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Column(
           children: <Widget>[
-            _buildInfoRow('Genero: ', data.genre),
-            _buildInfoRow('Estudio: ', data.studio),
-            _buildInfoRow('Autor: ', data.author),
-            _buildInfoRow('Diretor: ', data.director),
-            _buildInfoRow('Ano: ', data.year),
-            _buildInfoRow('Episodios: ', data.episodesNumber),
+            _buildInfoRow('${locale.genre}: ', data.genre),
+            _buildInfoRow('${locale.studio}: ', data.studio),
+            _buildInfoRow('${locale.author}: ', data.author),
+            _buildInfoRow('${locale.director}: ', data.director),
+            _buildInfoRow('${locale.episodes}: ', data.episodesNumber),
+            _buildInfoRow('${locale.year}: ', data.year),
+
           ],
         ),
       );
 
   Widget buildResumeSection(String resume) => Column(
               children: <Widget>[
-                Text('Sinopse',),
+                Text(locale.resume, style: TextStyle(
+                  fontSize: 20
+                ),),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  margin: EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
@@ -342,14 +348,14 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderS
                 size: 100,
               ),
 
-              Text('Dados Indisponiveis...'),
+              Text(locale.dataUnavailable),
 
               Container(
                 margin: EdgeInsets.only(top: 16),
                 child: RaisedButton.icon(
                   onPressed: () => detailsStore.loadAnimeDetails(),
                   icon: Icon(Icons.refresh, color: Colors.white,),
-                  label: Text('Tentar Novamente', style: TextStyle(
+                  label: Text(locale.tryAgain, style: TextStyle(
                       color: textPrimaryColor
                   ),),
                   color: accentColor,

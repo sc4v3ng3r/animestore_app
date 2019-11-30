@@ -1,3 +1,4 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
@@ -22,6 +23,7 @@ import 'package:random_color/random_color.dart';
 class HomePage extends StatelessWidget {
 
   final RandomColor _randomColor = RandomColor();
+  static const TOP_ANIMES_TAG = 'TopAnimesTag';
 
   static const _SECTION_STYLE = TextStyle(
     fontSize: 18, );
@@ -30,6 +32,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final appStore = Provider.of<ApplicationStore>(context);
+    final AnimeStoreLocalization locale = AnimeStoreLocalization.of(context);
 
     final ScrollController topAnimesController = ScrollController(
       initialScrollOffset: appStore.topAnimeOffset
@@ -74,10 +77,10 @@ class HomePage extends StatelessWidget {
     );
 
     final topAnimesHeader = _createHeaderSection(context,
-      title: 'Top Animes',
+      title: '${locale.topAnimes}',
       iconData: Icons.star,
       iconColor: Colors.amberAccent,
-      heroTag: 'TopAnimesTag',
+      heroTag: TOP_ANIMES_TAG,
 //      leading: Icon(, ),
 //      header: 'Top Animes',
     );
@@ -85,7 +88,7 @@ class HomePage extends StatelessWidget {
     final genresHeader = _createHeaderSection(context,
       iconData:Icons.explore,
       iconColor: accentColor,
-      title: 'Explorar Gêneros',
+      title: locale.exploreGenres,
       onTap: () {
         Navigator.push(context,
           CupertinoPageRoute(
@@ -100,7 +103,7 @@ class HomePage extends StatelessWidget {
       (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
           :
       _createHeaderSection(context,
-          title: 'Minha Lista',
+          title: locale.myAnimeList,
           iconColor: accentColor,
           iconData: Icons.video_library,
           onTap: () =>_openAnimeItemGridPage(context, appStore.myAnimeMap.values.toList(),),
@@ -110,14 +113,14 @@ class HomePage extends StatelessWidget {
     final mostRecentsHeader = _createHeaderSection(context,
       iconData: Icons.update,
       iconColor: accentColor,
-      title: 'Mais recentes',
+      title: locale.recentlyUpdated,
       onTap: () => _openAnimeItemGridPage(context, appStore.mostRecentAnimeList,),
     );
 
     final latestEpisodesHeader = _createHeaderSection(
         context,
       iconData: Icons.ondemand_video,
-      title: 'Últimos Episódios',
+      title: locale.latestEpisodes,
       iconColor: accentColor,
       onTap: () => _openLatestEpisodePage(context),
     );

@@ -1,3 +1,4 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
@@ -20,6 +21,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   ScrollController _controller;
   final TextEditingController _searchController = TextEditingController(text: '');
   SearchStore searchStore;
+  AnimeStoreLocalization locale;
 
   @override
   void initState() {
@@ -39,6 +41,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    locale = AnimeStoreLocalization.of(context);
 
     final appBar = SliverAppBar(
       backgroundColor: primaryColor,
@@ -74,7 +77,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                         icon: Icon(Icons.clear),
                         onPressed: () => searchStore.clearSearch(),
                       ),
-                      hintText: 'Anime, Estudio, Genero...',
+                      hintText: locale.searchHint,
                       hintStyle: TextStyle(color: secondaryColor),
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.0)
                   ),
@@ -111,16 +114,16 @@ class _SearchWidgetState extends State<SearchWidget> {
 
               case SearchState.DONE:
                 if (searchStore.searchItemList.isEmpty)
-                  widget = _centerDecoration(size, Icons.sentiment_dissatisfied, 'Sem Resultados...');
+                  widget = _centerDecoration(size, Icons.sentiment_dissatisfied, locale.noResults);
                 else
                   widget = _buildGrid(searchStore.searchItemList, size);
                 break;
 
               case SearchState.NONE:
-                widget = _centerDecoration(size, Icons.search,'Pesquisar...' );
+                widget = _centerDecoration(size, Icons.search,'${locale.search}' );
                 break;
               case SearchState.ERROR:
-                _centerDecoration(size, Icons.error,'Erro na busca' );
+                _centerDecoration(size, Icons.error, locale.searchErrorMessage );
                 break;
             }
             return widget;

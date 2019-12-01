@@ -4,7 +4,7 @@ import 'package:anime_app/ui/component/AnimeStoreAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
-import 'package:anime_app/ui/pages/HeroTags.dart';
+import 'package:anime_app/ui/utils/HeroTags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

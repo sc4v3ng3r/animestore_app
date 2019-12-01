@@ -40,9 +40,6 @@ class TitleHeaderWidget extends StatelessWidget {
                 ),
               ),
             ),
-//            (onTap != null) ?
-//                Icon(Icons.navigate_next, color: iconColor , size: 28,)
-//                : Container(),
           ],
         ),
     );

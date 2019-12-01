@@ -4,6 +4,7 @@ import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dar
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+import 'package:anime_app/ui/component/TapableText.dart';
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
@@ -77,15 +78,18 @@ class HomePage extends StatelessWidget {
     );
 
     final topAnimesHeader = _createHeaderSection(context,
+      locale: locale,
       title: '${locale.topAnimes}',
       iconData: Icons.star,
       iconColor: Colors.amberAccent,
       heroTag: TOP_ANIMES_TAG,
+      viewMore: false,
 //      leading: Icon(, ),
 //      header: 'Top Animes',
     );
 
     final genresHeader = _createHeaderSection(context,
+      locale: locale,
       iconData:Icons.explore,
       iconColor: accentColor,
       title: locale.exploreGenres,
@@ -103,6 +107,8 @@ class HomePage extends StatelessWidget {
       (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
           :
       _createHeaderSection(context,
+          locale: locale,
+          viewMore: true,
           title: locale.myAnimeList,
           iconColor: accentColor,
           iconData: Icons.video_library,
@@ -111,6 +117,7 @@ class HomePage extends StatelessWidget {
     );
 
     final mostRecentsHeader = _createHeaderSection(context,
+      locale: locale,
       iconData: Icons.update,
       iconColor: accentColor,
       title: locale.recentlyUpdated,
@@ -119,6 +126,7 @@ class HomePage extends StatelessWidget {
 
     final latestEpisodesHeader = _createHeaderSection(
         context,
+      locale: locale,
       iconData: Icons.ondemand_video,
       title: locale.latestEpisodes,
       iconColor: accentColor,
@@ -184,10 +192,11 @@ class HomePage extends StatelessWidget {
   }
 
   SliverPadding _createHeaderSection(BuildContext context,{
+    @required AnimeStoreLocalization locale,
     IconData iconData,
     Color iconColor,
     String title,
-    List<Widget> actions,
+    bool viewMore = true,
     String heroTag,
     Function onTap}) =>
       SliverPadding(
@@ -195,6 +204,7 @@ class HomePage extends StatelessWidget {
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               TitleHeaderWidget(
                 iconData: iconData,
@@ -204,7 +214,17 @@ class HomePage extends StatelessWidget {
                 style: _SECTION_STYLE,
                 onTap: onTap,
               ),
-            ]..addAll(actions ?? []),
+
+              (viewMore) ? Container(
+                child: TapText(
+                  onTap: onTap,
+                  fontSize: 16.0,
+                  text: locale.viewAll,
+                  defaultColor: secondaryColor,
+                  onTapColor: accentColor,
+                ),
+              ) : Container(),
+            ],
           ),
         ),
       );

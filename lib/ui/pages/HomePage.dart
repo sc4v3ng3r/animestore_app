@@ -4,6 +4,7 @@ import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dar
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+import 'package:anime_app/ui/component/TapableText.dart';
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
@@ -12,6 +13,7 @@ import 'package:anime_app/ui/pages/GenreGridPage.dart';
 import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
+import 'package:anime_app/ui/utils/HeroTags.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +25,7 @@ import 'package:random_color/random_color.dart';
 class HomePage extends StatelessWidget {
 
   final RandomColor _randomColor = RandomColor();
-  static const TOP_ANIMES_TAG = 'TopAnimesTag';
+
 
   static const _SECTION_STYLE = TextStyle(
     fontSize: 18, );
@@ -77,18 +79,24 @@ class HomePage extends StatelessWidget {
     );
 
     final topAnimesHeader = _createHeaderSection(context,
+      locale: locale,
       title: '${locale.topAnimes}',
       iconData: Icons.star,
       iconColor: Colors.amberAccent,
-      heroTag: TOP_ANIMES_TAG,
+      heroTag: HeroTags.TAG_TOP_ANIMES,
+      onTap:() {
+        _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes', HeroTags.TAG_TOP_ANIMES);
+      },
 //      leading: Icon(, ),
 //      header: 'Top Animes',
     );
 
     final genresHeader = _createHeaderSection(context,
+      locale: locale,
       iconData:Icons.explore,
       iconColor: accentColor,
       title: locale.exploreGenres,
+      heroTag: HeroTags.TAG_EXPLORE_GENRES,
       onTap: () {
         Navigator.push(context,
           CupertinoPageRoute(
@@ -103,29 +111,46 @@ class HomePage extends StatelessWidget {
       (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
           :
       _createHeaderSection(context,
+          locale: locale,
+          viewMore: true,
           title: locale.myAnimeList,
+          heroTag: HeroTags.TAG_MY_LIST,
           iconColor: accentColor,
           iconData: Icons.video_library,
-          onTap: () =>_openAnimeItemGridPage(context, appStore.myAnimeMap.values.toList(),),
+          onTap: () =>_openAnimeItemGridPage(
+              context,
+              appStore.myAnimeMap.values.toList(),
+              locale.myAnimeList,
+              HeroTags.TAG_MY_LIST,
+          ),
       ),
     );
 
     final mostRecentsHeader = _createHeaderSection(context,
+      locale: locale,
       iconData: Icons.update,
       iconColor: accentColor,
       title: locale.recentlyUpdated,
-      onTap: () => _openAnimeItemGridPage(context, appStore.mostRecentAnimeList,),
+      heroTag: HeroTags.TAG_RECENTLY_UPLOADED,
+      onTap: () => _openAnimeItemGridPage(context,
+          appStore.mostRecentAnimeList,
+          locale.recentlyUpdated,
+        HeroTags.TAG_RECENTLY_UPLOADED,
+      ),
     );
 
     final latestEpisodesHeader = _createHeaderSection(
         context,
+      locale: locale,
       iconData: Icons.ondemand_video,
       title: locale.latestEpisodes,
+      heroTag: HeroTags.TAG_LATEST_EPISODES,
       iconColor: accentColor,
       onTap: () => _openLatestEpisodePage(context),
     );
 
     return CustomScrollView(
+
       physics: BouncingScrollPhysics(),
       slivers: <Widget>[
         appBar,
@@ -136,8 +161,9 @@ class HomePage extends StatelessWidget {
           appStore,
           data:appStore.topAnimeList,
           width: size.width * .42,
-          tag: HERO_TAG_UPDATE,
-          controller: topAnimesController
+          tag: HeroTags.TAG_TOP_ANIMES,
+          controller: topAnimesController,
+
         ),
 
         mostRecentsHeader,
@@ -184,17 +210,21 @@ class HomePage extends StatelessWidget {
   }
 
   SliverPadding _createHeaderSection(BuildContext context,{
+    @required AnimeStoreLocalization locale,
     IconData iconData,
     Color iconColor,
     String title,
-    List<Widget> actions,
+    bool viewMore = true,
     String heroTag,
     Function onTap}) =>
       SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+        padding: EdgeInsets.only(
+            bottom: 24.0, top: 24.0,
+            left: 16.0, right: 12.0),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               TitleHeaderWidget(
                 iconData: iconData,
@@ -204,7 +234,17 @@ class HomePage extends StatelessWidget {
                 style: _SECTION_STYLE,
                 onTap: onTap,
               ),
-            ]..addAll(actions ?? []),
+
+              (viewMore) ? Container(
+                child: TapText(
+                  onTap: onTap,
+                  fontSize: 16.0,
+                  text: locale.viewAll,
+                  defaultColor: secondaryColor,
+                  onTapColor: accentColor,
+                ),
+              ) : Container(),
+            ],
           ),
         ),
       );
@@ -400,10 +440,13 @@ class HomePage extends StatelessWidget {
           ),
         );
 
-  void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,) {
+  void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,
+      String title, String heroTag) {
     Navigator.push(context, CupertinoPageRoute(
         builder: (_) => DefaultAnimeItemGridPage(
+          title: title,
           gridItems: data,
+          heroTag: heroTag,
         ),
     ));
   }

@@ -21,20 +21,27 @@ class TitleHeaderWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Hero(
-        tag: heroTag ?? UniqueKey().toString(),
-        child: Row(
+      child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(iconData, color: iconColor, size: 28,),
-            Container(width: 4.0,),
-            Text('$title', style: style,),
-            (onTap != null) ?
-                Icon(Icons.navigate_next, color: iconColor , size: 28,)
-                : Container(),
+            Container(width: 8.0,),
+            Flexible(
+              child: Hero(
+                tag: heroTag ?? UniqueKey().toString(),
+                child: Container(
+                  child: Material(
+                    color: Colors.transparent,
+                    elevation: .0,
+                    child: Text('$title', style: style, maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
-      ),
     );
   }
 }

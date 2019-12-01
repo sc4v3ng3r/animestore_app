@@ -1,6 +1,9 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/ui/component/AnimeStoreAppBar.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
+import 'package:anime_app/ui/utils/HeroTags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,17 +39,24 @@ import 'package:provider/provider.dart';
 //);
 class RecentEpisodeListPage extends StatelessWidget {
 
+  const RecentEpisodeListPage({Key key }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var applicationStore = Provider.of<ApplicationStore>(context);
-
+    final locale = AnimeStoreLocalization.of(context);
     var data = applicationStore.latestEpisodes;
 
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
+
+          AnimeStoreAppBar(
+            title: locale.latestEpisodes,
+            heroTag: HeroTags.TAG_LATEST_EPISODES,
+          ),
 
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 8.0, ),

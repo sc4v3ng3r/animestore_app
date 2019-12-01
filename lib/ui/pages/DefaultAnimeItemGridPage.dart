@@ -1,5 +1,6 @@
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/ui/component/AnimeStoreAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
@@ -12,9 +13,14 @@ typedef OnTap = void Function();
 
 class DefaultAnimeItemGridPage extends StatelessWidget {
   final List<AnimeItem> gridItems;
+  final String title;
+  final String heroTag;
 
   const DefaultAnimeItemGridPage({Key key,
-    @required this.gridItems, }
+    @required this.gridItems,
+    @required this.title,
+    this.heroTag,
+  }
     ) : super(key: key);
 
 
@@ -30,6 +36,11 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
+
+          AnimeStoreAppBar(
+            title: title,
+            heroTag: heroTag,
+          ),
 
           SliverGridItemView(
             childAspectRatio: (itemWidth / itemHeight),

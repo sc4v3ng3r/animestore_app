@@ -21,16 +21,23 @@ class TitleHeaderWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Hero(
-        tag: heroTag ?? UniqueKey().toString(),
-        child: Row(
+      child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(iconData, color: iconColor, size: 28,),
             Container(width: 8.0,),
             Flexible(
-              child: Text('$title', style: style, maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              child: Hero(
+                tag: heroTag ?? UniqueKey().toString(),
+                child: Container(
+                  child: Material(
+                    color: Colors.transparent,
+                    elevation: .0,
+                    child: Text('$title', style: style, maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
               ),
             ),
 //            (onTap != null) ?
@@ -38,7 +45,6 @@ class TitleHeaderWidget extends StatelessWidget {
 //                : Container(),
           ],
         ),
-      ),
     );
   }
 }

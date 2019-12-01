@@ -1,7 +1,10 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/ui/component/AnimeStoreAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
+import 'package:anime_app/ui/pages/HeroTags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +20,18 @@ class GenreGridPage extends StatelessWidget {
 
     var width = size.width * 1.3;
     var height =  size.width * .9;
+
+    final locale = AnimeStoreLocalization.of(context);
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
+
+          AnimeStoreAppBar(
+            title: locale.exploreGenres,
+            heroTag: HeroTags.TAG_EXPLORE_GENRES,
+          ),
+
           SliverGridItemView(
             childAspectRatio: (width / height),
             delegate: SliverChildBuilderDelegate(

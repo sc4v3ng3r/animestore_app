@@ -10,6 +10,7 @@ import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';
+import 'package:anime_app/ui/pages/HeroTags.dart';
 import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
@@ -24,7 +25,7 @@ import 'package:random_color/random_color.dart';
 class HomePage extends StatelessWidget {
 
   final RandomColor _randomColor = RandomColor();
-  static const TOP_ANIMES_TAG = 'TopAnimesTag';
+
 
   static const _SECTION_STYLE = TextStyle(
     fontSize: 18, );
@@ -82,8 +83,10 @@ class HomePage extends StatelessWidget {
       title: '${locale.topAnimes}',
       iconData: Icons.star,
       iconColor: Colors.amberAccent,
-      heroTag: TOP_ANIMES_TAG,
-      viewMore: false,
+      heroTag: HeroTags.TAG_TOP_ANIMES,
+      onTap:() {
+        _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes', HeroTags.TAG_TOP_ANIMES);
+      },
 //      leading: Icon(, ),
 //      header: 'Top Animes',
     );
@@ -93,6 +96,7 @@ class HomePage extends StatelessWidget {
       iconData:Icons.explore,
       iconColor: accentColor,
       title: locale.exploreGenres,
+      heroTag: HeroTags.TAG_EXPLORE_GENRES,
       onTap: () {
         Navigator.push(context,
           CupertinoPageRoute(
@@ -110,9 +114,15 @@ class HomePage extends StatelessWidget {
           locale: locale,
           viewMore: true,
           title: locale.myAnimeList,
+          heroTag: HeroTags.TAG_MY_LIST,
           iconColor: accentColor,
           iconData: Icons.video_library,
-          onTap: () =>_openAnimeItemGridPage(context, appStore.myAnimeMap.values.toList(),),
+          onTap: () =>_openAnimeItemGridPage(
+              context,
+              appStore.myAnimeMap.values.toList(),
+              locale.myAnimeList,
+              HeroTags.TAG_MY_LIST,
+          ),
       ),
     );
 
@@ -121,7 +131,12 @@ class HomePage extends StatelessWidget {
       iconData: Icons.update,
       iconColor: accentColor,
       title: locale.recentlyUpdated,
-      onTap: () => _openAnimeItemGridPage(context, appStore.mostRecentAnimeList,),
+      heroTag: HeroTags.TAG_RECENTLY_UPLOADED,
+      onTap: () => _openAnimeItemGridPage(context,
+          appStore.mostRecentAnimeList,
+          locale.recentlyUpdated,
+        HeroTags.TAG_RECENTLY_UPLOADED,
+      ),
     );
 
     final latestEpisodesHeader = _createHeaderSection(
@@ -129,6 +144,7 @@ class HomePage extends StatelessWidget {
       locale: locale,
       iconData: Icons.ondemand_video,
       title: locale.latestEpisodes,
+      heroTag: HeroTags.TAG_LATEST_EPISODES,
       iconColor: accentColor,
       onTap: () => _openLatestEpisodePage(context),
     );
@@ -145,8 +161,9 @@ class HomePage extends StatelessWidget {
           appStore,
           data:appStore.topAnimeList,
           width: size.width * .42,
-          tag: HERO_TAG_UPDATE,
-          controller: topAnimesController
+          tag: HeroTags.TAG_TOP_ANIMES,
+          controller: topAnimesController,
+
         ),
 
         mostRecentsHeader,
@@ -423,10 +440,13 @@ class HomePage extends StatelessWidget {
           ),
         );
 
-  void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,) {
+  void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,
+      String title, String heroTag) {
     Navigator.push(context, CupertinoPageRoute(
         builder: (_) => DefaultAnimeItemGridPage(
+          title: title,
           gridItems: data,
+          heroTag: heroTag,
         ),
     ));
   }

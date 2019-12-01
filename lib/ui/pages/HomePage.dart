@@ -134,6 +134,7 @@ class HomePage extends StatelessWidget {
     );
 
     return CustomScrollView(
+
       physics: BouncingScrollPhysics(),
       slivers: <Widget>[
         appBar,
@@ -200,7 +201,9 @@ class HomePage extends StatelessWidget {
     String heroTag,
     Function onTap}) =>
       SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+        padding: EdgeInsets.only(
+            bottom: 24.0, top: 24.0,
+            left: 16.0, right: 12.0),
         sliver: SliverToBoxAdapter(
           child: Row(
             mainAxisSize: MainAxisSize.max,

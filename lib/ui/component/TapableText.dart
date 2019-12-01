@@ -27,17 +27,31 @@ class _TapTextState extends State<TapText> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      onTapDown: (details) { _changeColor(widget.onTapColor);},
-      onTapUp: (details){ _changeColor(widget.defaultColor); },
-      onTapCancel: () { _changeColor(widget.defaultColor);},
-      child: Text(widget.text ?? '',
-        style: TextStyle(
-          fontSize: widget.fontSize ?? 16,
-          color: currentColor,
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          onTap: widget.onTap,
+          onTapDown: (details) { _changeColor(widget.onTapColor);},
+          onTapUp: (details){ _changeColor(widget.defaultColor); },
+          onTapCancel: () { _changeColor(widget.defaultColor);},
+          child: Text(widget.text ?? '',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: widget.fontSize ?? 16,
+              color: currentColor,
+            ),
+          ),
         ),
-      ),
+
+        Container(
+          child: Icon(
+            Icons.navigate_next,
+            color: currentColor , size: 20,
+
+          ),
+        ),
+      ],
     );
   }
 

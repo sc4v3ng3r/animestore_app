@@ -40,6 +40,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   Widget build(BuildContext context) {
 
+    var size = MediaQuery.of(context).size;
+
     return WillPopScope(
       onWillPop: () async {
         print('OnWillPop');
@@ -131,6 +133,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         allowedScreenSleep: false,
         allowMuting: true,
         showControlsOnInitialize: true,
+
+
       );
 
   void _clearControllers(){

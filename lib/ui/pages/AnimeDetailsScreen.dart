@@ -24,7 +24,7 @@ class AnimeDetailsScreen extends StatefulWidget  {
 
 }
 
-class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with TickerProviderStateMixin {
+class _AnimeDetailsScreen extends State<AnimeDetailsScreen> with SingleTickerProviderStateMixin {
   ApplicationStore applicationStore;
   AnimeDetailsStore detailsStore;
   AnimeStoreLocalization locale;

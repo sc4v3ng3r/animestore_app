@@ -22,18 +22,69 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  
+  const HomePage({Key key,}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
   final RandomColor _randomColor = RandomColor();
-
-
   static const _SECTION_STYLE = TextStyle(
-    fontSize: 18, );
+    fontSize: 18, 
+  );
+
+  ApplicationStore appStore;
+  AnimationController controller;
+  Animation carouselAnimation;
+  Animation headerAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    appStore = Provider.of<ApplicationStore>(context, listen: false);
+    if (appStore.isFirstHomePageView){
+      controller = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 1000),
+      );
+
+      carouselAnimation = Tween<Offset>(
+        begin: Offset(50, .0),
+        end: Offset.zero
+      )
+      .animate(CurvedAnimation(
+        curve: Curves.fastLinearToSlowEaseIn,
+        parent: controller
+      ));
+
+      headerAnimation = Tween<Offset>(
+        begin: Offset(-50, .0),
+        end: Offset.zero
+      )
+      .animate(CurvedAnimation(
+        curve: Curves.fastLinearToSlowEaseIn,
+        parent: controller
+      ));
+
+      controller.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    appStore.isFirstHomePageView = false;
+    controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final appStore = Provider.of<ApplicationStore>(context);
+    
     final AnimeStoreLocalization locale = AnimeStoreLocalization.of(context);
 
     final ScrollController topAnimesController = ScrollController(
@@ -59,6 +110,13 @@ class HomePage extends StatelessWidget {
 
     final expandedHeight = size.width * .9;
 
+    final carousel = _createDayReleaseCarousel(
+      context: context,
+      width: size.width,
+      height: expandedHeight,
+      appStore: appStore,
+    );
+
     final appBar = SliverAppBar(
         expandedHeight: expandedHeight,
         floating: false,
@@ -69,12 +127,12 @@ class HomePage extends StatelessWidget {
         backgroundColor: primaryColor.withOpacity(.9),
         //title: Text('AppBar', style: TextStyle(color: Colors.black),),
         flexibleSpace: FlexibleSpaceBar(
-            background: _createDayReleaseCarousel(
-              context: context,
-              width: size.width,
-              height: expandedHeight,
-              appStore: appStore,
+            background: (appStore.isFirstHomePageView) 
+            ? SlideTransition(
+                position: carouselAnimation,
+                child: carousel,
             )
+            : carousel 
         ),
     );
 
@@ -87,8 +145,7 @@ class HomePage extends StatelessWidget {
       onTap:() {
         _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes', HeroTags.TAG_TOP_ANIMES);
       },
-//      leading: Icon(, ),
-//      header: 'Top Animes',
+
     );
 
     final genresHeader = _createHeaderSection(context,
@@ -148,15 +205,13 @@ class HomePage extends StatelessWidget {
       iconColor: accentColor,
       onTap: () => _openLatestEpisodePage(context),
     );
-
+  
     return CustomScrollView(
 
       physics: BouncingScrollPhysics(),
       slivers: <Widget>[
         appBar,
-
         topAnimesHeader,
-
         _createHorizontaAnimelList(
           appStore,
           data:appStore.topAnimeList,
@@ -216,13 +271,9 @@ class HomePage extends StatelessWidget {
     String title,
     bool viewMore = true,
     String heroTag,
-    Function onTap}) =>
-      SliverPadding(
-        padding: EdgeInsets.only(
-            bottom: 24.0, top: 24.0,
-            left: 16.0, right: 12.0),
-        sliver: SliverToBoxAdapter(
-          child: Row(
+    Function onTap}) {
+
+      final layout = Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -245,16 +296,25 @@ class HomePage extends StatelessWidget {
                 ),
               ) : Container(),
             ],
-          ),
+          );
+
+      return SliverPadding(
+        padding: EdgeInsets.only(
+            bottom: 24.0, top: 24.0,
+            left: 16.0, right: 12.0),
+        sliver: SliverToBoxAdapter(
+          child: (appStore.isFirstHomePageView) 
+            ? SlideTransition(
+              position: headerAnimation,
+              child: layout,
+            )
+            :layout
         ),
       );
-
+    }
   SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore, {
-    List<AnimeItem>  data, double width, String tag, ScrollController controller}) =>
-      SliverToBoxAdapter(
-        child: Container(
-          height: width * 1.4,
-          child: ListView.builder(
+    List<AnimeItem>  data, double width, String tag, ScrollController controller}) {
+      final listWidget = ListView.builder(
                 controller: controller,
                 itemBuilder: (context, index) {
                   var anime = data[index];
@@ -275,9 +335,20 @@ class HomePage extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: data.length,
                 physics: BouncingScrollPhysics(),
-              ),
+              );
+
+      return SliverToBoxAdapter(
+        child: Container(
+          height: width * 1.4,
+          child: (appStore.isFirstHomePageView) ? 
+            SlideTransition(
+              position: carouselAnimation,
+              child: listWidget,
+            )
+            : listWidget
         ),
       );
+    }
 
   SliverToBoxAdapter _createHorizontaCustomAnimelList(ApplicationStore appStore, {
     double width, String tag, ScrollController controller}) =>

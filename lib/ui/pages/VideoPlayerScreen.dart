@@ -134,7 +134,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         allowMuting: true,
         showControlsOnInitialize: true,
 
-
       );
 
   void _clearControllers(){

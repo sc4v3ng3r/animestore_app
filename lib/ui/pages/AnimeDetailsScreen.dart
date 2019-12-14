@@ -39,6 +39,12 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   );
 
   @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     detailsStore = Provider.of<AnimeDetailsStore>(context, listen: false);
@@ -46,7 +52,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     
     animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1800)
+      duration: Duration(milliseconds: 2000)
     );
 
     applicationStore = Provider.of<ApplicationStore>(context, listen: false);
@@ -60,7 +66,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
     scaleAnimation = Tween<double>(begin: .0, end: 1.0)
     .animate( CurvedAnimation(
-      curve: Interval(.5, 1.0, curve: Curves.easeInBack),
+      curve: Interval(.4, 1.0, curve: Curves.easeInBack),
       parent: animationController
     ) );
   
@@ -139,7 +145,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               return <Widget>[
                 SliverOverlapAbsorber(
                   handle:NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  
                   sliver: appBar,
+
                 ),
                 SliverToBoxAdapter(
                   child: animeTitleSection(detailsStore.currentAnimeItem.title),
@@ -153,13 +161,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                     TabBar(
                       tabs: <Widget>[
                         Tab(
-                          child: Text(locale.episodes, 
-                            style: TextStyle(fontSize: 16.0),),
+                          text: locale.episodes,
                         ),
                         Tab(
-                          child: Text(locale.animeDetails,
-                            style: TextStyle(fontSize: 16.0),
-                          ),
+                          text: locale.animeDetails,
                         ),
                       ],
                     ),
@@ -224,6 +229,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       top: false,
       bottom: false,
       child: CustomScrollView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
           slivers: <Widget>[
             (detailsStore.animeDetails.episodes.isEmpty)
                 ? SliverToBoxAdapter(
@@ -249,7 +256,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                       var animeId = detailsStore.currentAnimeItem.id;
                       var isWatched =
                           applicationStore.isEpisodeWatched(animeId, episodeId);
-                      
+                    
                       return ListTile(
                         leading: Icon(
                           Icons.play_circle_filled,
@@ -285,6 +292,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       top: false,
       bottom: false,
       child: CustomScrollView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildListDelegate.fixed(
@@ -328,10 +337,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   }
 
   Widget animeTitleSection(String title) => Container(
-        margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        margin: EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: .0),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10.0),
-          margin: EdgeInsets.only(bottom: 8.0),
+          //margin: EdgeInsets.only(bottom: 8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -459,9 +468,9 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this._tabBar);
 
   final TabBar _tabBar;
-  static const _PADDING = 12.0;
+  static const _PADDING = 32.0;
   @override
-  double get minExtent => _tabBar.preferredSize.height + _PADDING;
+  double get minExtent =>  _tabBar.preferredSize.height + _PADDING;
   @override
   double get maxExtent => _tabBar.preferredSize.height + _PADDING;
 
@@ -469,9 +478,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return new Container(
-      padding: EdgeInsets.only(top: _PADDING),
       color: primaryColor,
-      child: _tabBar,
+      child: SafeArea(
+        child: _tabBar,
+      ),
     );
   }
 

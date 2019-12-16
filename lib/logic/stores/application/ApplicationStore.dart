@@ -17,6 +17,7 @@ abstract class _ApplicationStore with Store {
   double topAnimeOffset =0, myListOffset =0,
       mainAnimeListOffset =0, mostRecentOffset =0, genreListOffset =.0;
 
+  bool isFirstHomePageView = true;
 
   @observable
   ObservableList<AnimeItem> mainAnimeList = ObservableList();

@@ -159,6 +159,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                   floating: true,
                   delegate: _SliverAppBarDelegate(
                     TabBar(
+                      indicatorColor: accentColor,
                       tabs: <Widget>[
                         Tab(
                           text: locale.episodes,
@@ -257,26 +258,37 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                       var isWatched =
                           applicationStore.isEpisodeWatched(animeId, episodeId);
                     
-                      return ListTile(
-                        leading: Icon(
-                          Icons.play_circle_filled,
-                          color: (isWatched) ? Colors.green : accentColor,
-                        ),
-                        
-                        title: Text(
-                            detailsStore.animeDetails.episodes[index].title),
-                        
-                        onTap: () async {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => VideoPlayerScreen(
-                                        episodeId: episodeId,
-                                      )));
+                      return Container(
+                        color: Color(0xFF131D2A),
+                        margin: EdgeInsets.only(bottom: 4.0),
+                        child: Material(
+                          color: Colors.transparent,
+                          elevation: .0,
+                              child: InkWell(
+                              onTap: () async {
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => VideoPlayerScreen(
+                                            episodeId: episodeId,
+                                          )));
 
-                          applicationStore.addWatchedEpisode(
-                              animeId, episodeId);
-                        },
+                              applicationStore.addWatchedEpisode(
+                                  animeId, episodeId);
+                            },
+                              child: ListTile(
+
+                              leading: Icon(
+                                Icons.play_circle_outline,
+                                size: 34.0,
+                                color: (isWatched) ? Colors.green : Colors.grey[300].withOpacity(.7),
+                              ),
+                              
+                              title: Text( detailsStore.animeDetails.episodes[index].title,),
+                            
+                            ),
+                          ),
+                        ),
                       );
                     },
                     childCount: detailsStore.animeDetails.episodes.length,

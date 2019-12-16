@@ -77,8 +77,8 @@ class _SplashScreenState extends State<SplashScreen>
       parent: dotController,
     ));
     controller.forward().then((_) {
-      appStore.initApp();
       dotController.forward();
+      appStore.initApp();
     }  );
   }
 

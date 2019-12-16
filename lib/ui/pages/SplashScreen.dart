@@ -1,4 +1,5 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/ui/component/DotSpinner.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,39 +11,47 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   ApplicationStore appStore;
   AnimationController controller;
+  AnimationController dotController;
 
   Animation transformAnimation;
   Animation textTransition;
   Animation iconTransition;
   Animation borderAnimation;
+  Animation loaderTransition;
 
   @override
   void dispose() {
     controller.dispose();
+    dotController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1300),
+      duration: Duration(milliseconds: 1000),
     );
+
+    dotController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 800),
+    );
+
     appStore = Provider.of<ApplicationStore>(context, listen: false);
 
     transformAnimation = Tween<double>(begin: .0, end: 1.0).animate(
         CurvedAnimation(
-            curve: Interval(.0, .8, curve: Curves.easeIn), parent: controller)
-    );
+            curve: Interval(.0, .5, curve: Curves.linear), parent: controller));
 
     borderAnimation = Tween<double>(begin: 1.0, end: .0).animate(
         CurvedAnimation(
-            curve: Interval(.0, .8, curve: Curves.easeIn), parent: controller)
-    );    
+            curve: Interval(.0, .5, curve: Curves.easeIn), parent: controller));
     var transitionInterval =
         Interval(.5, 1.0, curve: Curves.fastLinearToSlowEaseIn);
 
@@ -59,8 +68,18 @@ class _SplashScreenState extends State<SplashScreen>
       curve: transitionInterval,
       parent: controller,
     ));
-    controller.forward();
-    appStore.initApp();
+
+    loaderTransition = Tween<Offset>(
+      begin: Offset(50.0, .0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      curve: Curves.fastLinearToSlowEaseIn,
+      parent: dotController,
+    ));
+    controller.forward().then((_) {
+      appStore.initApp();
+      dotController.forward();
+    }  );
   }
 
   @override
@@ -73,7 +92,6 @@ class _SplashScreenState extends State<SplashScreen>
       decoration: BoxDecoration(
         color: Colors.white,
       ),
-      
       child: AnimatedBuilder(
         animation: controller,
         builder: (context, child) => Transform.scale(
@@ -82,8 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
           origin: Offset.zero,
           child: Material(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderAnimation.value * 20 ),
-
+              borderRadius: BorderRadius.circular(borderAnimation.value * 20),
             ),
             color: primaryColor,
             child: Column(
@@ -110,17 +127,31 @@ class _SplashScreenState extends State<SplashScreen>
                     builder: (_, __) => SlideTransition(
                       position: textTransition,
                       child: Text(
-                        'Anime Store',
-                        style: TextStyle(
-                            color: textPrimaryColor,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 32),
-                      ),
+                            'Anime Store',
+                            style: TextStyle(
+                                color: textPrimaryColor,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32
+                            ),
+                          ),
                     ),
                   ),
                 ),
+              
+                AnimatedBuilder(
+                  animation: dotController,
+                  builder: (context, child){
+                    return SlideTransition(
+                      position: loaderTransition,
+                      child: DotSpinner(),
+
+
+                    );
+                  },
+                ),
               ],
+              
             ),
           ),
         ),

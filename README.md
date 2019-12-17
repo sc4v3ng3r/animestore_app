@@ -5,9 +5,9 @@ Anime Store is a simple, beautiful, lightweight and open source mobile app to st
 
 
 <p float="left">
-  <img src="https://s5.gifyu.com/images/app_startupf7a34bdb2ef8352f.gif" width="300" />
-  <img src="https://s5.gifyu.com/images/home_to_details00ff993998186b6a.gif" width="300" /> 
-  <img src="https://s5.gifyu.com/images/playbfba65960598f3e3.gif" width="300" />
+  <img src="https://s5.gifyu.com/images/app_startupf7a34bdb2ef8352f.gif" width="250" />
+  <img src="https://s5.gifyu.com/images/home_to_details00ff993998186b6a.gif" width="250" /> 
+  <img src="https://s5.gifyu.com/images/playbfba65960598f3e3.gif" width="250" />
 </p>
 
 

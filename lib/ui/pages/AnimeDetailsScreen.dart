@@ -3,6 +3,7 @@ import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/notification/CustomListNotification.dart';
+import 'package:anime_app/ui/component/video/VideoWidget.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
@@ -269,7 +270,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                               Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                      builder: (context) => VideoPlayerScreen(
+                                      builder: (context) => VideoWidget(
                                             episodeId: episodeId,
                                           )));
 

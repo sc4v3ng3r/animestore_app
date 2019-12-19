@@ -1,5 +1,6 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
+import 'package:anime_app/ui/component/video/VideoWidget.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,13 +29,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void initState() {
-
-    SystemChrome.setPreferredOrientations( DeviceOrientation.values );
-
     super.initState();
-    appStore = Provider.of<ApplicationStore>(context, listen: false);
-    videoPlayerStore = VideoPlayerStore(appStore);
-    videoPlayerStore.loadEpisodeDetails(widget.episodeId);
+    // SystemChrome.setPreferredOrientations( DeviceOrientation.values );
+
+    // 
+    // appStore = Provider.of<ApplicationStore>(context, listen: false);
+    // videoPlayerStore = VideoPlayerStore(appStore);
+    // videoPlayerStore.loadEpisodeDetails(widget.episodeId);
   }
 
   @override
@@ -42,69 +43,75 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
     var size = MediaQuery.of(context).size;
 
-    return WillPopScope(
-      onWillPop: () async {
-        print('OnWillPop');
-        if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.LOADING) {
-          videoPlayerStore.cancelEpisodeLoading();
-        }
+    return VideoWidget(episodeId: widget.episodeId,);
 
-        else if (_chewieController.isFullScreen) {
-          _chewieController.exitFullScreen();
-          return true;
-        }
+    // return WillPopScope(
+    //   onWillPop: () async {
+    //     print('OnWillPop');
+    //     if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.DOWNLOADING) {
+    //       videoPlayerStore.cancelEpisodeLoading();
+    //     }
 
-        await SystemChrome.setPreferredOrientations( [DeviceOrientation.portraitUp, ] );
-        return true;
-      },
+    //     else if (_chewieController.isFullScreen) {
+    //       _chewieController.exitFullScreen();
+    //       _chewieController.pause();
+    //       await SystemChrome.setPreferredOrientations( [DeviceOrientation.portraitUp, ] );
+    //       Navigator.pop(context);
+    //       //
+    //       return false;
+    //     }
 
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Observer(
-          builder: (context){
-            if(videoPlayerStore.episodeLoadingStatus == EpisodeLoading.LOADING)
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+    //     await SystemChrome.setPreferredOrientations( [DeviceOrientation.portraitUp, ] );
+    //     return true;
+    //   },
 
-            if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.ERROR)
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Center(child: Icon(Icons.error, color: Colors.red, size: 82,)),
-                  Container(height: 10,),
-                  Text(
-                    'Vídeo Indisponível..',
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    style: TextStyle(color: Colors.red,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),),
+    //   child: Scaffold(
+    //     backgroundColor: Colors.black,
+    //     body: Observer(
+    //       builder: (context){
+    //         if(videoPlayerStore.episodeLoadingStatus == EpisodeStatus.DOWNLOADING)
+    //           return Center(
+    //             child: CircularProgressIndicator(),
+    //           );
 
-                  RaisedButton(
-                    child: Text('Voltar'),
-                    onPressed: () => Navigator.pop(context),
-                  )
-                ],
-              );
+    //         if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.ERROR)
+    //           return Column(
+    //             mainAxisSize: MainAxisSize.max,
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: <Widget>[
+    //               Center(child: Icon(Icons.error, color: Colors.red, size: 82,)),
+    //               Container(height: 10,),
+    //               Text(
+    //                 'Vídeo Indisponível..',
+    //                 textAlign: TextAlign.center,
+    //                 maxLines: 2,
+    //                 style: TextStyle(color: Colors.red,
+    //                     fontSize: 20,
+    //                     fontWeight: FontWeight.bold),),
 
-            if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.CANCELED)
-              return Container();
+    //               RaisedButton(
+    //                 child: Text('Voltar'),
+    //                 onPressed: () => Navigator.pop(context),
+    //               )
+    //             ],
+    //           );
 
-            if (videoPlayerStore.episodeLoadingStatus == EpisodeLoading.DONE){
-              _playerController ??= _createPlayerController(
-                  videoPlayerStore.currentEpisode.streamingUrl, );
-              _chewieController ??= _createChewieController();
+    //         if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.CANCELED)
+    //           return Container();
 
-            }
+    //         if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.DOWNLOADING_DONE){
+    //           _playerController ??= _createPlayerController(
+    //               videoPlayerStore.currentEpisode.streamingUrl, );
+    //           _chewieController ??= _createChewieController();
 
-            return Chewie( controller: _chewieController, );
-          },
-        ),
-      ),
-    );
+    //         }
+
+    //         return Chewie( controller: _chewieController, );
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 
   @override
@@ -125,8 +132,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       ChewieController(
         videoPlayerController: _playerController,
         aspectRatio: _DEFAULT_ASPECT_RATIO,
-        allowFullScreen: true,
-        fullScreenByDefault: false,
+        fullScreenByDefault: true,
+        allowFullScreen: false,
+        customControls: VideoWidget(),
         autoPlay: true,
         looping: false,
         showControls: true,

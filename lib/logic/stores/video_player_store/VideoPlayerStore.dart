@@ -91,7 +91,6 @@ abstract class _VideoPlayerStore with Store {
   }
 
   void _controllerListener(){
-    print('The absolute position is ${controller.value.absolutePosition}');
     _setCurrentPosition( controller.value.position );
   }
 
@@ -102,4 +101,8 @@ abstract class _VideoPlayerStore with Store {
     controller?.dispose();
     super.dispose();
   }
+
+  void seekTo(int seconds) => controller.seekTo(
+    Duration(seconds: (seconds < 0) ? 0 : seconds)
+    );
 }

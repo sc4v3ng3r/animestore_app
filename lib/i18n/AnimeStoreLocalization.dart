@@ -64,6 +64,8 @@ abstract class AnimeStoreLocalization {
   String get searchErrorMessage;
 
   String get viewAll;
+
+  String get settings;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{

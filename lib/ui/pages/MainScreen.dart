@@ -7,7 +7,7 @@ import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum MainScreenNavigation { HOME, ANIME_LIST, SEARCH}
+enum MainScreenNavigation { HOME, ANIME_LIST, SEARCH, SETTINGS }
 
 class MainScreen extends StatefulWidget {
   @override
@@ -61,6 +61,10 @@ class _MainScreenState extends State<MainScreen> {
       case MainScreenNavigation.SEARCH:
         widget = SearchWidget();
         break;
+
+      case MainScreenNavigation.SETTINGS:
+        widget = Container();
+        break;
     }
     return widget;
   }
@@ -83,9 +87,11 @@ class _MainScreenState extends State<MainScreen> {
     ]),
 
     child: BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       selectedItemColor: accentColor,
       backgroundColor: primaryColor,
       unselectedItemColor: secondaryColor,
+      //fixedColor: primaryColor,
       items: <BottomNavigationBarItem>[
 
         BottomNavigationBarItem(
@@ -108,6 +114,13 @@ class _MainScreenState extends State<MainScreen> {
             Icons.search,
           ),
         ),
+
+        BottomNavigationBarItem(
+          title: Text(locale.settings),
+          icon: Icon(
+            Icons.settings
+          )
+        )
       ],
 
       onTap: _changePageBody,

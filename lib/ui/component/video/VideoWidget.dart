@@ -15,6 +15,8 @@ class VideoWidget extends StatefulWidget {
   _VideoWidgetState createState() => _VideoWidgetState();
 }
 
+enum _MenuOption {NEXT, PREVIOUS, EXIT}
+
 class _VideoWidgetState extends State<VideoWidget>
     with TickerProviderStateMixin {
   VideoPlayerController videoController;
@@ -63,6 +65,7 @@ class _VideoWidgetState extends State<VideoWidget>
 
   @override
   void dispose() {
+    
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     //videoController?.dispose();
@@ -85,13 +88,7 @@ class _VideoWidgetState extends State<VideoWidget>
               EpisodeStatus.DOWNLOADING)
             videoPlayerStore.cancelEpisodeLoading();
 
-          // if (videoController != null){
-          //   if (videoController.value.isPlaying)
-          //     videoController.pause();
-          // }
-
           await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-
           await SystemChrome.setPreferredOrientations(
               [DeviceOrientation.portraitUp]);
           // after orientation changes the controller is playing
@@ -105,7 +102,7 @@ class _VideoWidgetState extends State<VideoWidget>
           child: Observer(
             builder: (_) {
               Widget widget;
-              
+
               switch (videoPlayerStore.episodeLoadingStatus) {
                 case EpisodeStatus.BUFFERING:
                 case EpisodeStatus.DOWNLOADING:
@@ -127,7 +124,7 @@ class _VideoWidgetState extends State<VideoWidget>
                 case EpisodeStatus.READY:
                   videoController = videoPlayerStore.controller;
                   widget = buildPlayerWidget(size);
-                  videoPlayerStore.playOrPause();
+                  //videoPlayerStore.playOrPause();
                   controller.forward();
                   break;
               }
@@ -193,37 +190,128 @@ class _VideoWidgetState extends State<VideoWidget>
   Widget buildTopWidget(final Size size) => Align(
         alignment: Alignment.topCenter,
         child: Container(
-          margin: EdgeInsets.only(top: 8.0),
           width: size.width,
-          height: 80,
+          height: 100,
           color: Colors.transparent,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(),
-                Center(
-                    child: Text(
-                  'Current Episode Title',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
-                )),
-                IconButton(
-                  onPressed: () {
-                    print('Icon Press');
-                  },
-                  color: Colors.white,
-                  icon: Icon(
-                    Icons.more_vert,
-                  ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: .0,
+            centerTitle: true,
+            leading: Container(),
+            actions: <Widget>[
+              IconButton(
+                padding: EdgeInsets.only(right: 8.0),
+                // iconSize: 25,
+                onPressed: () {
+                  showMenu(
+                    elevation: .0,
+                    position: RelativeRect.fromLTRB(100, 50, 0, 0),
+                    color: Colors.transparent,
+                    //initialValue: _MenuOption.PREVIOUS,
+                    context: context,
+                    items: <PopupMenuEntry<_MenuOption>>[
+                      PopupMenuItem<_MenuOption>(
+                        value: _MenuOption.PREVIOUS,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.skip_previous,
+                                color: Colors.white,
+                              )
+                            ),
+                            Text('Anterior'),
+                            
+                          ],
+                        ),
+                      ),
+
+                      PopupMenuItem<_MenuOption>(
+                        value: _MenuOption.NEXT,
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.skip_next,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text('Proximo'),
+                            
+                          ],
+                        ),
+                      ),
+
+                      PopupMenuItem<_MenuOption>(
+                        value: _MenuOption.NEXT,
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(right: 8.0),
+                              child: Icon(
+                                Icons.exit_to_app,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text('Sair'),
+                          ],
+                        ),
+                      ),
+                    ]
+                  );
+                },
+                color: Colors.white,
+                icon: Icon(
+                  Icons.more_vert,
                 ),
-              ],
+              ),
+            ],
+            title: Container(
+              width: size.width,
+              height: 100,
+              child: Text(
+              videoPlayerStore.currentEpisode.title,
+              maxLines: 3,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700),
+            ),
             ),
           ),
         ),
+        // child: Row(
+        //     mainAxisSize: MainAxisSize.max,
+
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: <Widget>[
+
+        //       Expanded(
+        //         child: Text(videoPlayerStore.currentEpisode.title,
+        //           style: TextStyle(fontSize: 18,
+        //           color: Colors.white,
+        //           fontWeight: FontWeight.w700),
+        //         ),
+        //       ),
+
+        //       IconButton(
+        //         iconSize: 25,
+        //         onPressed: () {
+        //           print('Icon Press');
+        //         },
+        //         color: Colors.white,
+        //         icon: Icon(
+        //           Icons.more_vert,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        //),
       );
 
   Widget buildCenterControllersWidget(final Size size, bool available) => Align(
@@ -242,9 +330,8 @@ class _VideoWidgetState extends State<VideoWidget>
                   Icons.replay_10,
                 ),
                 onPressed: available
-                    ? () {
-                        print('Backward');
-                      }
+                    ? () => videoPlayerStore
+                        .seekTo(videoPlayerStore.currentPosition.inSeconds - 10)
                     : null,
               ),
               IconButton(
@@ -261,11 +348,8 @@ class _VideoWidgetState extends State<VideoWidget>
                     );
                   },
                 ),
-                onPressed: available
-                    ? () {
-                        videoPlayerStore.playOrPause();
-                      }
-                    : null,
+                onPressed:
+                    available ? () => videoPlayerStore.playOrPause() : null,
               ),
               IconButton(
                 disabledColor: Colors.white,
@@ -275,9 +359,8 @@ class _VideoWidgetState extends State<VideoWidget>
                   Icons.forward_10,
                 ),
                 onPressed: available
-                    ? () {
-                        print('Forward');
-                      }
+                    ? () => videoPlayerStore
+                        .seekTo(videoPlayerStore.currentPosition.inSeconds + 10)
                     : null,
               ),
             ],
@@ -292,9 +375,7 @@ class _VideoWidgetState extends State<VideoWidget>
           height: 80,
           color: Colors.transparent,
           child: Observer(
-
             builder: (_) {
-              
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -312,10 +393,14 @@ class _VideoWidgetState extends State<VideoWidget>
                       padding: EdgeInsets.zero,
                       child: Slider(
                         activeColor: accentColor,
-                        value: videoPlayerStore.currentPosition.inSeconds.toDouble(),
+                        value: videoPlayerStore.currentPosition.inSeconds
+                            .toDouble(),
                         min: .0,
-                        max: videoPlayerStore.controller.value.duration.inSeconds.toDouble(),
-                        onChanged: (value) {},
+                        max: videoPlayerStore
+                            .controller.value.duration.inSeconds
+                            .toDouble(),
+                        onChanged: (value) =>
+                            videoPlayerStore.seekTo(value.toInt()),
                       ),
                     ),
                   ),
@@ -324,8 +409,8 @@ class _VideoWidgetState extends State<VideoWidget>
                     child: Container(
                       margin: EdgeInsets.only(left: 24.0, bottom: 8.0),
                       child: Text(
-                        "${_printDuration(videoPlayerStore.currentPosition)}" + 
-                        " / ${_printDuration(videoPlayerStore.controller.value.duration)}",
+                        "${_printDuration(videoPlayerStore.currentPosition)}" +
+                            " / ${_printDuration(videoPlayerStore.controller.value.duration)}",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -341,15 +426,15 @@ class _VideoWidgetState extends State<VideoWidget>
       );
 
   String _printDuration(Duration duration) {
-        String twoDigits(int n) {
-          if (n >= 10) return "$n";
-          return "0$n";
-        }
-
-        String twoDigitMinutes = twoDigits(duration.inMinutes);
-        String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-        return "$twoDigitMinutes:$twoDigitSeconds";
+    String twoDigits(int n) {
+      if (n >= 10) return "$n";
+      return "0$n";
     }
+
+    String twoDigitMinutes = twoDigits(duration.inMinutes);
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
+  }
 
   Widget buildErrorWidget() => Column(
         mainAxisSize: MainAxisSize.max,

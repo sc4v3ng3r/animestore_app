@@ -1,4 +1,5 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:flutter/semantics.dart';
 
 class LocalizationEN extends AnimeStoreLocalization {
 
@@ -92,4 +93,7 @@ class LocalizationEN extends AnimeStoreLocalization {
 
   @override
   String get viewAll => 'View all';
+
+  @override
+  String get settings => "Settings";
 }

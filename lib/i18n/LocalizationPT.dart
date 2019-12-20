@@ -94,6 +94,6 @@ class LocalizationPT extends AnimeStoreLocalization {
   String get viewAll => 'Ver todos';
 
   @override
-  String get settings => "Opções";
+  String get info => "Sobre";
 
 }

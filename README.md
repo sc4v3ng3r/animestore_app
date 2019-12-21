@@ -15,7 +15,7 @@ The content which this app shows is hosted and handled by the brazilian website 
 
 The app provide support english and brazilian portuguese languages but be aware that some data content will be only available in brazilian portuguese like animation subtitles. Due copyrights issues the app on Google Play is available only in Brazil but if you're in other country you can build the app very easy. The build process is described later in this document.
 
-**I've no copyrights of the content and I am not the uploader and the keeper of the content. The propose of this app is educational and show some flutter development skills.**
+**Anime Store has no copyrights of the content and I am not the uploader and the keeper of the content. The propose of this app is educational and show some flutter development skills.**
  
 
 # How to Install or Build

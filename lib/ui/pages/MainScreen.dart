@@ -118,7 +118,7 @@ class _MainScreenState extends State<MainScreen> {
         BottomNavigationBarItem(
           title: Text(locale.info),
           icon: Icon(
-            Icons.info
+            Icons.info_outline
           )
         )
       ],

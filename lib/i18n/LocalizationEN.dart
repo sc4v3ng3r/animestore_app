@@ -110,7 +110,7 @@ class LocalizationEN extends AnimeStoreLocalization {
   String get appInfoSubtitle => 'Info';
 
   @override
-  String get appNameTitle => 'App name';
+  String get appNameTitle => 'Application name';
 
   @override
   String get buildNumberTitle => 'Build number';

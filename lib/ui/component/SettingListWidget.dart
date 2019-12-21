@@ -13,6 +13,11 @@ class SettingListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final locale = AnimeStoreLocalization.of(context);
+    final defaultTrailing = Icon(
+      Icons.navigate_next,
+      color: Colors.white,
+      );
+
     return SafeArea(
       child: ListView(
         shrinkWrap: true,
@@ -27,21 +32,23 @@ class SettingListWidget extends StatelessWidget {
             title: locale.animeStore,
             subtitle: locale.appInfoSubtitle,
             icon: UiUtils.getAppIcon(size: iconSize),
+            trailing: defaultTrailing,
           ),
 
           _buildItem(
             title: locale.animeStoreLicenseTitle,
             subtitle: locale.animeStoreLicensesubtitle,
             icon: _buildDefaultIcon(Icons.assignment),
+            trailing: defaultTrailing,
             onTap: (){}
           ),
 
           _buildItem(
-            icon: _buildDefaultIcon(Icons.info_outline),
+            icon: _buildDefaultIcon(Icons.info),
             title: locale.openSourceLibraryTitle,
             subtitle: locale.openSourceLibrarysubtitle,
+            trailing: defaultTrailing,
             onTap: (){
-              print('push page');
               Navigator.push(context, 
                 CupertinoPageRoute(
                   builder: (_) => OpenSourceLibraryPage(),
@@ -63,7 +70,7 @@ class SettingListWidget extends StatelessWidget {
   );
   Widget _buildItem(
           {@required VoidCallback onTap, @required String title, 
-           String subtitle, @required Widget icon}) =>
+           String subtitle, @required Widget icon, Widget trailing}) =>
       Container(
         child: ListTile(
           onTap: onTap,
@@ -83,6 +90,8 @@ class SettingListWidget extends StatelessWidget {
               ),
             ],
           ),
+
+          trailing: trailing,
         ),
       );
 }

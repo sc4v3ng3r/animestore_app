@@ -96,4 +96,32 @@ class LocalizationEN extends AnimeStoreLocalization {
 
   @override
   String get info => "About";
+  
+  @override
+  String get animeStore => 'Anime Store';
+
+  @override
+  String get animeStoreLicenseTitle => 'License';
+
+  @override
+  String get animeStoreLicensesubtitle => '$animeStore terms of license';
+
+  @override
+  String get appInfoSubtitle => 'Info';
+
+  @override
+  String get appNameTitle => 'App name';
+
+  @override
+  String get buildNumberTitle => 'Build number';
+
+  @override
+  String get openSourceLibraryTitle => 'Open source libraries';
+
+  @override
+  String get openSourceLibrarysubtitle => 'Open source libraries used by $animeStore';
+
+  @override
+  String get versionTitle => 'Version';
+
 }

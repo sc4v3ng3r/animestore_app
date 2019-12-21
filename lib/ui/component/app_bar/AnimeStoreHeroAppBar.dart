@@ -1,12 +1,12 @@
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 
-class AnimeStoreAppBar extends StatelessWidget {
+class AnimeStoreHeroAppBar extends StatelessWidget {
   final String title;
   final List<Widget> actions;
   final Object heroTag;
 
-  const AnimeStoreAppBar(
+  const AnimeStoreHeroAppBar(
       {Key key, this.heroTag, @required this.title, this.actions})
       : assert(title != null),
         super(key: key);

@@ -1,18 +1,21 @@
 import 'package:anime_app/database/DatabaseProvider.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
+import 'package:anime_app/model/AppInfo.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
+import 'package:package_info/package_info.dart';
 
 part 'ApplicationStore.g.dart';
 
 class ApplicationStore = _ApplicationStore with _$ApplicationStore;
 
 abstract class _ApplicationStore with Store {
-
+  
   final AniTubeApi api = AniTubeApi();
   final DatabaseProvider databaseProvider = DatabaseProvider();
   static const DEFAULT_PAGES_LOADING = 4;
   static const TIMEOUT = 10000;
+  AppInfo _appInfo;
 
   double topAnimeOffset =0, myListOffset =0,
       mainAnimeListOffset =0, mostRecentOffset =0, genreListOffset =.0;
@@ -153,6 +156,7 @@ abstract class _ApplicationStore with Store {
 
       try {
         await databaseProvider.init();
+        _getAppInfo();
         await _initDataFromNetwork();
         setAppInitialization(AppInitStatus.INITIALIZED);
       }
@@ -243,6 +247,25 @@ abstract class _ApplicationStore with Store {
     setMyAnimeMap(data);
   }
 
+  Future<void> _getAppInfo() async {
+    try{
+      var info = await PackageInfo.fromPlatform();
+    
+    _appInfo = AppInfo(
+      appName: info.appName,
+      buildNumber: info.buildNumber,
+      version: info.version
+    );
+    } 
+    catch (ex){
+      print('ApplicationStore::_getAppInfo $ex');
+      print('Not able to fetch AppInfo data.');
+    }
+
+    
+  }
+
+  AppInfo get appInfo => _appInfo;
   Future<void> loadWatchedEpisodes() async {
     Map<String, List<String>> data =
         await databaseProvider.loadWatchedEpisodes();

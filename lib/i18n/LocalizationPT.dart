@@ -96,4 +96,31 @@ class LocalizationPT extends AnimeStoreLocalization {
   @override
   String get info => "Sobre";
 
+  @override
+  String get animeStore => 'Anime Store';
+
+  @override
+  String get animeStoreLicenseTitle => 'Licensa';
+
+  @override
+  String get animeStoreLicensesubtitle => 'Termos de licensa do $animeStore';
+
+  @override
+  String get appInfoSubtitle => 'Informações';
+
+  @override
+  String get appNameTitle => 'Nome da aplicação';
+
+  @override
+  String get buildNumberTitle => 'Número de Compilação';
+
+  @override
+  String get openSourceLibraryTitle => 'Licensas de código aberto';
+
+  @override
+  String get openSourceLibrarysubtitle => 'Bibliotecas de código aberto utilizadas por $animeStore';
+
+  @override
+  String get versionTitle => 'Versão';
+
 }

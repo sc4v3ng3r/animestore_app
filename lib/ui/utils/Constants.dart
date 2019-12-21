@@ -15,6 +15,7 @@ final Map<String, String> librariesMap = {
   'mobx': 'MobX is a library for reactively managing the state of your applications. Use the power of observables, actions, and reactions to supercharge your Dart and Flutter apps.',
   'flutter_mobx': 'Flutter integration for MobX. It provides a set of Observer widgets that automatically rebuild when the tracked observables change.',
   'mobx_codegen': 'Code generator for MobX that adds support for annotating your code with @observable, @computed, @action and also creating Store classes. Stores can be created with a mixin or @store',
+  'package_info':'Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.',
   'intl_translation': 'Contains code to deal with internationalized/localized messages, date and number formatting and parsing, bi-directional text, and other internationalization issues.',
   'intl': 'Contains code to deal with internationalized/localized messages, date and number formatting and parsing, bi-directional text, and other internationalization issues.',
 };

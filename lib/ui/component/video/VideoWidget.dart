@@ -6,6 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock/wakelock.dart';
+
+/// TODO:
+/// * implement awake lock
+/// * next episode navigation
+/// * previous episode navigation
+/// * auto play
+/// * auto episode navigation
+/// * exit button
+/// * Aspect ratio button
+/// 
 
 class VideoWidget extends StatefulWidget {
   final String episodeId;
@@ -27,12 +38,15 @@ class _VideoWidgetState extends State<VideoWidget>
 
   VideoPlayerStore videoPlayerStore;
   ApplicationStore appStore;
+  static const _DEFAULT_ASPECT_RATIO = 3 / 2;
+
 
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+    Wakelock.enable();    
     super.initState();
 
     appStore = Provider.of<ApplicationStore>(context, listen: false);
@@ -67,14 +81,11 @@ class _VideoWidgetState extends State<VideoWidget>
   void dispose() {
     
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-    //videoController?.dispose();
     controller?.dispose();
     videoPlayerStore.dispose();
+    Wakelock.disable();
     super.dispose();
   }
-
-  static const _DEFAULT_ASPECT_RATIO = 3 / 2;
 
   @override
   Widget build(BuildContext context) {

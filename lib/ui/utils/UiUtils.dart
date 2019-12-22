@@ -18,4 +18,24 @@ class UiUtils {
           width: size ?? 32,
           height: size ?? 32,
     );
+
+  static PopupMenuItem createMenuItem<T>({@required T value, 
+    @required String title,
+    @required  Icon icon}){
+    
+    return PopupMenuItem<T>(
+          value: value,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(right: 8.0),
+                  child: icon
+              ),
+              Text(title),
+            ],
+          ),
+        );
+
+  }  
 }

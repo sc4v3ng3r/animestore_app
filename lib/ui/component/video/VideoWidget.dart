@@ -1,6 +1,8 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
+import 'package:anime_app/ui/utils/UiUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -9,14 +11,14 @@ import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
 /// TODO:
-/// * implement awake lock
+/// * implement awake lock [DONE]
 /// * next episode navigation
 /// * previous episode navigation
 /// * auto play
 /// * auto episode navigation
 /// * exit button
 /// * Aspect ratio button
-/// 
+///
 
 class VideoWidget extends StatefulWidget {
   final String episodeId;
@@ -26,7 +28,7 @@ class VideoWidget extends StatefulWidget {
   _VideoWidgetState createState() => _VideoWidgetState();
 }
 
-enum _MenuOption {NEXT, PREVIOUS, EXIT}
+enum _MenuOption { NEXT, PREVIOUS, EXIT }
 
 class _VideoWidgetState extends State<VideoWidget>
     with TickerProviderStateMixin {
@@ -40,13 +42,12 @@ class _VideoWidgetState extends State<VideoWidget>
   ApplicationStore appStore;
   static const _DEFAULT_ASPECT_RATIO = 3 / 2;
 
-
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
-    Wakelock.enable();    
+    Wakelock.enable();
     super.initState();
 
     appStore = Provider.of<ApplicationStore>(context, listen: false);
@@ -79,7 +80,6 @@ class _VideoWidgetState extends State<VideoWidget>
 
   @override
   void dispose() {
-    
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     controller?.dispose();
     videoPlayerStore.dispose();
@@ -218,61 +218,8 @@ class _VideoWidgetState extends State<VideoWidget>
                     elevation: .0,
                     position: RelativeRect.fromLTRB(100, 50, 0, 0),
                     color: Colors.transparent,
-                    //initialValue: _MenuOption.PREVIOUS,
                     context: context,
-                    items: <PopupMenuEntry<_MenuOption>>[
-                      PopupMenuItem<_MenuOption>(
-                        value: _MenuOption.PREVIOUS,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.skip_previous,
-                                color: Colors.white,
-                              )
-                            ),
-                            Text('Anterior'),
-                            
-                          ],
-                        ),
-                      ),
-
-                      PopupMenuItem<_MenuOption>(
-                        value: _MenuOption.NEXT,
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.skip_next,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text('Proximo'),
-                            
-                          ],
-                        ),
-                      ),
-
-                      PopupMenuItem<_MenuOption>(
-                        value: _MenuOption.NEXT,
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.exit_to_app,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text('Sair'),
-                          ],
-                        ),
-                      ),
-                    ]
+                    items: popupMenuItems( AnimeStoreLocalization.of(context) ),
                   );
                 },
                 color: Colors.white,
@@ -285,44 +232,17 @@ class _VideoWidgetState extends State<VideoWidget>
               width: size.width,
               height: 100,
               child: Text(
-              videoPlayerStore.currentEpisode.title,
-              maxLines: 3,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700),
-            ),
+                videoPlayerStore.currentEpisode.title,
+                maxLines: 3,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700),
+              ),
             ),
           ),
         ),
-        // child: Row(
-        //     mainAxisSize: MainAxisSize.max,
-
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: <Widget>[
-
-        //       Expanded(
-        //         child: Text(videoPlayerStore.currentEpisode.title,
-        //           style: TextStyle(fontSize: 18,
-        //           color: Colors.white,
-        //           fontWeight: FontWeight.w700),
-        //         ),
-        //       ),
-
-        //       IconButton(
-        //         iconSize: 25,
-        //         onPressed: () {
-        //           print('Icon Press');
-        //         },
-        //         color: Colors.white,
-        //         icon: Icon(
-        //           Icons.more_vert,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        //),
       );
 
   Widget buildCenterControllersWidget(final Size size, bool available) => Align(
@@ -474,4 +394,36 @@ class _VideoWidgetState extends State<VideoWidget>
           )
         ],
       );
+
+  //value, title, icon
+  List<Widget> popupMenuItems(AnimeStoreLocalization locale) {
+    var widgetList = <PopupMenuItem<_MenuOption>>[];
+
+    if (videoPlayerStore.currentEpisode.previousEpisodeId.isNotEmpty)
+      widgetList.add(
+        UiUtils.createMenuItem<_MenuOption>(
+          icon: Icon(Icons.skip_previous,color: Colors.white,),
+          value: _MenuOption.PREVIOUS,
+          title: locale.previous,
+        )
+      );
+
+    if (videoPlayerStore.currentEpisode.nextEpisodeId.isNotEmpty)
+      widgetList.add(
+        UiUtils.createMenuItem<_MenuOption>(
+          icon: Icon(Icons.skip_next, color: Colors.white,),
+          value: _MenuOption.NEXT,
+          title: locale.next,
+        )
+      );
+
+    widgetList.add(
+      UiUtils.createMenuItem(
+        icon: Icon(Icons.exit_to_app, color: Colors.white,),
+          value: _MenuOption.EXIT,
+          title: locale.quit,
+      )
+    );
+    return widgetList;
+  }
 }

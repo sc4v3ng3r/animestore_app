@@ -123,4 +123,13 @@ class LocalizationPT extends AnimeStoreLocalization {
   @override
   String get versionTitle => 'Versão';
 
+  @override
+  String get next => 'Próximo';
+
+  @override
+  String get previous => 'Anterior';
+
+  @override
+  String get quit => 'Sair';
+
 }

@@ -124,4 +124,13 @@ class LocalizationEN extends AnimeStoreLocalization {
   @override
   String get versionTitle => 'Version';
 
+  @override
+  String get quit => 'Quit';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get previous => 'Previous';
+
 }

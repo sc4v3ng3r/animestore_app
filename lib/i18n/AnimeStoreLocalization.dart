@@ -84,6 +84,12 @@ abstract class AnimeStoreLocalization {
   String get versionTitle;
 
   String get buildNumberTitle;
+
+  String get quit;
+
+  String get next;
+
+  String get previous;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{

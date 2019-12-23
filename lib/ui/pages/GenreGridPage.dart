@@ -1,6 +1,6 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/ui/component/AnimeStoreAppBar.dart';
+import 'package:anime_app/ui/component/app_bar/AnimeStoreHeroAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
@@ -27,7 +27,7 @@ class GenreGridPage extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
 
-          AnimeStoreAppBar(
+          AnimeStoreHeroAppBar(
             title: locale.exploreGenres,
             heroTag: HeroTags.TAG_EXPLORE_GENRES,
           ),

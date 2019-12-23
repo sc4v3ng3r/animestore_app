@@ -1,6 +1,6 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/ui/component/AnimeStoreAppBar.dart';
+import 'package:anime_app/ui/component/app_bar/AnimeStoreHeroAppBar.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/utils/HeroTags.dart';
@@ -53,7 +53,7 @@ class RecentEpisodeListPage extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
 
-          AnimeStoreAppBar(
+          AnimeStoreHeroAppBar(
             title: locale.latestEpisodes,
             heroTag: HeroTags.TAG_LATEST_EPISODES,
           ),

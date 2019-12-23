@@ -1,0 +1,21 @@
+
+final Map<String, String> librariesMap = {
+  'anitube_crawler_api': 'Anitube website crawler API. This API allows you to get data and parse them from the brazilian anime website anitube.site.',
+  'build_runner': 'Tools to write binaries that run builders.',
+  'carousel_pro': 'A Flutter Carousel Slider widget. Support Network and Asset Images. You can modify the UI according your design easily.',
+  'bot_toast': 'A really easy to use flutter toast library.Easy to use and feature rich.',
+  'wakelock' : 'This plugin allows you to keep Android and iOS devices awake, i.e. prevent the screen from sleeping by toggling the wakelock of the device on or off.',
+  'random_color': 'Generate random colors from hue, saturation and brightness that are visualy appearing. You can chose exact color specifications.',
+  'sqflite': 'Flutter plugin for SQLite, a self-contained, high-reliability, embedded, SQL database engine.',
+  'path': 'A string-based path manipulation library. All of the path operations you know and love, with solid support for Windows, POSIX (Linux and Mac OS X), and the web.',
+  'flutter_svg': 'An SVG rendering and widget library for Flutter, which allows painting and displaying Scalable Vector Graphics 1.1 files.',
+  'flutter_advanced_networkimage': 'An advanced image provider provides caching and retrying for flutter app. Now with zoomable widget and transition to image widget.', 
+  'provider': 'A mixture between dependency injection and state management, built with widgets for widgets.',
+  'video_player': 'Flutter plugin for displaying inline video with other Flutter widgets on Android and iOS.',
+  'mobx': 'MobX is a library for reactively managing the state of your applications. Use the power of observables, actions, and reactions to supercharge your Dart and Flutter apps.',
+  'flutter_mobx': 'Flutter integration for MobX. It provides a set of Observer widgets that automatically rebuild when the tracked observables change.',
+  'mobx_codegen': 'Code generator for MobX that adds support for annotating your code with @observable, @computed, @action and also creating Store classes. Stores can be created with a mixin or @store',
+  'package_info':'Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.',
+  'intl_translation': 'Contains code to deal with internationalized/localized messages, date and number formatting and parsing, bi-directional text, and other internationalization issues.',
+  'intl': 'Contains code to deal with internationalized/localized messages, date and number formatting and parsing, bi-directional text, and other internationalization issues.',
+};

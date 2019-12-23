@@ -2,12 +2,13 @@ import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
 import 'package:anime_app/ui/component/SearchWidget.dart';
+import 'package:anime_app/ui/component/SettingListWidget.dart';
 import 'package:anime_app/ui/pages/HomePage.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum MainScreenNavigation { HOME, ANIME_LIST, SEARCH}
+enum MainScreenNavigation { HOME, ANIME_LIST, SEARCH, SETTINGS }
 
 class MainScreen extends StatefulWidget {
   @override
@@ -43,8 +44,7 @@ class _MainScreenState extends State<MainScreen> {
             }
             return flag;
           }
-          ),
-
+        ),
       bottomNavigationBar: _createBottomBar(),
     );
   }
@@ -60,6 +60,10 @@ class _MainScreenState extends State<MainScreen> {
         break;
       case MainScreenNavigation.SEARCH:
         widget = SearchWidget();
+        break;
+
+      case MainScreenNavigation.SETTINGS:
+        widget = SettingListWidget();
         break;
     }
     return widget;
@@ -83,9 +87,11 @@ class _MainScreenState extends State<MainScreen> {
     ]),
 
     child: BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       selectedItemColor: accentColor,
       backgroundColor: primaryColor,
       unselectedItemColor: secondaryColor,
+      //fixedColor: primaryColor,
       items: <BottomNavigationBarItem>[
 
         BottomNavigationBarItem(
@@ -108,6 +114,13 @@ class _MainScreenState extends State<MainScreen> {
             Icons.search,
           ),
         ),
+
+        BottomNavigationBarItem(
+          title: Text(locale.info),
+          icon: Icon(
+            Icons.info_outline
+          )
+        )
       ],
 
       onTap: _changePageBody,

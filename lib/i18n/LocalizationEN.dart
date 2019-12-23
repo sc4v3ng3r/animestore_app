@@ -1,4 +1,5 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:flutter/semantics.dart';
 
 class LocalizationEN extends AnimeStoreLocalization {
 
@@ -92,4 +93,44 @@ class LocalizationEN extends AnimeStoreLocalization {
 
   @override
   String get viewAll => 'View all';
+
+  @override
+  String get info => "About";
+  
+  @override
+  String get animeStore => 'Anime Store';
+
+  @override
+  String get animeStoreLicenseTitle => 'License';
+
+  @override
+  String get animeStoreLicensesubtitle => '$animeStore terms of license';
+
+  @override
+  String get appInfoSubtitle => 'Info';
+
+  @override
+  String get appNameTitle => 'Application name';
+
+  @override
+  String get buildNumberTitle => 'Build number';
+
+  @override
+  String get openSourceLibraryTitle => 'Open source libraries';
+
+  @override
+  String get openSourceLibrarysubtitle => 'Open source libraries used by $animeStore';
+
+  @override
+  String get versionTitle => 'Version';
+
+  @override
+  String get quit => 'Quit';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get previous => 'Previous';
+
 }

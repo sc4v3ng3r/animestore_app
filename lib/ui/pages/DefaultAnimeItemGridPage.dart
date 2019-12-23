@@ -1,6 +1,6 @@
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/ui/component/AnimeStoreAppBar.dart';
+import 'package:anime_app/ui/component/app_bar/AnimeStoreHeroAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
@@ -37,7 +37,7 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
 
-          AnimeStoreAppBar(
+          AnimeStoreHeroAppBar(
             title: title,
             heroTag: heroTag,
           ),

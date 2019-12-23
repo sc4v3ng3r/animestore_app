@@ -64,6 +64,32 @@ abstract class AnimeStoreLocalization {
   String get searchErrorMessage;
 
   String get viewAll;
+
+  String get info;
+
+  String get animeStore;
+
+  String get appInfoSubtitle;
+
+  String get animeStoreLicenseTitle;
+
+  String get animeStoreLicensesubtitle;
+
+  String get openSourceLibraryTitle;
+
+  String get openSourceLibrarysubtitle;
+
+  String get appNameTitle;
+
+  String get versionTitle;
+
+  String get buildNumberTitle;
+
+  String get quit;
+
+  String get next;
+
+  String get previous;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{

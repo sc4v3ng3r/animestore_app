@@ -55,6 +55,7 @@ abstract class _VideoPlayerStore with Store {
 
     _setPlayingStatus(controller.value.isPlaying);
   }
+  
   void loadEpisodeDetails(String episodeId) async {
     if (episodeLoadingStatus == EpisodeStatus.DOWNLOADING)
       return;
@@ -72,6 +73,7 @@ abstract class _VideoPlayerStore with Store {
 
       if (episodeLoadingStatus != EpisodeStatus.ERROR){
         setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING_DONE);
+        controller?.dispose();
         controller = VideoPlayerController.network(currentEpisode.streamingUrl,
           httpHeaders: {'Referer': currentEpisode.referer} );
         
@@ -79,6 +81,7 @@ abstract class _VideoPlayerStore with Store {
           (_){
             controller.addListener( _controllerListener );
             setEpisodeLoadingStatus(EpisodeStatus.READY);
+            playOrPause();
           } 
           );     
       }
@@ -92,6 +95,28 @@ abstract class _VideoPlayerStore with Store {
 
   void _controllerListener(){
     _setCurrentPosition( controller.value.position );
+    
+    // if is the end of the reproduction
+    if (controller.value.position.inMilliseconds >= controller.value.duration.inMilliseconds && 
+      currentEpisode.nextEpisodeId.isNotEmpty)
+      nextEpisode();
+  }
+
+  void nextEpisode() async {
+    _prepareControllerToAnotherEpisode();
+    loadEpisodeDetails( currentEpisode.nextEpisodeId );
+  }
+
+  void previousEpisode() async {
+    _prepareControllerToAnotherEpisode();
+    loadEpisodeDetails(currentEpisode.previousEpisodeId );
+  }
+
+  void _prepareControllerToAnotherEpisode() {
+     if (controller.value.isPlaying)
+      controller.pause();
+
+     controller.removeListener( _controllerListener );
   }
 
   @override

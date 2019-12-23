@@ -11,14 +11,9 @@ import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
 /// TODO:
-/// * implement awake lock [DONE]
-/// * next episode navigation
-/// * previous episode navigation
-/// * auto play
-/// * auto episode navigation
-/// * exit button
+/// handle viewed episode if the anime is on user list.
 /// * Aspect ratio button
-///
+/// * 
 
 class VideoWidget extends StatefulWidget {
   final String episodeId;
@@ -32,7 +27,7 @@ enum _MenuOption { NEXT, PREVIOUS, EXIT }
 
 class _VideoWidgetState extends State<VideoWidget>
     with TickerProviderStateMixin {
-  VideoPlayerController videoController;
+  //VideoPlayerController videoController;
   AnimationController controller;
 
   Animation topDownTransition, downTopTransition;
@@ -80,13 +75,21 @@ class _VideoWidgetState extends State<VideoWidget>
 
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     controller?.dispose();
     videoPlayerStore.dispose();
     Wakelock.disable();
     super.dispose();
   }
 
+  Future<void> _prepareToLeave() async {
+    if (videoPlayerStore.episodeLoadingStatus ==
+              EpisodeStatus.DOWNLOADING)
+            videoPlayerStore.cancelEpisodeLoading();
+
+          await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+          await SystemChrome.setPreferredOrientations(
+              [DeviceOrientation.portraitUp]);
+  }
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -95,13 +98,7 @@ class _VideoWidgetState extends State<VideoWidget>
       backgroundColor: Colors.black,
       body: WillPopScope(
         onWillPop: () async {
-          if (videoPlayerStore.episodeLoadingStatus ==
-              EpisodeStatus.DOWNLOADING)
-            videoPlayerStore.cancelEpisodeLoading();
-
-          await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-          await SystemChrome.setPreferredOrientations(
-              [DeviceOrientation.portraitUp]);
+          await _prepareToLeave();
           // after orientation changes the controller is playing
           // the video again due build method fired again.
           return true;
@@ -133,10 +130,8 @@ class _VideoWidgetState extends State<VideoWidget>
                   break;
 
                 case EpisodeStatus.READY:
-                  videoController = videoPlayerStore.controller;
                   widget = buildPlayerWidget(size);
-                  //videoPlayerStore.playOrPause();
-                  controller.forward();
+                  controller.forward(from: .0);
                   break;
               }
               return widget;
@@ -165,14 +160,14 @@ class _VideoWidgetState extends State<VideoWidget>
                 alignment: Alignment.center,
                 child: AspectRatio(
                   aspectRatio: _DEFAULT_ASPECT_RATIO,
-                  child: VideoPlayer(videoController),
+                  child: VideoPlayer(videoPlayerStore.controller),
                 ),
               ),
               AnimatedBuilder(
                 animation: controller,
                 builder: (_, __) => SlideTransition(
                   position: topDownTransition,
-                  child: buildTopWidget(size),
+                  child: buildTopBarWidget(size),
                 ),
               ),
               AnimatedBuilder(
@@ -186,7 +181,7 @@ class _VideoWidgetState extends State<VideoWidget>
                 animation: controller,
                 builder: (_, __) => SlideTransition(
                   position: downTopTransition,
-                  child: buildBottomWidget(size),
+                  child: buildBottomBarWidget(size),
                 ),
               ),
             ],
@@ -198,7 +193,7 @@ class _VideoWidgetState extends State<VideoWidget>
         child: CircularProgressIndicator(),
       );
 
-  Widget buildTopWidget(final Size size) => Align(
+  Widget buildTopBarWidget(final Size size) => Align(
         alignment: Alignment.topCenter,
         child: Container(
           width: size.width,
@@ -210,22 +205,28 @@ class _VideoWidgetState extends State<VideoWidget>
             centerTitle: true,
             leading: Container(),
             actions: <Widget>[
-              IconButton(
-                padding: EdgeInsets.only(right: 8.0),
-                // iconSize: 25,
-                onPressed: () {
-                  showMenu(
-                    elevation: .0,
-                    position: RelativeRect.fromLTRB(100, 50, 0, 0),
-                    color: Colors.transparent,
-                    context: context,
-                    items: popupMenuItems( AnimeStoreLocalization.of(context) ),
-                  );
+              PopupMenuButton<_MenuOption>(
+                itemBuilder: (context) => popupMenuItems( AnimeStoreLocalization.of(context) ),
+                color: Colors.transparent,
+                elevation: .0,
+                offset: Offset(100,40),
+                onSelected: (option) async {
+                  
+                  switch(option){
+                    case _MenuOption.NEXT:
+                      videoPlayerStore.nextEpisode();
+                      break;
+                    
+                    case _MenuOption.PREVIOUS:
+                      videoPlayerStore.previousEpisode();
+                      break;
+                    
+                    case _MenuOption.EXIT:
+                      await _prepareToLeave();
+                      Navigator.pop(context);
+                      break;
+                  }
                 },
-                color: Colors.white,
-                icon: Icon(
-                  Icons.more_vert,
-                ),
               ),
             ],
             title: Container(
@@ -299,7 +300,7 @@ class _VideoWidgetState extends State<VideoWidget>
         ),
       );
 
-  Widget buildBottomWidget(final Size size) => Align(
+  Widget buildBottomBarWidget(final Size size) => Align(
         alignment: Alignment.bottomCenter,
         child: Container(
           width: size.width,
@@ -395,13 +396,13 @@ class _VideoWidgetState extends State<VideoWidget>
         ],
       );
 
-  //value, title, icon
-  List<Widget> popupMenuItems(AnimeStoreLocalization locale) {
+  List<PopupMenuItem<_MenuOption>> popupMenuItems(AnimeStoreLocalization locale) {
     var widgetList = <PopupMenuItem<_MenuOption>>[];
 
     if (videoPlayerStore.currentEpisode.previousEpisodeId.isNotEmpty)
       widgetList.add(
         UiUtils.createMenuItem<_MenuOption>(
+
           icon: Icon(Icons.skip_previous,color: Colors.white,),
           value: _MenuOption.PREVIOUS,
           title: locale.previous,

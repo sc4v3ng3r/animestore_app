@@ -28,7 +28,7 @@ enum _MenuOption { NEXT, PREVIOUS, EXIT }
 class _VideoWidgetState extends State<VideoWidget>
     with TickerProviderStateMixin {
   //VideoPlayerController videoController;
-  AnimationController controller;
+  AnimationController animationController;
 
   Animation topDownTransition, downTopTransition;
   Animation opacityAnimation;
@@ -49,33 +49,33 @@ class _VideoWidgetState extends State<VideoWidget>
     videoPlayerStore = VideoPlayerStore(appStore);
     videoPlayerStore.loadEpisodeDetails(widget.episodeId);
 
-    controller = AnimationController(
+    animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 450),
     );
 
     topDownTransition = Tween<Offset>(begin: Offset(.0, -50), end: Offset.zero)
         .animate(CurvedAnimation(
-            parent: controller,
+            parent: animationController,
             curve: Curves.fastLinearToSlowEaseIn,
             reverseCurve: Curves.fastLinearToSlowEaseIn));
 
     downTopTransition = Tween<Offset>(begin: Offset(.0, 50), end: Offset.zero)
         .animate(CurvedAnimation(
-            parent: controller,
+            parent: animationController,
             curve: Curves.fastLinearToSlowEaseIn,
             reverseCurve: Curves.fastLinearToSlowEaseIn));
 
     opacityAnimation = Tween<double>(begin: .0, end: 1.0).animate(
         CurvedAnimation(
-            parent: controller,
+            parent: animationController,
             curve: Curves.easeIn,
             reverseCurve: Curves.easeIn));
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    animationController?.dispose();
     videoPlayerStore.dispose();
     Wakelock.disable();
     super.dispose();
@@ -131,7 +131,7 @@ class _VideoWidgetState extends State<VideoWidget>
 
                 case EpisodeStatus.READY:
                   widget = buildPlayerWidget(size);
-                  controller.forward(from: .0);
+                  animationController.forward(from: .0);
                   break;
               }
               return widget;
@@ -144,10 +144,10 @@ class _VideoWidgetState extends State<VideoWidget>
 
   Widget buildPlayerWidget(final Size size) => GestureDetector(
         onTap: () {
-          if (controller.isCompleted) {
-            controller.reverse();
+          if (animationController.isCompleted) {
+            animationController.reverse();
           } else {
-            controller.forward();
+            animationController.forward();
           }
         },
         child: Container(
@@ -164,21 +164,21 @@ class _VideoWidgetState extends State<VideoWidget>
                 ),
               ),
               AnimatedBuilder(
-                animation: controller,
+                animation: animationController,
                 builder: (_, __) => SlideTransition(
                   position: topDownTransition,
                   child: buildTopBarWidget(size),
                 ),
               ),
               AnimatedBuilder(
-                  animation: controller,
+                  animation: animationController,
                   builder: (_, __) => FadeTransition(
                         opacity: opacityAnimation,
                         child: buildCenterControllersWidget(
-                            size, controller.isCompleted),
+                            size, animationController.isCompleted),
                       )),
               AnimatedBuilder(
-                animation: controller,
+                animation: animationController,
                 builder: (_, __) => SlideTransition(
                   position: downTopTransition,
                   child: buildBottomBarWidget(size),

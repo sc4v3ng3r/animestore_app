@@ -6,6 +6,7 @@ import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/TapableText.dart';
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
+import 'package:anime_app/ui/component/dialog/AnimeStoreAcceptDialog.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
@@ -179,6 +180,25 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               appStore.myAnimeMap.values.toList(),
               locale.myAnimeList,
               HeroTags.TAG_MY_LIST,
+              actions: <Widget>[
+                IconButton(
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (_) => 
+                        AnimeStoreAcceptDialog(
+                          title: 'Clear List',
+                          bodyMessage: 'DO you want to clear all list?',
+                          
+                        )
+                    );
+                  },
+                  icon: Icon(
+                    Icons.clear_all
+                  ),
+                ),
+              ],
+
           ),
       ),
     );
@@ -512,12 +532,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         );
 
   void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,
-      String title, String heroTag) {
+      String title, String heroTag,{List<Widget> actions}) {
     Navigator.push(context, CupertinoPageRoute(
         builder: (_) => DefaultAnimeItemGridPage(
           title: title,
           gridItems: data,
           heroTag: heroTag,
+          actions: actions,
         ),
     ));
   }

@@ -4,6 +4,9 @@ import 'package:anime_app/ui/component/app_bar/AnimeStoreIconAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// This page display information about the application
+/// like build number, application name and etc.
+/// 
 class AboutAppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,6 +17,7 @@ class AboutAppPage extends StatelessWidget {
       appBar: AnimeStoreIconAppBar(),
       body: ListView(
         shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         
         children: <Widget>[
 

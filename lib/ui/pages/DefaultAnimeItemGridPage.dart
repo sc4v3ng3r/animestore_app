@@ -15,10 +15,12 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
   final List<AnimeItem> gridItems;
   final String title;
   final String heroTag;
+  final List<Widget> actions;
 
   const DefaultAnimeItemGridPage({Key key,
     @required this.gridItems,
     @required this.title,
+    this.actions,
     this.heroTag,
   }
     ) : super(key: key);
@@ -40,6 +42,7 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
           AnimeStoreHeroAppBar(
             title: title,
             heroTag: heroTag,
+            actions: actions,
           ),
 
           SliverGridItemView(

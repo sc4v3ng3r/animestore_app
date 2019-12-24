@@ -4,7 +4,6 @@ import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dar
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/notification/CustomListNotification.dart';
 import 'package:anime_app/ui/component/video/VideoWidget.dart';
-import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -162,12 +161,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                     TabBar(
                       indicatorColor: accentColor,
                       tabs: <Widget>[
-                        Tab(
-                          text: locale.episodes,
-                        ),
-                        Tab(
-                          text: locale.animeDetails,
-                        ),
+                        Tab(text: locale.episodes,),
+                        Tab(text: locale.animeDetails,),
                       ],
                     ),
                   ),
@@ -266,13 +261,15 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                           color: Colors.transparent,
                           elevation: .0,
                               child: InkWell(
-                              onTap: () async {
+                              onTap: () {
                               Navigator.push(
                                   context,
                                   CupertinoPageRoute(
                                       builder: (context) => VideoWidget(
                                             episodeId: episodeId,
-                                          )));
+                                          )
+                                      )
+                                );
 
                               applicationStore.addWatchedEpisode(
                                   animeId, episodeId);
@@ -286,7 +283,13 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                               ),
                               
                               title: Text( detailsStore.animeDetails.episodes[index].title,),
-                            
+                              trailing: IconButton(
+                                onPressed: (){},
+                                icon: Icon(
+                                  Icons.more_vert,
+                                  color: Colors.white,
+                                ),
+                              ),                       
                             ),
                           ),
                         ),

@@ -133,11 +133,15 @@ class LocalizationPT extends AnimeStoreLocalization {
   String get quit => 'Sair';
 
   @override
-  // TODO: implement cancel
-  String get cancel => throw UnimplementedError();
+  String get cancel => 'Cancelar';
 
   @override
-  // TODO: implement confirm
-  String get confirm => throw UnimplementedError();
+  String get confirm => 'Confirmar';
+
+  @override
+  String get messageClearList => 'Deseja limpar toda sua lista?';
+  
+  @override
+  String get titleClearList => 'Limpar Lista';
 
 }

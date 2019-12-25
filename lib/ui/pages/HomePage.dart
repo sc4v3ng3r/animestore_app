@@ -189,12 +189,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         AnimeStoreAcceptDialog(
                           title: 'Clear List',
                           bodyMessage: 'DO you want to clear all list?',
+                          onConfirm: (){},
+                          onCancel: () => Navigator.pop(context),
+
                           
                         )
                     );
                   },
                   icon: Icon(
-                    Icons.clear_all
+                    Icons.delete_forever
                   ),
                 ),
               ],

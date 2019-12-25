@@ -1,43 +1,73 @@
+import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 
 class AnimeStoreAcceptDialog extends StatelessWidget {
-  
   final String title;
-  final VoidCallback onAccept;
-  final VoidCallback onDenied;
+  final VoidCallback onConfirm;
+  final VoidCallback onCancel;
   final String bodyMessage;
 
-  const AnimeStoreAcceptDialog({Key key, 
-    this.title, 
+  const AnimeStoreAcceptDialog({
+    Key key,
+    this.title,
     this.bodyMessage,
-    this.onAccept, 
-    this.onDenied,
-    }) : super(key: key);
-
+    this.onConfirm,
+    this.onCancel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final defaultShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(24.0),
+    );
+
+    final locale = AnimeStoreLocalization.of(context);
+
     return AlertDialog(
       backgroundColor: primaryColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.0),
+      shape: defaultShape,
+      title: Text(
+        title,
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
-      title: Text(title, style: TextStyle(
-        color: Colors.white,
-      ),),
-      content: Text(bodyMessage, style: TextStyle(
-        color: Colors.white
-      ),),
-      actions: <Widget>[
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          
+          Text(
+            bodyMessage,
+            style: TextStyle(color: Colors.white),
+          ),
 
-        FlatButton(
-          child: Text('Deny'),
-        ),
-        FlatButton(
-          child: Text('Confirm'),
-        ),
-      ],
+          Container(
+            margin: EdgeInsets.only(top: 24.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                
+                RaisedButton(
+                  shape: defaultShape,
+                  onPressed: onCancel,
+                  textColor: Colors.white,
+                  child: Text(locale.cancel),
+                  color: accentColor,
+                ),
+                
+                FlatButton(
+                  onPressed: onConfirm,
+                  shape: defaultShape,
+                  textColor: Colors.white,
+                  child: Text(locale.confirm),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

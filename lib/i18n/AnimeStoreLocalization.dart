@@ -94,6 +94,10 @@ abstract class AnimeStoreLocalization {
   String get confirm;
 
   String get cancel;
+
+  String get titleClearList;
+
+  String get messageClearList;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{
@@ -112,13 +116,13 @@ class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLo
     Intl.defaultLocale = localeName;
 
     if( locale.languageCode == "en" ) {
-      return LocalizationEN() as AnimeStoreLocalization;
+      return LocalizationEN();
     }
 
     if (locale.languageCode == 'pt')
-      return LocalizationPT() as AnimeStoreLocalization;
+      return LocalizationPT();
 
-    return LocalizationEN() as AnimeStoreLocalization;
+    return LocalizationEN();
   }
 
   @override

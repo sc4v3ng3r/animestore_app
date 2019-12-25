@@ -133,11 +133,15 @@ class LocalizationEN extends AnimeStoreLocalization {
   String get previous => 'Previous';
 
   @override
-  // TODO: implement cancel
-  String get cancel => throw UnimplementedError();
+  String get cancel => 'Cancel';
 
   @override
-  // TODO: implement confirm
-  String get confirm => throw UnimplementedError();
+  String get confirm => 'Confirm';
+
+  @override
+  String get messageClearList => 'Do you want clear all the list?';
+
+  @override
+  String get titleClearList => 'Clear List';
 
 }

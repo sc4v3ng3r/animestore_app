@@ -132,4 +132,12 @@ class LocalizationPT extends AnimeStoreLocalization {
   @override
   String get quit => 'Sair';
 
+  @override
+  // TODO: implement cancel
+  String get cancel => throw UnimplementedError();
+
+  @override
+  // TODO: implement confirm
+  String get confirm => throw UnimplementedError();
+
 }

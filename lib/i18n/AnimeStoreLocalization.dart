@@ -90,6 +90,10 @@ abstract class AnimeStoreLocalization {
   String get next;
 
   String get previous;
+
+  String get confirm;
+
+  String get cancel;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{
@@ -108,13 +112,13 @@ class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLo
     Intl.defaultLocale = localeName;
 
     if( locale.languageCode == "en" ) {
-      return LocalizationEN();
+      return LocalizationEN() as AnimeStoreLocalization;
     }
 
     if (locale.languageCode == 'pt')
-      return LocalizationPT();
+      return LocalizationPT() as AnimeStoreLocalization;
 
-    return LocalizationEN();
+    return LocalizationEN() as AnimeStoreLocalization;
   }
 
   @override

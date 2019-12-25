@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
@@ -119,12 +117,11 @@ abstract class _VideoPlayerStore with Store {
      controller.removeListener( _controllerListener );
   }
 
-  @override
   void dispose() {
     controller?.removeListener( _controllerListener );
     
     controller?.dispose();
-    super.dispose();
+
   }
 
   void seekTo(int seconds) => controller.seekTo(

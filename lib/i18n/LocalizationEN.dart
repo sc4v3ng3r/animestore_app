@@ -1,5 +1,4 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
-import 'package:flutter/semantics.dart';
 
 class LocalizationEN extends AnimeStoreLocalization {
 
@@ -132,5 +131,13 @@ class LocalizationEN extends AnimeStoreLocalization {
 
   @override
   String get previous => 'Previous';
+
+  @override
+  // TODO: implement cancel
+  String get cancel => throw UnimplementedError();
+
+  @override
+  // TODO: implement confirm
+  String get confirm => throw UnimplementedError();
 
 }

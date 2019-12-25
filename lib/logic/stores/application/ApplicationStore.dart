@@ -101,6 +101,12 @@ abstract class _ApplicationStore with Store {
   }
 
   @action
+  void clearMyList() {
+    myAnimeMap.clear();
+    databaseProvider.clearAllMyList();
+  }
+
+  @action
   setLatestEpisodes(List<EpisodeItem> data) => latestEpisodes = ObservableList.of(data);
 
   @action

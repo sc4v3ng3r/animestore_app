@@ -187,12 +187,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       context: context,
                       builder: (_) => 
                         AnimeStoreAcceptDialog(
-                          title: 'Clear List',
-                          bodyMessage: 'DO you want to clear all list?',
-                          onConfirm: (){},
+                          title: locale.titleClearList,
+                          bodyMessage: locale.messageClearList,
+                          onConfirm: () {
+                            appStore.clearMyList();
+                            Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+                          },
                           onCancel: () => Navigator.pop(context),
 
-                          
                         )
                     );
                   },

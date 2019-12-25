@@ -240,6 +240,16 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
+  void clearMyList() {
+    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
+    try {
+      return super.clearMyList();
+    } finally {
+      _$_ApplicationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic setLatestEpisodes(List<EpisodeItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction();
     try {

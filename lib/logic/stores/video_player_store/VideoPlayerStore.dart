@@ -80,6 +80,7 @@ abstract class _VideoPlayerStore with Store {
             controller.addListener( _controllerListener );
             setEpisodeLoadingStatus(EpisodeStatus.READY);
             playOrPause();
+            //appStore.addWatchedEpisode(currentEpisode.animeId, episodeId);
           } 
           );     
       }

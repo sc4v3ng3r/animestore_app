@@ -270,9 +270,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                                           )
                                       )
                                 );
-
-                              applicationStore.addWatchedEpisode(
-                                  animeId, episodeId);
                             },
                               child: ListTile(
 

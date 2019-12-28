@@ -232,6 +232,12 @@ abstract class _ApplicationStore with Store {
   Future<AnimeDetails> getAnimeDetails(String id, ) =>
       api.getAnimeDetails(id, timeout: TIMEOUT);
 
+  Future<void> refresh() async {
+    await getHomePageInfo();
+    await loadAnimeList();
+    await getGenresAvailable();
+  }
+
   Future<void> getHomePageInfo() async{
     var homePageData = await api.getHomePageData();
     setMostRecentAnimeList( homePageData.mostRecentAnimes );
@@ -272,6 +278,7 @@ abstract class _ApplicationStore with Store {
   }
 
   AppInfo get appInfo => _appInfo;
+  
   Future<void> loadWatchedEpisodes() async {
     Map<String, List<String>> data =
         await databaseProvider.loadWatchedEpisodes();

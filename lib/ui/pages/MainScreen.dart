@@ -8,6 +8,8 @@ import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
+
 enum MainScreenNavigation { HOME, ANIME_LIST, SEARCH, SETTINGS }
 
 class MainScreen extends StatefulWidget {
@@ -20,6 +22,8 @@ class _MainScreenState extends State<MainScreen> {
   MainScreenNavigation currentNav = MainScreenNavigation.HOME;
   ApplicationStore appStore;
   AnimeStoreLocalization locale;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -32,7 +36,12 @@ class _MainScreenState extends State<MainScreen> {
     locale = AnimeStoreLocalization.of(context);
 
     return Scaffold(
-      body: WillPopScope(
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        color: Colors.white,
+        backgroundColor: primaryColor,
+        onRefresh: () => appStore.refresh(),
+        child: WillPopScope(
           child: _getCurrentPage(),
           onWillPop: () async {
             var flag = true;
@@ -45,6 +54,7 @@ class _MainScreenState extends State<MainScreen> {
             return flag;
           }
         ),
+      ),
       bottomNavigationBar: _createBottomBar(),
     );
   }

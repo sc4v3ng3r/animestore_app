@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
-        color: Colors.white,
+        color: accentColor,
         backgroundColor: primaryColor,
         onRefresh: () => appStore.refresh(),
         child: WillPopScope(

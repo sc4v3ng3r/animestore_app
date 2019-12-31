@@ -348,6 +348,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
                     child: ItemView(
+                      tooltip: anime.title,
                       width: width,
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
@@ -393,6 +394,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
                     child: ItemView(
                       width: width,
+                      tooltip: anime.title,
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
                       imageHeroTag: heroTag,
@@ -524,6 +526,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 var heroTag = '${appStore.dayReleaseList[index].id}$HER_TAG_CAROUSEL';
                 return ItemView(
                   borderRadius: .0,
+                  tooltip: appStore.dayReleaseList[index].title,
                   imageUrl: appStore.dayReleaseList[index].imageUrl,
                   width: width,
                   imageHeroTag: heroTag,

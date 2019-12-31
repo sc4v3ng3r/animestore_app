@@ -43,25 +43,6 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2.5;
     final double itemWidth = size.width / 2;
 
-//    final appBar = SliverAppBar(
-//      title: Row(
-//        mainAxisSize: MainAxisSize.max,
-//        mainAxisAlignment: MainAxisAlignment.center,
-//        children: <Widget>[
-//          Icon(
-//            Icons.video_library,
-//          ),
-//          Container(
-//            width: 4.0,
-//          ),
-//          Text('AnimeApp'),
-//        ],
-//      ),
-//      snap: false,
-//      floating: true,
-//      pinned: false,
-//    );
-
     return CustomScrollView(
       controller: _controller,
       physics: BouncingScrollPhysics(),

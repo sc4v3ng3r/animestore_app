@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:anime_app/logic/Constants.dart';
@@ -19,6 +20,8 @@ abstract class _AnimeDetailsStore with Store {
 
   final ApplicationStore applicationStore;
   final AnimeItem currentAnimeItem;
+  /// if the component should load anime suggestions
+  final bool shouldLoadSuggestions;
 
   @observable
   Color backgroundColor = IMAGE_BACKGROUND_COLOR;
@@ -34,7 +37,11 @@ abstract class _AnimeDetailsStore with Store {
 
   AnimeDetails animeDetails;
 
-  _AnimeDetailsStore(this.applicationStore, this.currentAnimeItem);
+  @observable
+  ObservableList<AnimeItem> relatedAnimes;
+
+  _AnimeDetailsStore(this.applicationStore, 
+    this.currentAnimeItem, {this.shouldLoadSuggestions = true});
 
   @action setLoadingStatus(LoadingStatus data) => loadingStatus = data;
 
@@ -45,6 +52,11 @@ abstract class _AnimeDetailsStore with Store {
 
   @action setTabChoice(TabChoice choice) => tabChoice = choice;
 
+  @action setRelatedAnimes(List<AnimeItem> data ) 
+    => relatedAnimes = ObservableList.of( data..removeWhere ( 
+      (item) => item.id.compareTo(currentAnimeItem.id) == 0 )
+   );
+  
   void loadAnimeDetails() async {
     if (loadingStatus == LoadingStatus.LOADING)
       return;
@@ -53,6 +65,8 @@ abstract class _AnimeDetailsStore with Store {
       setLoadingStatus(LoadingStatus.LOADING);
       animeDetails = await applicationStore.getAnimeDetails(currentAnimeItem.id);
       setLoadingStatus(LoadingStatus.DONE);
+      if (shouldLoadSuggestions)
+        _loadAnimeSuggestions();
     }
     on CrawlerApiException catch (ex) {
       print(ex);
@@ -60,6 +74,38 @@ abstract class _AnimeDetailsStore with Store {
     }
   }
 
+  String _generateQuery(List<String> data){
+    final generator = Random();
+    var totalIndexes = generator.nextInt(data.length + 1);
+    String query = '';
+
+    for(var i =0; i < totalIndexes; i++){
+      var index = generator.nextInt(data.length);
+      query += '${data[index] }';
+      data.removeAt(index); 
+    }
+      
+    return query;
+  }
+
+  void _loadAnimeSuggestions() {
+    var genres = animeDetails.genre.split(',');
+    var query = (genres.length > 3) 
+      ? _generateQuery(genres) 
+      : animeDetails.genre;
+      
+    applicationStore.api.search(query,)
+        .then( (animeListPage){
+          setRelatedAnimes(animeListPage.animes);
+        } )
+        .catchError((error){
+          print(error);
+          setRelatedAnimes([]);
+        });
+    
+   
+  
+  }
   Future<Uint8List> extractDominantColor(Uint8List imgData) async {
     final double size = 180;
     var img = Image.memory(imgData, width: size, height: size, );

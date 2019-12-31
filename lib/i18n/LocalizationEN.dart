@@ -144,4 +144,9 @@ class LocalizationEN extends AnimeStoreLocalization {
   @override
   String get titleClearList => 'Clear List';
 
+  @override
+  String get suggestion => 'Suggestion';
+
+  @override
+  String get noSuggestions => 'Suggestions unavailable';
 }

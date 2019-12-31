@@ -98,6 +98,10 @@ abstract class AnimeStoreLocalization {
   String get titleClearList;
 
   String get messageClearList;
+
+  String get suggestion;
+
+  String get noSuggestions;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{

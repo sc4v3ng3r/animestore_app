@@ -14,10 +14,12 @@ class ItemView extends StatelessWidget {
   final String imageHeroTag;
   final double borderRadius;
   final Color backgroundColor;
+  final String tooltip;
 
   const ItemView({
     @required this.width,
     @required this.height,
+    this.tooltip,
     Key key,
     this.imageUrl,
     this.onTap,
@@ -30,17 +32,7 @@ class ItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(this.borderRadius ?? .0),
-      clipBehavior: Clip.antiAlias,
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: backgroundColor ?? secondaryColor,
-        ),
-
-        child: Stack(
+    final stack = Stack(
           fit: StackFit.expand,
           children: <Widget>[
 
@@ -75,8 +67,26 @@ class ItemView extends StatelessWidget {
               ),
             ),
           ],
+        );
+
+    final containerChild = (tooltip == null) ? stack :
+      Tooltip(
+        message: tooltip,
+        child: stack,
+      );    
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(this.borderRadius ?? .0),
+      clipBehavior: Clip.antiAlias,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: backgroundColor ?? secondaryColor,
         ),
+
+        child: containerChild,
       ),
     );
   }
+  
 }

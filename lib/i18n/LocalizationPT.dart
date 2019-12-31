@@ -144,4 +144,10 @@ class LocalizationPT extends AnimeStoreLocalization {
   @override
   String get titleClearList => 'Limpar Lista';
 
+  @override
+  String get suggestion => 'Sugestões';
+
+  @override
+  String get noSuggestions => 'Sem sugestões!';
+
 }

@@ -14,11 +14,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:anime_app/ui/component/DotSpinner.dart';
+import 'package:anime_app/ui/component/ItemView.dart';
+
 
 class AnimeDetailsScreen extends StatefulWidget {
   final String heroTag;
-
-  const AnimeDetailsScreen({Key key, this.heroTag}) : super(key: key);
+  
+  const AnimeDetailsScreen({Key key, 
+    this.heroTag}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AnimeDetailsScreen();
@@ -26,12 +30,15 @@ class AnimeDetailsScreen extends StatefulWidget {
 
 class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     with SingleTickerProviderStateMixin {
+  
+  static const _RELATED_TAG = 'RELATED_TAG';
   ApplicationStore applicationStore;
   AnimeDetailsStore detailsStore;
   AnimeStoreLocalization locale;
   AnimationController animationController;
   Animation slideAnimation;
   Animation scaleAnimation;
+  final ScrollController listController = ScrollController();
 
   static final _defaultSectionStyle = TextStyle(
     fontSize: 22,
@@ -231,18 +238,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
           slivers: <Widget>[
             (detailsStore.animeDetails.episodes.isEmpty)
                 ? SliverToBoxAdapter(
-                    child: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.do_not_disturb_alt,
-                            size: 52,
-                          ),
-                          Text(locale.episodesUnavailable),
-                        ],
-                      ),
+                    child: _buildUnavaiableWidget(
+                      locale.episodesUnavailable
                     ),
                   )
                 : SliverList(
@@ -313,6 +310,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               [
                 buildDetailsSection(detailsStore.animeDetails),
                 buildResumeSection(detailsStore.animeDetails.resume),
+                  (detailsStore.shouldLoadSuggestions) 
+                ? buildAnimeSuggestionSection() 
+                : Container(),
+                
                 Container(
                   height: 56.0,
                 ),
@@ -413,6 +414,86 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
         ],
       );
 
+  Widget buildAnimeSuggestionSection() => Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 12.0,),
+          child: Text(locale.suggestion , style: _defaultSectionStyle,),
+        ),
+        
+        Observer(
+          builder: (context){
+            if (detailsStore.relatedAnimes == null)
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 16.0),
+                    child: DotSpinner(
+                      height: 35.0,
+                    ),
+                  )
+                ],
+              );
+
+            else if (detailsStore.relatedAnimes.isEmpty)
+                return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 16.0),
+                    child: _buildUnavaiableWidget(
+                      locale.noSuggestions,
+                    )
+                  )
+                ],
+              );
+
+            else{
+              var width = MediaQuery.of(context).size.width * .42;
+              var height = width * 1.4;
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 12.0),
+                height: height,
+                child: ListView.builder(
+                  controller: listController,
+                  itemBuilder: (context, index) {
+                    var anime = detailsStore.relatedAnimes[index];
+                    var heroTag = '${anime.id}$_RELATED_TAG';
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
+                      child: ItemView(
+                        width: width,
+                        tooltip: anime.title,
+                        height: height,
+                        imageUrl: anime.imageUrl,
+                        imageHeroTag: heroTag,
+                        onTap: () =>  Navigator.push(context,CupertinoPageRoute(
+                          builder: (context) => Provider<AnimeDetailsStore>(
+                            builder: (_) => AnimeDetailsStore(applicationStore, anime, shouldLoadSuggestions: false),
+                            child: AnimeDetailsScreen(heroTag: heroTag,),
+                          ),
+                        ),
+                      ),
+                      ),
+                    );
+                  },
+
+                  scrollDirection: Axis.horizontal,
+                  itemCount: detailsStore.relatedAnimes.length,
+                  physics: BouncingScrollPhysics(),
+                ),
+              );
+            }    
+          },
+        ),
+      ],
+    ),
+  );
   Widget get emptySliver => SliverToBoxAdapter(
         child: Container(),
       );
@@ -440,6 +521,22 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     );
   }
 
+  Widget _buildUnavaiableWidget(String text) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.do_not_disturb_alt,
+            size: 52,
+            color: accentColor,
+          ),
+          Text(text),
+        ],
+      ),
+    );
+  }
   Widget buildErrorWidget() => Center(
         child: Container(
           margin: EdgeInsets.only(top: 16),

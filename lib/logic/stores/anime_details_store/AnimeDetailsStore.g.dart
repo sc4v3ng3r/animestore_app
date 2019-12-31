@@ -78,6 +78,23 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     }, _$tabChoiceAtom, name: '${_$tabChoiceAtom.name}_set');
   }
 
+  final _$relatedAnimesAtom = Atom(name: '_AnimeDetailsStore.relatedAnimes');
+
+  @override
+  ObservableList<AnimeItem> get relatedAnimes {
+    _$relatedAnimesAtom.context.enforceReadPolicy(_$relatedAnimesAtom);
+    _$relatedAnimesAtom.reportObserved();
+    return super.relatedAnimes;
+  }
+
+  @override
+  set relatedAnimes(ObservableList<AnimeItem> value) {
+    _$relatedAnimesAtom.context.conditionallyRunInAction(() {
+      super.relatedAnimes = value;
+      _$relatedAnimesAtom.reportChanged();
+    }, _$relatedAnimesAtom, name: '${_$relatedAnimesAtom.name}_set');
+  }
+
   final _$_AnimeDetailsStoreActionController =
       ActionController(name: '_AnimeDetailsStore');
 
@@ -116,6 +133,16 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     final _$actionInfo = _$_AnimeDetailsStoreActionController.startAction();
     try {
       return super.setTabChoice(choice);
+    } finally {
+      _$_AnimeDetailsStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setRelatedAnimes(List<AnimeItem> data) {
+    final _$actionInfo = _$_AnimeDetailsStoreActionController.startAction();
+    try {
+      return super.setRelatedAnimes(data);
     } finally {
       _$_AnimeDetailsStoreActionController.endAction(_$actionInfo);
     }

@@ -197,6 +197,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             return ItemView(
               width: itemWidth,
               height: itemHeight,
+              tooltip: items[index].title,
               imageUrl: items[index].imageUrl,
               imageHeroTag: items[index].id,
               onTap: () {

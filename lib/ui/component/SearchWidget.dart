@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/UiUtils.dart';
+
 class SearchWidget extends StatefulWidget {
 
   @override
@@ -102,12 +104,12 @@ class _SearchWidgetState extends State<SearchWidget> {
             var widget;
 
             switch(searchStore.searchState){
+              
               case SearchState.SEARCHING:
                 widget = SliverToBoxAdapter(
                     child: Container(
                       height: size.height *.7,
-                      child: Center(child: CircularProgressIndicator(),
-                      ),
+                      child: UiUtils.centredDotLoader(),
                     ),
                 );
                 break;
@@ -139,7 +141,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 children: <Widget>[
                   Container(
                       margin: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator()
+                      child: UiUtils.centredDotLoader(),
                   ),
                 ],
               ) : Container()
@@ -159,9 +161,9 @@ class _SearchWidgetState extends State<SearchWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                    icon,
-                    size: 180,
-                    color: Colors.grey.withOpacity(.3),
+                  icon,
+                  size: 180,
+                  color: Colors.grey.withOpacity(.3),
                 ),
 
                 Text(text,
@@ -197,6 +199,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             return ItemView(
               width: itemWidth,
               height: itemHeight,
+              tooltip: items[index].title,
               imageUrl: items[index].imageUrl,
               imageHeroTag: items[index].id,
               onTap: () {

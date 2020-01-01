@@ -119,6 +119,7 @@ class DatabaseProvider {
     return await _db.delete(_TABLE_ANIME_EPISODE_TRACK);
   }
 
+  Future<int> clearAllMyList() => _db.delete(_TABLE_MY_LIST);
 
   Future<int> insertAnimeToList(String id, AnimeItem data) async {
     return _db.insert(_TABLE_MY_LIST,

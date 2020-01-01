@@ -1,5 +1,4 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
-import 'package:flutter/semantics.dart';
 
 class LocalizationEN extends AnimeStoreLocalization {
 
@@ -133,4 +132,21 @@ class LocalizationEN extends AnimeStoreLocalization {
   @override
   String get previous => 'Previous';
 
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get messageClearList => 'Do you want clear all the list?';
+
+  @override
+  String get titleClearList => 'Clear List';
+
+  @override
+  String get suggestion => 'Suggestion';
+
+  @override
+  String get noSuggestions => 'Suggestions unavailable';
 }

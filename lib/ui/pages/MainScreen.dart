@@ -2,11 +2,13 @@ import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
 import 'package:anime_app/ui/component/SearchWidget.dart';
-import 'package:anime_app/ui/component/SettingListWidget.dart';
+import 'package:anime_app/ui/component/AboutListWidget.dart';
 import 'package:anime_app/ui/pages/HomePage.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+
 
 enum MainScreenNavigation { HOME, ANIME_LIST, SEARCH, SETTINGS }
 
@@ -20,6 +22,7 @@ class _MainScreenState extends State<MainScreen> {
   MainScreenNavigation currentNav = MainScreenNavigation.HOME;
   ApplicationStore appStore;
   AnimeStoreLocalization locale;
+  
 
   @override
   void initState() {
@@ -45,7 +48,8 @@ class _MainScreenState extends State<MainScreen> {
             return flag;
           }
         ),
-      bottomNavigationBar: _createBottomBar(),
+        
+        bottomNavigationBar: _createBottomBar(),
     );
   }
 
@@ -63,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
         break;
 
       case MainScreenNavigation.SETTINGS:
-        widget = SettingListWidget();
+        widget = AboutListWidget();
         break;
     }
     return widget;

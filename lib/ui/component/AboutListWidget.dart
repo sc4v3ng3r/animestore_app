@@ -6,7 +6,7 @@ import 'package:anime_app/ui/utils/UiUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class SettingListWidget extends StatelessWidget {
+class AboutListWidget extends StatelessWidget {
   final double iconSize = 32.0;
 
   @override
@@ -22,7 +22,6 @@ class SettingListWidget extends StatelessWidget {
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
-          
           _buildItem(
             onTap: () => Navigator.push(context, 
                 CupertinoPageRoute(

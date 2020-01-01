@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/UiUtils.dart';
+
 class AnimeGridWidget extends StatefulWidget {
   @override
   _AnimeGridWidgetState createState() => _AnimeGridWidgetState();
@@ -42,25 +44,6 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2.5;
     final double itemWidth = size.width / 2;
-
-//    final appBar = SliverAppBar(
-//      title: Row(
-//        mainAxisSize: MainAxisSize.max,
-//        mainAxisAlignment: MainAxisAlignment.center,
-//        children: <Widget>[
-//          Icon(
-//            Icons.video_library,
-//          ),
-//          Container(
-//            width: 4.0,
-//          ),
-//          Text('AnimeApp'),
-//        ],
-//      ),
-//      snap: false,
-//      floating: true,
-//      pinned: false,
-//    );
 
     return CustomScrollView(
       controller: _controller,
@@ -114,7 +97,7 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator()),
+                  child: UiUtils.centredDotLoader()),
               ],
             ) : Container(),
           ),

@@ -6,6 +6,7 @@ import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/TapableText.dart';
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
+import 'package:anime_app/ui/component/dialog/AnimeStoreAcceptDialog.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
@@ -21,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
+
 
 class HomePage extends StatefulWidget {
   
@@ -41,6 +43,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   AnimationController controller;
   Animation carouselAnimation;
   Animation headerAnimation;
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -179,6 +183,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               appStore.myAnimeMap.values.toList(),
               locale.myAnimeList,
               HeroTags.TAG_MY_LIST,
+              actions: <Widget>[
+                IconButton(
+                  onPressed: (){
+                    showDialog(
+                      context: context,
+                      builder: (_) => 
+                        AnimeStoreAcceptDialog(
+                          title: locale.titleClearList,
+                          bodyMessage: locale.messageClearList,
+                          onConfirm: () {
+                            appStore.clearMyList();
+                            Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+                          },
+                          onCancel: () => Navigator.pop(context),
+
+                        )
+                    );
+                  },
+                  icon: Icon(
+                    Icons.delete_forever
+                  ),
+                ),
+              ],
+
           ),
       ),
     );
@@ -197,7 +225,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
 
     final latestEpisodesHeader = _createHeaderSection(
-        context,
+      context,
       locale: locale,
       iconData: Icons.ondemand_video,
       title: locale.latestEpisodes,
@@ -206,8 +234,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       onTap: () => _openLatestEpisodePage(context),
     );
   
-    return CustomScrollView(
-
+    return RefreshIndicator(
+      key: refreshIndicatorKey,
+      onRefresh: () => appStore.refresh(),
+      color: accentColor,
+      backgroundColor: primaryColor,
+      child: CustomScrollView(
       physics: BouncingScrollPhysics(),
       slivers: <Widget>[
         appBar,
@@ -261,6 +293,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
         )
       ],
+    ),
     );
   }
 
@@ -323,6 +356,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
                     child: ItemView(
+                      tooltip: anime.title,
                       width: width,
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
@@ -368,6 +402,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
                     child: ItemView(
                       width: width,
+                      tooltip: anime.title,
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
                       imageHeroTag: heroTag,
@@ -499,6 +534,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 var heroTag = '${appStore.dayReleaseList[index].id}$HER_TAG_CAROUSEL';
                 return ItemView(
                   borderRadius: .0,
+                  tooltip: appStore.dayReleaseList[index].title,
                   imageUrl: appStore.dayReleaseList[index].imageUrl,
                   width: width,
                   imageHeroTag: heroTag,
@@ -512,12 +548,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         );
 
   void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,
-      String title, String heroTag) {
+      String title, String heroTag,{List<Widget> actions}) {
     Navigator.push(context, CupertinoPageRoute(
         builder: (_) => DefaultAnimeItemGridPage(
           title: title,
           gridItems: data,
           heroTag: heroTag,
+          actions: actions,
         ),
     ));
   }

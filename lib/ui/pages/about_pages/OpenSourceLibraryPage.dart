@@ -10,6 +10,7 @@ class OpenSourceLibraryPage extends StatelessWidget {
     return Scaffold(
       appBar: AnimeStoreIconAppBar(),
       body: ListView.builder(
+        physics: BouncingScrollPhysics(),
         itemBuilder: (context, index){
           var title = libraries[index];
           var subtitle = librariesMap[title];

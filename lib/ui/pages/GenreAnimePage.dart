@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/UiUtils.dart';
+
 class GenreAnimePage extends StatefulWidget {
   final String genreName;
 
@@ -71,9 +73,7 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
                   child: Container(
                     height: size.height,
                     width: size.width,
-                    child: Center(
-                      child: _loadingWidget(),
-                    ),
+                    child: UiUtils.centredDotLoader(),
                   ),
                 )
                 : (store.loadingStatus == LoadingStatus.ERROR) ?
@@ -131,13 +131,8 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
   }
 
   Widget _loadingWidget() =>
-      Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-              margin: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator()),
-        ],
-      );
+  Container(
+      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+      child: UiUtils.centredDotLoader(),          
+  );
 }

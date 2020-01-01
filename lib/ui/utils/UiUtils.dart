@@ -3,6 +3,7 @@ import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:anime_app/ui/component/DotSpinner.dart';
 
 class UiUtils {
 
@@ -19,6 +20,14 @@ class UiUtils {
           height: size ?? 32,
     );
 
+  static Widget centredDotLoader() =>
+    Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        DotSpinner(),
+      ],
+    );
   static PopupMenuItem createMenuItem<T>({@required T value, 
     @required String title,
     @required  Icon icon}){

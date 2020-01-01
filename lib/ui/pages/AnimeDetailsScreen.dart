@@ -14,8 +14,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:anime_app/ui/component/DotSpinner.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+import '../utils/UiUtils.dart';
 
 
 class AnimeDetailsScreen extends StatefulWidget {
@@ -183,15 +183,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
                 if (detailsStore.loadingStatus == LoadingStatus.LOADING)
                   return Container(
-                    height: 200,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        CircularProgressIndicator(),
-                      ],
-                    ),
+                    // height: 200,
+                    child: UiUtils.centredDotLoader(),
                   );
 
                 return TabBarView(
@@ -425,18 +418,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
         
         Observer(
           builder: (context){
-            if (detailsStore.relatedAnimes == null)
-              return Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 16.0),
-                    child: DotSpinner(
-                      height: 35.0,
-                    ),
-                  )
-                ],
+           if (detailsStore.relatedAnimes == null)
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 16.0),
+                child: UiUtils.centredDotLoader()
               );
 
             else if (detailsStore.relatedAnimes.isEmpty)
@@ -537,6 +522,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       ),
     );
   }
+  
   Widget buildErrorWidget() => Center(
         child: Container(
           margin: EdgeInsets.only(top: 16),

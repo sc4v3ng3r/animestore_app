@@ -22,8 +22,7 @@ class _MainScreenState extends State<MainScreen> {
   MainScreenNavigation currentNav = MainScreenNavigation.HOME;
   ApplicationStore appStore;
   AnimeStoreLocalization locale;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
+  
 
   @override
   void initState() {
@@ -36,12 +35,7 @@ class _MainScreenState extends State<MainScreen> {
     locale = AnimeStoreLocalization.of(context);
 
     return Scaffold(
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        color: accentColor,
-        backgroundColor: primaryColor,
-        onRefresh: () => appStore.refresh(),
-        child: WillPopScope(
+      body: WillPopScope(
           child: _getCurrentPage(),
           onWillPop: () async {
             var flag = true;
@@ -54,8 +48,8 @@ class _MainScreenState extends State<MainScreen> {
             return flag;
           }
         ),
-      ),
-      bottomNavigationBar: _createBottomBar(),
+        
+        bottomNavigationBar: _createBottomBar(),
     );
   }
 

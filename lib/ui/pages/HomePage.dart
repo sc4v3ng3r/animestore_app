@@ -23,6 +23,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
 
+
 class HomePage extends StatefulWidget {
   
   const HomePage({Key key,}) : super(key: key);
@@ -42,6 +43,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   AnimationController controller;
   Animation carouselAnimation;
   Animation headerAnimation;
+  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -222,7 +225,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
 
     final latestEpisodesHeader = _createHeaderSection(
-        context,
+      context,
       locale: locale,
       iconData: Icons.ondemand_video,
       title: locale.latestEpisodes,
@@ -231,8 +234,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       onTap: () => _openLatestEpisodePage(context),
     );
   
-    return CustomScrollView(
-
+    return RefreshIndicator(
+      key: refreshIndicatorKey,
+      onRefresh: () => appStore.refresh(),
+      color: accentColor,
+      backgroundColor: primaryColor,
+      child: CustomScrollView(
       physics: BouncingScrollPhysics(),
       slivers: <Widget>[
         appBar,
@@ -286,6 +293,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
         )
       ],
+    ),
     );
   }
 

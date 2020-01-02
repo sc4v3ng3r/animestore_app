@@ -149,4 +149,10 @@ class LocalizationEN extends AnimeStoreLocalization {
 
   @override
   String get noSuggestions => 'Suggestions unavailable';
+
+  @override
+  String get markAsViewed => 'Mark as viewed';
+
+  @override
+  String get markAsUnviewed => 'Mark as unviewed';
 }

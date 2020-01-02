@@ -150,4 +150,10 @@ class LocalizationPT extends AnimeStoreLocalization {
   @override
   String get noSuggestions => 'Sem sugestões!';
 
+  @override
+  String get markAsViewed => 'Marcar como visto';
+
+  @override
+  String get markAsUnviewed => 'Marcar como não visto';
+
 }

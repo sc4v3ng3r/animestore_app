@@ -15,7 +15,6 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
-
 import '../utils/UiUtils.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
@@ -329,6 +328,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                                       decorationColor: Colors.white),
                                 ),
                                 trailing: IconButton(
+                                  tooltip: (isWatched) 
+                                    ? locale.markAsUnviewed
+                                    : locale.markAsViewed,
                                   onPressed: () {
                                     (isWatched) 
                                       ? applicationStore.removeWatchedEpisode(episodeId)

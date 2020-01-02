@@ -5,6 +5,8 @@ import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
 import 'package:package_info/package_info.dart';
 
+import 'package:anime_app/model/EpisodeWatched.dart';
+
 part 'ApplicationStore.g.dart';
 
 class ApplicationStore = _ApplicationStore with _$ApplicationStore;
@@ -41,7 +43,7 @@ abstract class _ApplicationStore with Store {
   ObservableMap<String, AnimeItem> myAnimeMap = ObservableMap();
 
   @observable
-  ObservableMap<String, List<String>> watchedEpisodeMap = ObservableMap();
+  ObservableMap<String, EpisodeWatched> watchedEpisodeMap = ObservableMap();
 
   @observable
   ObservableList<EpisodeItem> latestEpisodes = ObservableList();
@@ -58,41 +60,38 @@ abstract class _ApplicationStore with Store {
   AppInitStatus appInitStatus = AppInitStatus.INITIALIZING;
 
   @action
-  setWatchedEpisodeMap(Map<String, List<String>> data)
+  setWatchedEpisodeMap(Map<String, EpisodeWatched> data)
     => watchedEpisodeMap = ObservableMap.of(data);
 
   @action
-  addWatchedEpisode(String animeId, String episodeId) {
-    if (!_isInMyList(animeId))
-      return;
+  addWatchedEpisode(
+    String episodeId, 
+    { String episodeTitle, int viewedAt,}) {
+    
+    if (!watchedEpisodeMap.containsKey(episodeId)){
+      var item = EpisodeWatched(viewedAt: viewedAt, 
+        id: episodeId, title: episodeTitle);
+      watchedEpisodeMap.putIfAbsent(episodeId, ()=> item);
+      databaseProvider.insertWatchedEpisode(item);
+    }
+    
+  }
 
-    if (watchedEpisodeMap[animeId] == null)
-      watchedEpisodeMap.putIfAbsent(animeId, () => []);
+  //bool _isInMyList(String animeId) => myAnimeMap.containsKey(animeId);
 
-    if(!watchedEpisodeMap[animeId].contains(episodeId)) {
-      watchedEpisodeMap[animeId].add(episodeId);
-      databaseProvider.insertWatchedEpisode(animeId, episodeId);
+  @action
+  removeWatchedEpisode(String episodeId) {
+    
+    if (watchedEpisodeMap.containsKey(episodeId)){
+      watchedEpisodeMap.remove(episodeId);
+      databaseProvider.removeWatchedEpisode(episodeId);
     }
   }
 
-  bool _isInMyList(String animeId) => myAnimeMap.containsKey(animeId);
-
-  @action
-  removeWatchedEpisode(String animeId, String episodeId) {
-    if (!_isInMyList(animeId))
-      return;
-
-    if (watchedEpisodeMap[animeId] != null){
-      watchedEpisodeMap[animeId].remove(episodeId);
-      databaseProvider.removeWatchedEpisode(animeId, episodeId);
-    }
-  }
-
-  @action
-  clearAnimeWatchedEpisodes(String animeId) {
-    watchedEpisodeMap.remove(animeId);
-    databaseProvider.removeAllWatchedEpisodes(animeId);
-  }
+  // @action
+  // clearAnimeWatchedEpisodes(String animeId) {
+  //   watchedEpisodeMap.remove(animeId);
+  // }
 
   @action
   clearWatchedEpisodeMap() {
@@ -149,12 +148,11 @@ abstract class _ApplicationStore with Store {
 
     if (watchedEpisodeMap.containsKey(id)){
       watchedEpisodeMap.remove(id);
-      databaseProvider.removeAllWatchedEpisodes(id);
     }
   }
 
-  bool isEpisodeWatched(String animeId, String episodeId)
-    => watchedEpisodeMap[animeId]?.contains(episodeId) ?? false;
+  bool isEpisodeWatched(String episodeId)
+    => watchedEpisodeMap.containsKey(episodeId) ?? false;
 
   void initApp() async {
     if (appInitStatus == AppInitStatus.INITIALIZED)
@@ -255,7 +253,6 @@ abstract class _ApplicationStore with Store {
 
   Future<void> loadMyAnimeMap() async {
     Map<String,AnimeItem> data = await databaseProvider.loadMyAnimeList();
-    //print('Loaded from LOCAL $data');
     setMyAnimeMap(data);
   }
 
@@ -280,9 +277,10 @@ abstract class _ApplicationStore with Store {
   AppInfo get appInfo => _appInfo;
   
   Future<void> loadWatchedEpisodes() async {
-    Map<String, List<String>> data =
-        await databaseProvider.loadWatchedEpisodes();
+    var data = await databaseProvider.loadWatchedEpisodes();
+    var map = <String, EpisodeWatched>{};
 
-    setWatchedEpisodeMap(data);
+    data.forEach( (ep) => map.putIfAbsent(ep.id, () => ep) );
+    setWatchedEpisodeMap( map );
   }
 }

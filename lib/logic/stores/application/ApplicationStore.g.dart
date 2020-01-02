@@ -118,14 +118,14 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       Atom(name: '_ApplicationStore.watchedEpisodeMap');
 
   @override
-  ObservableMap<String, List<String>> get watchedEpisodeMap {
+  ObservableMap<String, EpisodeWatched> get watchedEpisodeMap {
     _$watchedEpisodeMapAtom.context.enforceReadPolicy(_$watchedEpisodeMapAtom);
     _$watchedEpisodeMapAtom.reportObserved();
     return super.watchedEpisodeMap;
   }
 
   @override
-  set watchedEpisodeMap(ObservableMap<String, List<String>> value) {
+  set watchedEpisodeMap(ObservableMap<String, EpisodeWatched> value) {
     _$watchedEpisodeMapAtom.context.conditionallyRunInAction(() {
       super.watchedEpisodeMap = value;
       _$watchedEpisodeMapAtom.reportChanged();
@@ -190,7 +190,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       ActionController(name: '_ApplicationStore');
 
   @override
-  dynamic setWatchedEpisodeMap(Map<String, List<String>> data) {
+  dynamic setWatchedEpisodeMap(Map<String, EpisodeWatched> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction();
     try {
       return super.setWatchedEpisodeMap(data);
@@ -200,30 +200,22 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic addWatchedEpisode(String animeId, String episodeId) {
+  dynamic addWatchedEpisode(String episodeId,
+      {String episodeTitle, int viewedAt}) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction();
     try {
-      return super.addWatchedEpisode(animeId, episodeId);
+      return super.addWatchedEpisode(episodeId,
+          episodeTitle: episodeTitle, viewedAt: viewedAt);
     } finally {
       _$_ApplicationStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  dynamic removeWatchedEpisode(String animeId, String episodeId) {
+  dynamic removeWatchedEpisode(String episodeId) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction();
     try {
-      return super.removeWatchedEpisode(animeId, episodeId);
-    } finally {
-      _$_ApplicationStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic clearAnimeWatchedEpisodes(String animeId) {
-    final _$actionInfo = _$_ApplicationStoreActionController.startAction();
-    try {
-      return super.clearAnimeWatchedEpisodes(animeId);
+      return super.removeWatchedEpisode(episodeId);
     } finally {
       _$_ApplicationStoreActionController.endAction(_$actionInfo);
     }

@@ -242,7 +242,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                           detailsStore.animeDetails.episodes[index].id;
                       var animeId = detailsStore.currentAnimeItem.id;
                       var isWatched =
-                          applicationStore.isEpisodeWatched(animeId, episodeId);
+                          applicationStore.isEpisodeWatched(episodeId);
                     
                       return Container(
                         color: Color(0xFF131D2A),

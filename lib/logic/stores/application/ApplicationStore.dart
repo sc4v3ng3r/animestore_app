@@ -5,20 +5,24 @@ import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
 import 'package:package_info/package_info.dart';
 
+import 'package:anime_app/model/EpisodeWatched.dart';
+
 part 'ApplicationStore.g.dart';
 
 class ApplicationStore = _ApplicationStore with _$ApplicationStore;
 
 abstract class _ApplicationStore with Store {
-  
   final AniTubeApi api = AniTubeApi();
   final DatabaseProvider databaseProvider = DatabaseProvider();
   static const DEFAULT_PAGES_LOADING = 4;
   static const TIMEOUT = 10000;
   AppInfo _appInfo;
 
-  double topAnimeOffset =0, myListOffset =0,
-      mainAnimeListOffset =0, mostRecentOffset =0, genreListOffset =.0;
+  double topAnimeOffset = 0,
+      myListOffset = 0,
+      mainAnimeListOffset = 0,
+      mostRecentOffset = 0,
+      genreListOffset = .0;
 
   bool isFirstHomePageView = true;
 
@@ -41,7 +45,7 @@ abstract class _ApplicationStore with Store {
   ObservableMap<String, AnimeItem> myAnimeMap = ObservableMap();
 
   @observable
-  ObservableMap<String, List<String>> watchedEpisodeMap = ObservableMap();
+  ObservableMap<String, EpisodeWatched> watchedEpisodeMap = ObservableMap();
 
   @observable
   ObservableList<EpisodeItem> latestEpisodes = ObservableList();
@@ -58,40 +62,29 @@ abstract class _ApplicationStore with Store {
   AppInitStatus appInitStatus = AppInitStatus.INITIALIZING;
 
   @action
-  setWatchedEpisodeMap(Map<String, List<String>> data)
-    => watchedEpisodeMap = ObservableMap.of(data);
+  setWatchedEpisodeMap(Map<String, EpisodeWatched> data) =>
+      watchedEpisodeMap = ObservableMap.of(data);
 
   @action
-  addWatchedEpisode(String animeId, String episodeId) {
-    if (!_isInMyList(animeId))
-      return;
-
-    if (watchedEpisodeMap[animeId] == null)
-      watchedEpisodeMap.putIfAbsent(animeId, () => []);
-
-    if(!watchedEpisodeMap[animeId].contains(episodeId)) {
-      watchedEpisodeMap[animeId].add(episodeId);
-      databaseProvider.insertWatchedEpisode(animeId, episodeId);
-    }
-  }
-
-  bool _isInMyList(String animeId) => myAnimeMap.containsKey(animeId);
-
-  @action
-  removeWatchedEpisode(String animeId, String episodeId) {
-    if (!_isInMyList(animeId))
-      return;
-
-    if (watchedEpisodeMap[animeId] != null){
-      watchedEpisodeMap[animeId].remove(episodeId);
-      databaseProvider.removeWatchedEpisode(animeId, episodeId);
+  addWatchedEpisode(
+    String episodeId, {
+    String episodeTitle,
+    int viewedAt,
+  }) {
+    if (!watchedEpisodeMap.containsKey(episodeId)) {
+      var item = EpisodeWatched(
+          viewedAt: viewedAt, id: episodeId, title: episodeTitle);
+      watchedEpisodeMap.putIfAbsent(episodeId, () => item);
+      databaseProvider.insertWatchedEpisode(item);
     }
   }
 
   @action
-  clearAnimeWatchedEpisodes(String animeId) {
-    watchedEpisodeMap.remove(animeId);
-    databaseProvider.removeAllWatchedEpisodes(animeId);
+  removeWatchedEpisode(String episodeId) {
+    if (watchedEpisodeMap.containsKey(episodeId)) {
+      watchedEpisodeMap.remove(episodeId);
+      databaseProvider.removeWatchedEpisode(episodeId);
+    }
   }
 
   @action
@@ -107,71 +100,70 @@ abstract class _ApplicationStore with Store {
   }
 
   @action
-  setLatestEpisodes(List<EpisodeItem> data) => latestEpisodes = ObservableList.of(data);
+  setLatestEpisodes(List<EpisodeItem> data) =>
+      latestEpisodes = ObservableList.of(data);
 
   @action
-  setAnimeListLoadingStatus(LoadingStatus status) => animeListLoadingStatus = status;
+  setAnimeListLoadingStatus(LoadingStatus status) =>
+      animeListLoadingStatus = status;
 
   @action
-  addAnimeItem(List<AnimeItem> data) => mainAnimeList.addAll( data );
+  addAnimeItem(List<AnimeItem> data) => mainAnimeList.addAll(data);
 
   @action
   setAppInitialization(AppInitStatus status) => appInitStatus = status;
 
   @action
-  setMostRecentAnimeList(List<AnimeItem> data) => mostRecentAnimeList = ObservableList.of(data);
-  
-  @action
-  setDailyReleases( List<AnimeItem> data ) => dayReleaseList = ObservableList.of(data);
+  setMostRecentAnimeList(List<AnimeItem> data) =>
+      mostRecentAnimeList = ObservableList.of(data);
 
   @action
-  setTopAnimeList ( List<AnimeItem> data) => topAnimeList = ObservableList.of(data);
+  setDailyReleases(List<AnimeItem> data) =>
+      dayReleaseList = ObservableList.of(data);
 
   @action
-  setGenreList( List<String>  data) => genreList = ObservableList.of(data);
+  setTopAnimeList(List<AnimeItem> data) =>
+      topAnimeList = ObservableList.of(data);
 
   @action
-  setMyAnimeMap( Map<String,AnimeItem> data) => myAnimeMap = ObservableMap.of(data);
+  setGenreList(List<String> data) => genreList = ObservableList.of(data);
 
   @action
-  addToAnimeMap(String key, AnimeItem data) => myAnimeMap.putIfAbsent(
-      key,
-          () {
-            databaseProvider.insertAnimeToList(key, data);
-            return data;
-          });
+  setMyAnimeMap(Map<String, AnimeItem> data) =>
+      myAnimeMap = ObservableMap.of(data);
+
+  @action
+  addToAnimeMap(String key, AnimeItem data) => myAnimeMap.putIfAbsent(key, () {
+        databaseProvider.insertAnimeToList(key, data);
+        return data;
+      });
 
   @action
   removeFromAnimeMap(String id) {
-
     myAnimeMap.remove(id);
     databaseProvider.removeAnimeFromList(id);
 
-    if (watchedEpisodeMap.containsKey(id)){
+    if (watchedEpisodeMap.containsKey(id)) {
       watchedEpisodeMap.remove(id);
-      databaseProvider.removeAllWatchedEpisodes(id);
     }
   }
 
-  bool isEpisodeWatched(String animeId, String episodeId)
-    => watchedEpisodeMap[animeId]?.contains(episodeId) ?? false;
+  
+  bool isEpisodeWatched(String episodeId) =>
+      watchedEpisodeMap.containsKey(episodeId) ?? false;
 
   void initApp() async {
-    if (appInitStatus == AppInitStatus.INITIALIZED)
-      return;
+    if (appInitStatus == AppInitStatus.INITIALIZED) return;
 
-      try {
-        await databaseProvider.init();
-        _getAppInfo();
-        await _initDataFromNetwork();
-        setAppInitialization(AppInitStatus.INITIALIZED);
-      }
-
-      on CrawlerApiException catch(ex){
-        print(ex);
-        setAppInitialization(AppInitStatus.INIT_ERROR);
-      }
-
+    try {
+      await databaseProvider.init();
+      _getAppInfo();
+      await _initDataFromNetwork();
+      setAppInitialization(AppInitStatus.INITIALIZED);
+    } on CrawlerApiException catch (ex) {
+      print(ex);
+      setAppInitialization(AppInitStatus.INIT_ERROR);
+    }
   }
 
   Future<void> _initDataFromNetwork() async {
@@ -183,25 +175,22 @@ abstract class _ApplicationStore with Store {
   }
 
   void appRetry() async {
-    if (appInitStatus != AppInitStatus.INIT_ERROR)
-      return;
+    if (appInitStatus != AppInitStatus.INIT_ERROR) return;
 
     try {
       setAppInitialization(AppInitStatus.INITIALIZING);
       await _initDataFromNetwork();
       setAppInitialization(AppInitStatus.INITIALIZED);
-    }
-
-    on CrawlerApiException catch (ex){
+    } on CrawlerApiException catch (ex) {
       print(ex);
       setAppInitialization(AppInitStatus.INIT_ERROR);
     }
   }
+
   // This method load the main anime list and handles also the pagination.
   // We must always load main anime list data with this method.
   Future<void> loadAnimeList() async {
-    if (animeListLoadingStatus == LoadingStatus.LOADING)
-      return;
+    if (animeListLoadingStatus == LoadingStatus.LOADING) return;
 
     var cacheList = <AnimeItem>[];
 
@@ -210,15 +199,14 @@ abstract class _ApplicationStore with Store {
 
       for (int i = 0; i < DEFAULT_PAGES_LOADING; i++) {
         try {
-          var data = await api.getAnimeListPageData(
-              pageNumber: mainAnimesPageCounter);
+          var data =
+              await api.getAnimeListPageData(pageNumber: mainAnimesPageCounter);
 
           cacheList.addAll(data.animes);
 
           maxMainAnimesPageNumber = int.parse(data.maxPageNumber);
           mainAnimesPageCounter++;
-        }
-        on CrawlerApiException catch (ex) {
+        } on CrawlerApiException catch (ex) {
           print('Fail loding page number $mainAnimesPageCounter $ex');
           mainAnimesPageCounter++;
         }
@@ -229,60 +217,57 @@ abstract class _ApplicationStore with Store {
     setAnimeListLoadingStatus(LoadingStatus.DONE);
   }
 
-  Future<AnimeDetails> getAnimeDetails(String id, ) =>
+  Future<AnimeDetails> getAnimeDetails(
+    String id,
+  ) =>
       api.getAnimeDetails(id, timeout: TIMEOUT);
 
-  Future<void> refresh() async {
+  Future<void> refreshHome() async {
     await getHomePageInfo();
-    await loadAnimeList();
+    //await loadAnimeList();
     await getGenresAvailable();
   }
 
-  Future<void> getHomePageInfo() async{
+  Future<void> getHomePageInfo() async {
     var homePageData = await api.getHomePageData();
-    setMostRecentAnimeList( homePageData.mostRecentAnimes );
-    setTopAnimeList( homePageData.mostShowedAnimes);
-    setLatestEpisodes(  homePageData.latestEpisodes
-      ..removeWhere( (item) => item.title.contains('anúncios')) );
-    setDailyReleases( homePageData.dayReleases);
-
+    setMostRecentAnimeList(homePageData.mostRecentAnimes);
+    setTopAnimeList(homePageData.mostShowedAnimes);
+    setLatestEpisodes(homePageData.latestEpisodes
+      ..removeWhere((item) => item.title.contains('anúncios')));
+    setDailyReleases(homePageData.dayReleases);
   }
 
   Future<void> getGenresAvailable() async {
     List<String> data = await api.getGenresAvailable(timeout: TIMEOUT);
-    setGenreList(data );
+    setGenreList(data);
   }
 
   Future<void> loadMyAnimeMap() async {
-    Map<String,AnimeItem> data = await databaseProvider.loadMyAnimeList();
-    //print('Loaded from LOCAL $data');
+    Map<String, AnimeItem> data = await databaseProvider.loadMyAnimeList();
     setMyAnimeMap(data);
   }
 
   Future<void> _getAppInfo() async {
-    try{
+    try {
       var info = await PackageInfo.fromPlatform();
-    
-    _appInfo = AppInfo(
-      appName: info.appName,
-      buildNumber: info.buildNumber,
-      version: info.version
-    );
-    } 
-    catch (ex){
+
+      _appInfo = AppInfo(
+          appName: info.appName,
+          buildNumber: info.buildNumber,
+          version: info.version);
+    } catch (ex) {
       print('ApplicationStore::_getAppInfo $ex');
       print('Not able to fetch AppInfo data.');
     }
-
-    
   }
 
   AppInfo get appInfo => _appInfo;
-  
-  Future<void> loadWatchedEpisodes() async {
-    Map<String, List<String>> data =
-        await databaseProvider.loadWatchedEpisodes();
 
-    setWatchedEpisodeMap(data);
+  Future<void> loadWatchedEpisodes() async {
+    var data = await databaseProvider.loadWatchedEpisodes();
+    var map = <String, EpisodeWatched>{};
+
+    data.forEach((ep) => map.putIfAbsent(ep.id, () => ep));
+    setWatchedEpisodeMap(map);
   }
 }

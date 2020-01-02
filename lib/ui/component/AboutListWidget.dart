@@ -34,13 +34,13 @@ class AboutListWidget extends StatelessWidget {
             trailing: defaultTrailing,
           ),
 
-          _buildItem(
-            title: locale.animeStoreLicenseTitle,
-            subtitle: locale.animeStoreLicensesubtitle,
-            icon: _buildDefaultIcon(Icons.assignment),
-            trailing: defaultTrailing,
-            onTap: (){}
-          ),
+          // _buildItem(
+          //   title: locale.animeStoreLicenseTitle,
+          //   subtitle: locale.animeStoreLicensesubtitle,
+          //   icon: _buildDefaultIcon(Icons.assignment),
+          //   trailing: defaultTrailing,
+          //   onTap: (){}
+          // ),
 
           _buildItem(
             icon: _buildDefaultIcon(Icons.info),

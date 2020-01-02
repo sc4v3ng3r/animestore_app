@@ -23,20 +23,20 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
 
-
 class HomePage extends StatefulWidget {
-  
-  const HomePage({Key key,}) : super(key: key);
+  const HomePage({
+    Key key,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final RandomColor _randomColor = RandomColor();
   static const _SECTION_STYLE = TextStyle(
-    fontSize: 18, 
+    fontSize: 18,
   );
 
   ApplicationStore appStore;
@@ -50,29 +50,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
-    if (appStore.isFirstHomePageView){
+    if (appStore.isFirstHomePageView) {
       controller = AnimationController(
         vsync: this,
         duration: Duration(milliseconds: 1000),
       );
 
-      carouselAnimation = Tween<Offset>(
-        begin: Offset(50, .0),
-        end: Offset.zero
-      )
-      .animate(CurvedAnimation(
-        curve: Curves.fastLinearToSlowEaseIn,
-        parent: controller
-      ));
+      carouselAnimation = Tween<Offset>(begin: Offset(50, .0), end: Offset.zero)
+          .animate(CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: controller));
 
-      headerAnimation = Tween<Offset>(
-        begin: Offset(-50, .0),
-        end: Offset.zero
-      )
-      .animate(CurvedAnimation(
-        curve: Curves.fastLinearToSlowEaseIn,
-        parent: controller
-      ));
+      headerAnimation = Tween<Offset>(begin: Offset(-50, .0), end: Offset.zero)
+          .animate(CurvedAnimation(
+              curve: Curves.fastLinearToSlowEaseIn, parent: controller));
 
       controller.forward();
     }
@@ -88,29 +78,29 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    
+
     final AnimeStoreLocalization locale = AnimeStoreLocalization.of(context);
 
-    final ScrollController topAnimesController = ScrollController(
-      initialScrollOffset: appStore.topAnimeOffset
-    );
-    topAnimesController.addListener( () => appStore.topAnimeOffset = topAnimesController.position.pixels);
+    final ScrollController topAnimesController =
+        ScrollController(initialScrollOffset: appStore.topAnimeOffset);
+    topAnimesController.addListener(
+        () => appStore.topAnimeOffset = topAnimesController.position.pixels);
 
-    final ScrollController mostRecentController = ScrollController(
-      initialScrollOffset: appStore.mostRecentOffset
-    );
-    mostRecentController.addListener( () => appStore.mostRecentOffset = mostRecentController.position.pixels );
+    final ScrollController mostRecentController =
+        ScrollController(initialScrollOffset: appStore.mostRecentOffset);
+    mostRecentController.addListener(
+        () => appStore.mostRecentOffset = mostRecentController.position.pixels);
 
-    final ScrollController genresController = ScrollController(
-      initialScrollOffset: appStore.genreListOffset
-    );
-    genresController.addListener(() => appStore.genreListOffset = genresController.position.pixels);
+    final ScrollController genresController =
+        ScrollController(initialScrollOffset: appStore.genreListOffset);
+    genresController.addListener(
+        () => appStore.genreListOffset = genresController.position.pixels);
 
     final ScrollController myListController = ScrollController(
       initialScrollOffset: appStore.myListOffset,
     );
-    myListController.addListener(() => appStore.myListOffset = myListController.position.pixels);
-
+    myListController.addListener(
+        () => appStore.myListOffset = myListController.position.pixels);
 
     final expandedHeight = size.width * .9;
 
@@ -122,104 +112,103 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
 
     final appBar = SliverAppBar(
-        expandedHeight: expandedHeight,
-        floating: false,
-        elevation: 0.0,
-        pinned: false,
-        snap: false,
-        centerTitle: true,
-        backgroundColor: primaryColor.withOpacity(.9),
-        //title: Text('AppBar', style: TextStyle(color: Colors.black),),
-        flexibleSpace: FlexibleSpaceBar(
-            background: (appStore.isFirstHomePageView) 
-            ? SlideTransition(
-                position: carouselAnimation,
-                child: carousel,
-            )
-            : carousel 
-        ),
+      expandedHeight: expandedHeight,
+      floating: false,
+      elevation: 0.0,
+      pinned: false,
+      snap: false,
+      centerTitle: true,
+      backgroundColor: primaryColor.withOpacity(.9),
+      //title: Text('AppBar', style: TextStyle(color: Colors.black),),
+      flexibleSpace: FlexibleSpaceBar(
+          background: (appStore.isFirstHomePageView)
+              ? SlideTransition(
+                  position: carouselAnimation,
+                  child: carousel,
+                )
+              : carousel),
     );
 
-    final topAnimesHeader = _createHeaderSection(context,
+    final topAnimesHeader = _createHeaderSection(
+      context,
       locale: locale,
       title: '${locale.topAnimes}',
       iconData: Icons.star,
       iconColor: Colors.amberAccent,
       heroTag: HeroTags.TAG_TOP_ANIMES,
-      onTap:() {
-        _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes', HeroTags.TAG_TOP_ANIMES);
+      onTap: () {
+        _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes',
+            HeroTags.TAG_TOP_ANIMES);
       },
-
     );
 
-    final genresHeader = _createHeaderSection(context,
+    final genresHeader = _createHeaderSection(
+      context,
       locale: locale,
-      iconData:Icons.explore,
+      iconData: Icons.explore,
       iconColor: accentColor,
       title: locale.exploreGenres,
       heroTag: HeroTags.TAG_EXPLORE_GENRES,
       onTap: () {
-        Navigator.push(context,
-          CupertinoPageRoute(
-              builder: (context) => GenreGridPage()
-          ),
+        Navigator.push(
+          context,
+          CupertinoPageRoute(builder: (context) => GenreGridPage()),
         );
       },
     );
 
     final myListHeader = Observer(
-      builder: (context) =>
-      (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
-          :
-      _createHeaderSection(context,
-          locale: locale,
-          viewMore: true,
-          title: locale.myAnimeList,
-          heroTag: HeroTags.TAG_MY_LIST,
-          iconColor: accentColor,
-          iconData: Icons.video_library,
-          onTap: () =>_openAnimeItemGridPage(
+      builder: (context) => (appStore.myAnimeMap.isEmpty)
+          ? SliverToBoxAdapter(
+              child: Container(),
+            )
+          : _createHeaderSection(
               context,
-              appStore.myAnimeMap.values.toList(),
-              locale.myAnimeList,
-              HeroTags.TAG_MY_LIST,
-              actions: <Widget>[
-                IconButton(
-                  onPressed: (){
-                    showDialog(
-                      context: context,
-                      builder: (_) => 
-                        AnimeStoreAcceptDialog(
-                          title: locale.titleClearList,
-                          bodyMessage: locale.messageClearList,
-                          onConfirm: () {
-                            appStore.clearMyList();
-                            Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-                          },
-                          onCancel: () => Navigator.pop(context),
-
-                        )
-                    );
-                  },
-                  icon: Icon(
-                    Icons.delete_forever
+              locale: locale,
+              viewMore: true,
+              title: locale.myAnimeList,
+              heroTag: HeroTags.TAG_MY_LIST,
+              iconColor: accentColor,
+              iconData: Icons.video_library,
+              onTap: () => _openAnimeItemGridPage(
+                context,
+                appStore.myAnimeMap.values.toList(),
+                locale.myAnimeList,
+                HeroTags.TAG_MY_LIST,
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => AnimeStoreAcceptDialog(
+                                title: locale.titleClearList,
+                                bodyMessage: locale.messageClearList,
+                                onConfirm: () {
+                                  appStore.clearMyList();
+                                  Navigator.popUntil(context,
+                                      (Route<dynamic> route) => route.isFirst);
+                                },
+                                onCancel: () => Navigator.pop(context),
+                              ));
+                    },
+                    icon: Icon(Icons.delete_forever),
                   ),
-                ),
-              ],
-
-          ),
-      ),
+                ],
+              ),
+            ),
     );
 
-    final mostRecentsHeader = _createHeaderSection(context,
+    final mostRecentsHeader = _createHeaderSection(
+      context,
       locale: locale,
       iconData: Icons.update,
       iconColor: accentColor,
       title: locale.recentlyUpdated,
       heroTag: HeroTags.TAG_RECENTLY_UPLOADED,
-      onTap: () => _openAnimeItemGridPage(context,
-          appStore.mostRecentAnimeList,
-          locale.recentlyUpdated,
+      onTap: () => _openAnimeItemGridPage(
+        context,
+        appStore.mostRecentAnimeList,
+        locale.recentlyUpdated,
         HeroTags.TAG_RECENTLY_UPLOADED,
       ),
     );
@@ -233,93 +222,82 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       iconColor: accentColor,
       onTap: () => _openLatestEpisodePage(context),
     );
-  
+
     return RefreshIndicator(
       key: refreshIndicatorKey,
-      onRefresh: () => appStore.refresh(),
+      onRefresh: () => appStore.refreshHome(),
       color: accentColor,
       backgroundColor: primaryColor,
       child: CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: <Widget>[
-        appBar,
-        topAnimesHeader,
-        _createHorizontaAnimelList(
-          appStore,
-          data:appStore.topAnimeList,
-          width: size.width * .42,
-          tag: HeroTags.TAG_TOP_ANIMES,
-          controller: topAnimesController,
-
-        ),
-
-        mostRecentsHeader,
-
-        _createHorizontaAnimelList(
-          appStore,
-          data:appStore.mostRecentAnimeList,
-          width: size.width * .42,
-          tag: HERO_TAG_RELEASE,
-          controller: mostRecentController
-        ),
-
-        genresHeader,
-
-        _createHorizontalGenreList(
-          width: size.width * .42,
-          data: appStore.genreList,
-          controller: genresController,
-        ),
-
-        myListHeader,
-
-        Observer(
-          builder: (context) =>
-          (appStore.myAnimeMap.isEmpty) ? SliverToBoxAdapter(child: Container(),)
-              :
-          _createHorizontaCustomAnimelList(
+        physics: BouncingScrollPhysics(),
+        slivers: <Widget>[
+          appBar,
+          topAnimesHeader,
+          _createHorizontaAnimelList(
             appStore,
+            data: appStore.topAnimeList,
             width: size.width * .42,
-            tag: HERO_TAG_MY_LIST,
-            controller: myListController,
+            tag: HeroTags.TAG_TOP_ANIMES,
+            controller: topAnimesController,
           ),
-        ),
-
-        latestEpisodesHeader,
-        _createHorizontalEpisodeList(
-          context,
-          data: appStore.latestEpisodes,
-          width: size.width * .42,
-
-        )
-      ],
-    ),
+          mostRecentsHeader,
+          _createHorizontaAnimelList(appStore,
+              data: appStore.mostRecentAnimeList,
+              width: size.width * .42,
+              tag: HERO_TAG_RELEASE,
+              controller: mostRecentController),
+          genresHeader,
+          _createHorizontalGenreList(
+            width: size.width * .42,
+            data: appStore.genreList,
+            controller: genresController,
+          ),
+          myListHeader,
+          Observer(
+            builder: (context) => (appStore.myAnimeMap.isEmpty)
+                ? SliverToBoxAdapter(
+                    child: Container(),
+                  )
+                : _createHorizontaCustomAnimelList(
+                    appStore,
+                    width: size.width * .42,
+                    tag: HERO_TAG_MY_LIST,
+                    controller: myListController,
+                  ),
+          ),
+          latestEpisodesHeader,
+          _createHorizontalEpisodeList(
+            context,
+            data: appStore.latestEpisodes,
+            width: size.width * .42,
+          )
+        ],
+      ),
     );
   }
 
-  SliverPadding _createHeaderSection(BuildContext context,{
-    @required AnimeStoreLocalization locale,
-    IconData iconData,
-    Color iconColor,
-    String title,
-    bool viewMore = true,
-    String heroTag,
-    Function onTap}) {
-
-      final layout = Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              TitleHeaderWidget(
-                iconData: iconData,
-                iconColor:iconColor,
-                title: title,
-                heroTag: heroTag,
-                style: _SECTION_STYLE,
-                onTap: onTap,
-              ),
-
-              (viewMore) ? Container(
+  SliverPadding _createHeaderSection(BuildContext context,
+      {@required AnimeStoreLocalization locale,
+      IconData iconData,
+      Color iconColor,
+      String title,
+      bool viewMore = true,
+      String heroTag,
+      Function onTap}) {
+    final layout = Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        TitleHeaderWidget(
+          iconData: iconData,
+          iconColor: iconColor,
+          title: title,
+          heroTag: heroTag,
+          style: _SECTION_STYLE,
+          onTap: onTap,
+        ),
+        (viewMore)
+            ? Container(
                 child: TapText(
                   onTap: onTap,
                   fontSize: 16.0,
@@ -327,65 +305,67 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   defaultColor: secondaryColor,
                   onTapColor: accentColor,
                 ),
-              ) : Container(),
-            ],
-          );
+              )
+            : Container(),
+      ],
+    );
 
-      return SliverPadding(
-        padding: EdgeInsets.only(
-            bottom: 24.0, top: 24.0,
-            left: 16.0, right: 12.0),
-        sliver: SliverToBoxAdapter(
-          child: (appStore.isFirstHomePageView) 
-            ? SlideTransition(
-              position: headerAnimation,
-              child: layout,
-            )
-            :layout
-        ),
-      );
-    }
-  SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore, {
-    List<AnimeItem>  data, double width, String tag, ScrollController controller}) {
-      final listWidget = ListView.builder(
-                controller: controller,
-                itemBuilder: (context, index) {
-                  var anime = data[index];
-                  var heroTag = '${anime.id}$tag';
+    return SliverPadding(
+      padding:
+          EdgeInsets.only(bottom: 24.0, top: 24.0, left: 16.0, right: 12.0),
+      sliver: SliverToBoxAdapter(
+          child: (appStore.isFirstHomePageView)
+              ? SlideTransition(
+                  position: headerAnimation,
+                  child: layout,
+                )
+              : layout),
+    );
+  }
 
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
-                    child: ItemView(
-                      tooltip: anime.title,
-                      width: width,
-                      height: width * 1.4,
-                      imageUrl: anime.imageUrl,
-                      imageHeroTag: heroTag,
-                      onTap: () => _openAnimeDetailsPage(context, anime, heroTag, appStore),
-                    ),
-                  );
-                },
+  SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore,
+      {List<AnimeItem> data,
+      double width,
+      String tag,
+      ScrollController controller}) {
+    final listWidget = ListView.builder(
+      controller: controller,
+      itemBuilder: (context, index) {
+        var anime = data[index];
+        var heroTag = '${anime.id}$tag';
 
-                scrollDirection: Axis.horizontal,
-                itemCount: data.length,
-                physics: BouncingScrollPhysics(),
-              );
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
+          child: ItemView(
+            tooltip: anime.title,
+            width: width,
+            height: width * 1.4,
+            imageUrl: anime.imageUrl,
+            imageHeroTag: heroTag,
+            onTap: () =>
+                _openAnimeDetailsPage(context, anime, heroTag, appStore),
+          ),
+        );
+      },
+      scrollDirection: Axis.horizontal,
+      itemCount: data.length,
+      physics: BouncingScrollPhysics(),
+    );
 
-      return SliverToBoxAdapter(
-        child: Container(
+    return SliverToBoxAdapter(
+      child: Container(
           height: width * 1.4,
-          child: (appStore.isFirstHomePageView) ? 
-            SlideTransition(
-              position: carouselAnimation,
-              child: listWidget,
-            )
-            : listWidget
-        ),
-      );
-    }
+          child: (appStore.isFirstHomePageView)
+              ? SlideTransition(
+                  position: carouselAnimation,
+                  child: listWidget,
+                )
+              : listWidget),
+    );
+  }
 
-  SliverToBoxAdapter _createHorizontaCustomAnimelList(ApplicationStore appStore, {
-    double width, String tag, ScrollController controller}) =>
+  SliverToBoxAdapter _createHorizontaCustomAnimelList(ApplicationStore appStore,
+          {double width, String tag, ScrollController controller}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width * 1.4,
@@ -399,14 +379,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   var heroTag = '${anime.id}$tag';
 
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
                     child: ItemView(
                       width: width,
                       tooltip: anime.title,
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
                       imageHeroTag: heroTag,
-                      onTap: () => _openAnimeDetailsPage(context, anime, heroTag, appStore),
+                      onTap: () => _openAnimeDetailsPage(
+                          context, anime, heroTag, appStore),
                     ),
                   );
                 },
@@ -415,78 +397,84 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 physics: BouncingScrollPhysics(),
               );
             },
-
           ),
         ),
       );
 
-  SliverToBoxAdapter _createHorizontalGenreList( {
-    List<String>  data, double width, String tag, ScrollController controller}) =>
+  SliverToBoxAdapter _createHorizontalGenreList(
+          {List<String> data,
+          double width,
+          String tag,
+          ScrollController controller}) =>
       SliverToBoxAdapter(
         child: Container(
-            height: width * .9,
-            child: Observer(
-              builder: (context){
-                return ListView.builder(
-                  controller: controller,
-                  itemBuilder: (context, index) {
-
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
-                      child: ItemView(
-                        width: width * 1.3,
-                        height: width * .9,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Expanded(
-                                child: Text(data[index],
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 25,
-                                  ),
-                                )
-                            )
+          height: width * .9,
+          child: Observer(
+            builder: (context) {
+              return ListView.builder(
+                controller: controller,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
+                    child: ItemView(
+                      width: width * 1.3,
+                      height: width * .9,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                              child: Text(
+                            data[index],
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 25,
+                            ),
+                          ))
+                        ],
+                      ),
+                      backgroundColor: _randomColor.randomColor(
+                        colorHue: ColorHue.multiple(
+                          colorHues: [
+                            ColorHue.blue,
                           ],
                         ),
-                        backgroundColor: _randomColor.randomColor(
-                          colorHue: ColorHue.multiple(
-                            colorHues: [ ColorHue.blue, ],
-                          ),
-                          colorBrightness: ColorBrightness.dark,
-                        ),
-                        onTap: () {
-                          Navigator.push(context,
-                              CupertinoPageRoute(
-                                  builder: (context) =>
-                                      GenreAnimePage(genreName: data[index])
-                              )
-                          );
-                        },
+                        colorBrightness: ColorBrightness.dark,
                       ),
-                    );
-                  },
-                  scrollDirection: Axis.horizontal,
-                  itemCount: data.length,
-                  physics: BouncingScrollPhysics(),
-                );
-              },
-            ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    GenreAnimePage(genreName: data[index])));
+                      },
+                    ),
+                  );
+                },
+                scrollDirection: Axis.horizontal,
+                itemCount: data.length,
+                physics: BouncingScrollPhysics(),
+              );
+            },
           ),
+        ),
       );
 
-
-  SliverToBoxAdapter _createHorizontalEpisodeList(BuildContext context, {
-    List<EpisodeItem>  data, double width, String tag, ScrollController controller}) => SliverToBoxAdapter(
-      child: Container(
-        height: width + 24,
-        child: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index){
+  SliverToBoxAdapter _createHorizontalEpisodeList(BuildContext context,
+          {List<EpisodeItem> data,
+          double width,
+          String tag,
+          ScrollController controller}) =>
+      SliverToBoxAdapter(
+        child: Container(
+          height: width + 24,
+          child: ListView.builder(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 12.0),
                 child: EpisodeItemView(
@@ -498,77 +486,78 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ),
               );
             },
-          itemCount: data.length ~/ 8,
+            itemCount: data.length ~/ 8,
+          ),
         ),
-      ),
-    );
-
-  void _openLatestEpisodePage(BuildContext context) =>
-      Navigator.push(context, CupertinoPageRoute(
-          builder: (context) => RecentEpisodeListPage())
       );
 
-  void _openAnimeDetailsPage(BuildContext context, AnimeItem anime, String heroTag,
-        ApplicationStore appStore) =>
-        Navigator.push(context,
-            CupertinoPageRoute(
-                builder: (context) => Provider<AnimeDetailsStore>(
-                  builder: (_) => AnimeDetailsStore(appStore, anime),
-                  child: AnimeDetailsScreen(heroTag: heroTag,),
-                ),
-            )
-        );
+  void _openLatestEpisodePage(BuildContext context) => Navigator.push(context,
+      CupertinoPageRoute(builder: (context) => RecentEpisodeListPage()));
 
-    Widget _createDayReleaseCarousel({BuildContext context, ApplicationStore appStore, double width, height}) =>
-        Carousel(
+  void _openAnimeDetailsPage(BuildContext context, AnimeItem anime,
+          String heroTag, ApplicationStore appStore) =>
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => Provider<AnimeDetailsStore>(
+              builder: (_) => AnimeDetailsStore(appStore, anime),
+              child: AnimeDetailsScreen(
+                heroTag: heroTag,
+              ),
+            ),
+          ));
+
+  Widget _createDayReleaseCarousel(
+          {BuildContext context,
+          ApplicationStore appStore,
+          double width,
+          height}) =>
+      Observer(builder: (_) {
+        return Carousel(
           showIndicator: true,
           autoplay: false,
           animationCurve: Curves.easeIn,
           boxFit: BoxFit.fill,
           dotSize: 6.0,
           overlayShadow: true,
-
-          images: List.generate(
-              appStore.dayReleaseList.length,
-                  (index){
-                var heroTag = '${appStore.dayReleaseList[index].id}$HER_TAG_CAROUSEL';
-                return ItemView(
-                  borderRadius: .0,
-                  tooltip: appStore.dayReleaseList[index].title,
-                  imageUrl: appStore.dayReleaseList[index].imageUrl,
-                  width: width,
-                  imageHeroTag: heroTag,
-                  height: height,
-                  onTap: () => _openAnimeDetailsPage(
-                      context,
-                      appStore.dayReleaseList[index], heroTag, appStore),
-                );
-              }
-          ),
+          images: List.generate(appStore.dayReleaseList.length, (index) {
+            var heroTag =
+                '${appStore.dayReleaseList[index].id}$HER_TAG_CAROUSEL';
+            return ItemView(
+              borderRadius: .0,
+              tooltip: appStore.dayReleaseList[index].title,
+              imageUrl: appStore.dayReleaseList[index].imageUrl,
+              width: width,
+              imageHeroTag: heroTag,
+              height: height,
+              onTap: () => _openAnimeDetailsPage(
+                  context, appStore.dayReleaseList[index], heroTag, appStore),
+            );
+          }),
         );
+      });
 
-  void _openAnimeItemGridPage(BuildContext context, List<AnimeItem> data,
-      String title, String heroTag,{List<Widget> actions}) {
-    Navigator.push(context, CupertinoPageRoute(
-        builder: (_) => DefaultAnimeItemGridPage(
-          title: title,
-          gridItems: data,
-          heroTag: heroTag,
-          actions: actions,
-        ),
-    ));
+  void _openAnimeItemGridPage(
+      BuildContext context, List<AnimeItem> data, String title, String heroTag,
+      {List<Widget> actions}) {
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (_) => DefaultAnimeItemGridPage(
+            title: title,
+            gridItems: data,
+            heroTag: heroTag,
+            actions: actions,
+          ),
+        ));
   }
 
   void _playEpisode(BuildContext context, String episodeId) {
-      Navigator.push(context,
-          CupertinoPageRoute(
-              builder: (context) =>
-                  VideoPlayerScreen(
-                    episodeId: episodeId,
-                  )
-          )
-      );
-
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => VideoPlayerScreen(
+                  episodeId: episodeId,
+                )));
   }
 }
-

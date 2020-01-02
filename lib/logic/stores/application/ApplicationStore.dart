@@ -222,9 +222,9 @@ abstract class _ApplicationStore with Store {
   ) =>
       api.getAnimeDetails(id, timeout: TIMEOUT);
 
-  Future<void> refresh() async {
+  Future<void> refreshHome() async {
     await getHomePageInfo();
-    await loadAnimeList();
+    //await loadAnimeList();
     await getGenresAvailable();
   }
 

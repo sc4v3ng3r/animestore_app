@@ -17,12 +17,10 @@ import 'package:provider/provider.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import '../utils/UiUtils.dart';
 
-
 class AnimeDetailsScreen extends StatefulWidget {
   final String heroTag;
-  
-  const AnimeDetailsScreen({Key key, 
-    this.heroTag}) : super(key: key);
+
+  const AnimeDetailsScreen({Key key, this.heroTag}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AnimeDetailsScreen();
@@ -30,7 +28,6 @@ class AnimeDetailsScreen extends StatefulWidget {
 
 class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     with SingleTickerProviderStateMixin {
-  
   static const _RELATED_TAG = 'RELATED_TAG';
   ApplicationStore applicationStore;
   AnimeDetailsStore detailsStore;
@@ -56,27 +53,22 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     super.initState();
     detailsStore = Provider.of<AnimeDetailsStore>(context, listen: false);
     detailsStore.loadAnimeDetails();
-    
+
     animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 2000)
-    );
+        vsync: this, duration: Duration(milliseconds: 2000));
 
     applicationStore = Provider.of<ApplicationStore>(context, listen: false);
-    
-    slideAnimation = Tween<Offset>(begin: Offset(400, .0),end: Offset.zero).animate(
+
+    slideAnimation =
+        Tween<Offset>(begin: Offset(400, .0), end: Offset.zero).animate(
       CurvedAnimation(
-        curve: Curves.fastLinearToSlowEaseIn,
-        parent: animationController
-      ),
+          curve: Curves.fastLinearToSlowEaseIn, parent: animationController),
     );
 
-    scaleAnimation = Tween<double>(begin: .0, end: 1.0)
-    .animate( CurvedAnimation(
-      curve: Interval(.4, 1.0, curve: Curves.easeInBack),
-      parent: animationController
-    ) );
-  
+    scaleAnimation = Tween<double>(begin: .0, end: 1.0).animate(CurvedAnimation(
+        curve: Interval(.4, 1.0, curve: Curves.easeInBack),
+        parent: animationController));
+
     animationController.forward();
   }
 
@@ -109,8 +101,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       snap: false,
       leading: Container(),
       expandedHeight: expandedHeight,
-    
-      backgroundColor: primaryColor, //detailsStore.backgroundColor,
+      backgroundColor: primaryColor,
       flexibleSpace: FlexibleSpaceBar(
         background: Hero(
           tag: widget.heroTag ?? UniqueKey().toString(),
@@ -128,99 +119,156 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
         return AnimatedBuilder(
           animation: animationController,
-          builder: (_, __) =>
-            Transform.scale(
-              scale: scaleAnimation.value,
-              origin: Offset.zero,
-              child: FloatingActionButton.extended(
-                backgroundColor: accentColor,
-                onPressed: () => (isInList) ? _removeFromList() : _addToList(),
-                label: Text((isInList) ? locale.removeFromList : locale.addToList),
-                icon: Icon((isInList) 
+          builder: (_, __) => Transform.scale(
+            scale: scaleAnimation.value,
+            origin: Offset.zero,
+            child: FloatingActionButton.extended(
+              backgroundColor: accentColor,
+              onPressed: () => (isInList) ? _removeFromList() : _addToList(),
+              label:
+                  Text((isInList) ? locale.removeFromList : locale.addToList),
+              icon: Icon((isInList)
                   ? Icons.remove_circle_outline
                   : Icons.add_circle_outline),
-        ),
             ),
+          ),
         );
       }),
-      
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverOverlapAbsorber(
-                  handle:NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                  
-                  sliver: appBar,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: appBar,
+              ),
+              SliverToBoxAdapter(
+                child: animeTitleSection(detailsStore.currentAnimeItem.title),
+              ),
 
-                ),
-                SliverToBoxAdapter(
-                  child: animeTitleSection(detailsStore.currentAnimeItem.title),
-                ),
+              // SliverToBoxAdapter(
+              //     child: Observer(
+              //     builder: (_){
+              //       var widget;
+              //       switch (detailsStore.loadingStatus){
+                      
+              //         case LoadingStatus.DONE:
+              //           widget = Container(
+              //             margin: EdgeInsets.only(top: 24.0),
+              //             child: Row(
+              //             mainAxisSize: MainAxisSize.max,
+              //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //             children: <Widget>[
+              //               RoundedButton(
+              //                 title: locale.addToList,
+              //                 size: 56,
+              //               ),
 
-               // sliver header with tab bars
-                SliverPersistentHeader(
-                  pinned: true,
-                  floating: true,
-                  delegate: _SliverAppBarDelegate(
-                    TabBar(
-                      indicatorColor: accentColor,
-                      tabs: <Widget>[
-                        Tab(text: locale.episodes,),
-                        Tab(text: locale.animeDetails,),
-                      ],
-                    ),
-                  ),
-                ),
-              ];
-            },
-            body: Observer(
-              builder: (context) {
-                if (detailsStore.loadingStatus == LoadingStatus.ERROR)
-                  return SingleChildScrollView(child: buildErrorWidget());
+              //               RoundedButton(
+              //                 title: locale.removeFromList,
+              //                 size: 56,
+              //               ),
 
-                if (detailsStore.loadingStatus == LoadingStatus.LOADING)
-                  return Container(
-                    // height: 200,
-                    child: UiUtils.centredDotLoader(),
-                  );
+              //               RoundedButton(
+              //                 title: locale.titleClearList,
+              //                 size: 56,
+              //               ),
+              //             ],
+              //           ),
+              //           );
+              //           break;
+                      
+              //         default:
+              //           widget = Container();
+              //           break;
+                      
+              //       }
 
-                return TabBarView(
-                  children: <Widget>[
-                    _createWithSlideTransition(
-                      child: buildEpisodesSection(), 
-                      animation: slideAnimation, 
-                      controller: animationController
-                    ),
-                    
-                    _createWithSlideTransition(
+              //       return widget;
+              //     },
+              //   ),
+              // ),
+
+              // sliver header with tab bars
+              Observer(
+                builder: (_) {
+                  var widget;
+                  switch (detailsStore.loadingStatus) {
+                    case LoadingStatus.DONE:
+                      widget = SliverPersistentHeader(
+                        pinned: true,
+                        floating: true,
+                        delegate: _SliverAppBarDelegate(
+                          TabBar(
+                            indicatorColor: accentColor,
+                            tabs: <Widget>[
+                              Tab(
+                                text: locale.episodes,
+                              ),
+                              Tab(
+                                text: locale.animeDetails,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                      break;
+
+                    default:
+                      widget = emptySliver;
+                      break;
+                  }
+
+                  return widget;
+                },
+              ),
+            ];
+          },
+          body: Observer(
+            builder: (context) {
+              if (detailsStore.loadingStatus == LoadingStatus.ERROR)
+                return SingleChildScrollView(child: buildErrorWidget());
+
+              if (detailsStore.loadingStatus == LoadingStatus.LOADING)
+                return Container(
+                  // height: 200,
+                  child: UiUtils.centredDotLoader(),
+                );
+
+              return TabBarView(
+                children: <Widget>[
+                  _createWithSlideTransition(
+                      child: buildEpisodesSection(),
+                      animation: slideAnimation,
+                      controller: animationController),
+                  _createWithSlideTransition(
                       child: buildMoreDetailsSection(),
                       animation: slideAnimation,
-                      controller: animationController
-                    ),
-                  ],
-                );
-              },
-            ),
+                      controller: animationController),
+                ],
+              );
+            },
           ),
         ),
-    
+      ),
     );
   }
 
-  Widget _createWithSlideTransition({@required Widget child, 
-    @required Animation<Offset> animation,
-    @required AnimationController controller}){
+  Widget _createWithSlideTransition(
+      {@required Widget child,
+      @required Animation<Offset> animation,
+      @required AnimationController controller}) {
     return AnimatedBuilder(
       animation: controller,
-      builder: (_,__) => SlideTransition(
+      builder: (_, __) => SlideTransition(
         position: animation,
         child: child,
       ),
     );
   }
+
   Widget buildEpisodesSection() {
     return SafeArea(
       top: false,
@@ -228,65 +276,62 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       child: CustomScrollView(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
-          slivers: <Widget>[
-            (detailsStore.animeDetails.episodes.isEmpty)
-                ? SliverToBoxAdapter(
-                    child: _buildUnavaiableWidget(
-                      locale.episodesUnavailable
-                    ),
-                  )
-                : SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      var episodeId =
-                          detailsStore.animeDetails.episodes[index].id;
-                      var animeId = detailsStore.currentAnimeItem.id;
-                      var isWatched =
-                          applicationStore.isEpisodeWatched(episodeId);
-                    
-                      return Container(
-                        color: Color(0xFF131D2A),
-                        margin: EdgeInsets.only(bottom: 4.0),
-                        child: Material(
-                          color: Colors.transparent,
-                          elevation: .0,
-                              child: InkWell(
-                              onTap: () {
-                              Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                      builder: (context) => VideoWidget(
-                                            episodeId: episodeId,
-                                          )
-                                      )
-                                );
-                            },
-                              child: ListTile(
+        slivers: <Widget>[
+          (detailsStore.animeDetails.episodes.isEmpty)
+              ? SliverToBoxAdapter(
+                  child: _buildUnavaiableWidget(locale.episodesUnavailable),
+                )
+              : SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    var episodeId =
+                        detailsStore.animeDetails.episodes[index].id;
 
-                              leading: Icon(
-                                Icons.play_circle_outline,
-                                size: 34.0,
-                                color: (isWatched) ? Colors.green : Colors.grey[300].withOpacity(.7),
+                    var isWatched =
+                        applicationStore.isEpisodeWatched(episodeId);
+
+                    return Container(
+                      color: Color(0xFF131D2A),
+                      margin: EdgeInsets.only(bottom: 4.0),
+                      child: Material(
+                        color: Colors.transparent,
+                        elevation: .0,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => VideoWidget(
+                                          episodeId: episodeId,
+                                        )));
+                          },
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.play_circle_outline,
+                              size: 34.0,
+                              color: (isWatched)
+                                  ? Colors.green
+                                  : Colors.grey[300].withOpacity(.7),
+                            ),
+                            title: Text(
+                              detailsStore.animeDetails.episodes[index].title,
+                            ),
+                            trailing: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.more_vert,
+                                color: Colors.white,
                               ),
-                              
-                              title: Text( detailsStore.animeDetails.episodes[index].title,),
-                              trailing: IconButton(
-                                onPressed: (){},
-                                icon: Icon(
-                                  Icons.more_vert,
-                                  color: Colors.white,
-                                ),
-                              ),                       
                             ),
                           ),
                         ),
-                      );
-                    },
-                    childCount: detailsStore.animeDetails.episodes.length,
-                  )
-                ),
-          ],
-        ),
+                      ),
+                    );
+                  },
+                  childCount: detailsStore.animeDetails.episodes.length,
+                )),
+        ],
+      ),
     );
   }
 
@@ -303,10 +348,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               [
                 buildDetailsSection(detailsStore.animeDetails),
                 buildResumeSection(detailsStore.animeDetails.resume),
-                  (detailsStore.shouldLoadSuggestions) 
-                ? buildAnimeSuggestionSection() 
-                : Container(),
-                
+                (detailsStore.shouldLoadSuggestions)
+                    ? buildAnimeSuggestionSection()
+                    : Container(),
                 Container(
                   height: 56.0,
                 ),
@@ -408,77 +452,85 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       );
 
   Widget buildAnimeSuggestionSection() => Container(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 12.0,),
-          child: Text(locale.suggestion , style: _defaultSectionStyle,),
-        ),
-        
-        Observer(
-          builder: (context){
-           if (detailsStore.relatedAnimes == null)
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 16.0),
-                child: UiUtils.centredDotLoader()
-              );
-
-            else if (detailsStore.relatedAnimes.isEmpty)
-                return Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 16.0),
-                    child: _buildUnavaiableWidget(
-                      locale.noSuggestions,
-                    )
-                  )
-                ],
-              );
-
-            else{
-              var width = MediaQuery.of(context).size.width * .42;
-              var height = width * 1.4;
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 12.0),
-                height: height,
-                child: ListView.builder(
-                  controller: listController,
-                  itemBuilder: (context, index) {
-                    var anime = detailsStore.relatedAnimes[index];
-                    var heroTag = '${anime.id}$_RELATED_TAG';
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 10.0),
-                      child: ItemView(
-                        width: width,
-                        tooltip: anime.title,
-                        height: height,
-                        imageUrl: anime.imageUrl,
-                        imageHeroTag: heroTag,
-                        onTap: () =>  Navigator.push(context,CupertinoPageRoute(
-                          builder: (context) => Provider<AnimeDetailsStore>(
-                            builder: (_) => AnimeDetailsStore(applicationStore, anime, shouldLoadSuggestions: false),
-                            child: AnimeDetailsScreen(heroTag: heroTag,),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: 12.0,
+              ),
+              child: Text(
+                locale.suggestion,
+                style: _defaultSectionStyle,
+              ),
+            ),
+            Observer(
+              builder: (context) {
+                if (detailsStore.relatedAnimes == null)
+                  return Container(
+                      margin: EdgeInsets.symmetric(vertical: 16.0),
+                      child: UiUtils.centredDotLoader());
+                else if (detailsStore.relatedAnimes.isEmpty)
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.symmetric(vertical: 16.0),
+                          child: _buildUnavaiableWidget(
+                            locale.noSuggestions,
+                          ))
+                    ],
+                  );
+                else {
+                  var width = MediaQuery.of(context).size.width * .42;
+                  var height = width * 1.4;
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 12.0),
+                    height: height,
+                    child: ListView.builder(
+                      controller: listController,
+                      itemBuilder: (context, index) {
+                        var anime = detailsStore.relatedAnimes[index];
+                        var heroTag = '${anime.id}$_RELATED_TAG';
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 4.0, vertical: 10.0),
+                          child: ItemView(
+                            width: width,
+                            tooltip: anime.title,
+                            height: height,
+                            imageUrl: anime.imageUrl,
+                            imageHeroTag: heroTag,
+                            onTap: () => Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) =>
+                                    Provider<AnimeDetailsStore>(
+                                  builder: (_) => AnimeDetailsStore(
+                                      applicationStore, anime,
+                                      shouldLoadSuggestions: false),
+                                  child: AnimeDetailsScreen(
+                                    heroTag: heroTag,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      ),
-                    );
-                  },
-
-                  scrollDirection: Axis.horizontal,
-                  itemCount: detailsStore.relatedAnimes.length,
-                  physics: BouncingScrollPhysics(),
-                ),
-              );
-            }    
-          },
+                        );
+                      },
+                      scrollDirection: Axis.horizontal,
+                      itemCount: detailsStore.relatedAnimes.length,
+                      physics: BouncingScrollPhysics(),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
+
   Widget get emptySliver => SliverToBoxAdapter(
         child: Container(),
       );
@@ -522,7 +574,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       ),
     );
   }
-  
+
   Widget buildErrorWidget() => Center(
         child: Container(
           margin: EdgeInsets.only(top: 16),
@@ -566,7 +618,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar _tabBar;
   static const _PADDING = 32.0;
   @override
-  double get minExtent =>  _tabBar.preferredSize.height + _PADDING;
+  double get minExtent => _tabBar.preferredSize.height + _PADDING;
   @override
   double get maxExtent => _tabBar.preferredSize.height + _PADDING;
 

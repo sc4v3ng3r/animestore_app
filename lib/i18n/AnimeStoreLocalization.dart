@@ -106,6 +106,10 @@ abstract class AnimeStoreLocalization {
   String get markAsViewed;
 
   String get markAsUnviewed;
+
+  String get videoUnavailable;
+
+  String get back;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{

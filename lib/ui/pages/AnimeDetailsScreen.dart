@@ -583,6 +583,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
   Widget _buildUnavaiableWidget(String text) {
     return Container(
+      margin: EdgeInsets.only(top: 16.0),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,

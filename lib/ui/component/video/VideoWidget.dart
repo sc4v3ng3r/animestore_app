@@ -35,6 +35,7 @@ class _VideoWidgetState extends State<VideoWidget>
 
   VideoPlayerStore videoPlayerStore;
   ApplicationStore appStore;
+  AnimeStoreLocalization locale;
   static const _DEFAULT_ASPECT_RATIO = 3 / 2;
 
   @override
@@ -93,6 +94,7 @@ class _VideoWidgetState extends State<VideoWidget>
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    locale = AnimeStoreLocalization.of(context);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -383,15 +385,18 @@ class _VideoWidgetState extends State<VideoWidget>
             height: 10,
           ),
           Text(
-            'Vídeo Indisponível..',
+            locale.videoUnavailable,
             textAlign: TextAlign.center,
             maxLines: 2,
             style: TextStyle(
                 color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           RaisedButton(
-            child: Text('Voltar'),
-            onPressed: () => Navigator.pop(context),
+            child: Text(locale.back),
+            onPressed: () async {
+              await _prepareToLeave();
+              Navigator.pop(context);
+            },
           )
         ],
       );

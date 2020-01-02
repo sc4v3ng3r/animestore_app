@@ -82,7 +82,7 @@ class LocalizationPT extends AnimeStoreLocalization {
       ' Tente novamente mais tarde.';
 
   @override
-  String get searchHint => 'Anime, Estudio, Genero...';
+  String get searchHint => 'Letra, Anime, Estúdio, Gênero...';
 
   @override
   String get noResults => 'Sem Resultados...';
@@ -155,5 +155,11 @@ class LocalizationPT extends AnimeStoreLocalization {
 
   @override
   String get markAsUnviewed => 'Marcar como não visto';
+
+  @override
+  String get back => 'Voltar';
+
+  @override
+  String get videoUnavailable => 'Vídeo Indisponível';
 
 }

@@ -148,6 +148,7 @@ abstract class _ApplicationStore with Store {
     }
   }
 
+  
   bool isEpisodeWatched(String episodeId) =>
       watchedEpisodeMap.containsKey(episodeId) ?? false;
 

@@ -15,6 +15,7 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+
 import '../utils/UiUtils.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
@@ -153,7 +154,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               //     builder: (_){
               //       var widget;
               //       switch (detailsStore.loadingStatus){
-                      
+
               //         case LoadingStatus.DONE:
               //           widget = Container(
               //             margin: EdgeInsets.only(top: 24.0),
@@ -179,11 +180,11 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               //           ),
               //           );
               //           break;
-                      
+
               //         default:
               //           widget = Container();
               //           break;
-                      
+
               //       }
 
               //       return widget;
@@ -287,9 +288,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                     var episodeId =
                         detailsStore.animeDetails.episodes[index].id;
 
-                    var isWatched =
-                        applicationStore.isEpisodeWatched(episodeId);
-
                     return Container(
                       color: Color(0xFF131D2A),
                       margin: EdgeInsets.only(bottom: 4.0),
@@ -305,24 +303,47 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                                           episodeId: episodeId,
                                         )));
                           },
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.play_circle_outline,
-                              size: 34.0,
-                              color: (isWatched)
-                                  ? Colors.green
-                                  : Colors.grey[300].withOpacity(.7),
-                            ),
-                            title: Text(
-                              detailsStore.animeDetails.episodes[index].title,
-                            ),
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
-                              ),
-                            ),
+                          child: Observer(
+                            builder: (_) {
+                              var isWatched = applicationStore.watchedEpisodeMap
+                                  .containsKey(episodeId);
+
+                              return ListTile(
+                                leading: Icon(
+                                  Icons.play_circle_outline,
+                                  size: 34.0,
+                                  color: (isWatched)
+                                      ? accentColor
+                                      : Colors.grey[300].withOpacity(.7),
+                                ),
+                                title: Text(
+                                  detailsStore
+                                      .animeDetails.episodes[index].title,
+                                  style: TextStyle(
+                                      color: (isWatched)
+                                          ? accentColor
+                                          : Colors.white,
+                                      decoration: (isWatched)
+                                          ? TextDecoration.lineThrough
+                                          : TextDecoration.none,
+                                      decorationColor: Colors.white),
+                                ),
+                                trailing: IconButton(
+                                  onPressed: () {
+                                    (isWatched) 
+                                      ? applicationStore.removeWatchedEpisode(episodeId)
+                                      : applicationStore.addWatchedEpisode(episodeId);
+
+                                  },
+                                  icon: Icon(
+                                    (isWatched)
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),

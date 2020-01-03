@@ -161,4 +161,7 @@ class LocalizationEN extends AnimeStoreLocalization {
 
   @override
   String get videoUnavailable => 'Video unavailable';
+
+  @override
+  String get episodesComingSoon => 'Coming soon...';
 }

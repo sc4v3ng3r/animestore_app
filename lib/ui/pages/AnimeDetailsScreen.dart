@@ -279,7 +279,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
         slivers: <Widget>[
           (detailsStore.animeDetails.episodes.isEmpty)
               ? SliverToBoxAdapter(
-                  child: _buildUnavaiableWidget(locale.episodesUnavailable),
+                  child: _buildUnavaiableWidget(
+                    locale.episodesComingSoon,
+                    iconData: Icons.update
+                    ),
                 )
               : SliverList(
                   delegate: SliverChildBuilderDelegate(
@@ -581,7 +584,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     );
   }
 
-  Widget _buildUnavaiableWidget(String text) {
+  Widget _buildUnavaiableWidget(String text, {IconData iconData}) {
     return Container(
       margin: EdgeInsets.only(top: 16.0),
       child: Column(
@@ -589,11 +592,16 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.do_not_disturb_alt,
+            iconData ?? Icons.do_not_disturb_alt,
             size: 52,
             color: accentColor,
           ),
-          Text(text),
+          Container(
+            margin: EdgeInsets.only(top: 4.0),
+            child: Text(text, style: TextStyle(
+              fontWeight: FontWeight.w500
+            ),)
+          ),
         ],
       ),
     );

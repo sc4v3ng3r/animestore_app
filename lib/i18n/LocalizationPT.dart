@@ -162,4 +162,7 @@ class LocalizationPT extends AnimeStoreLocalization {
   @override
   String get videoUnavailable => 'Vídeo Indisponível';
 
+  @override
+  String get episodesComingSoon => 'Em breve...';
+
 }

@@ -110,6 +110,8 @@ abstract class AnimeStoreLocalization {
   String get videoUnavailable;
 
   String get back;
+
+  String get episodesComingSoon;
 }
 
 class AnimeStoreLocalizationsDelegate extends LocalizationsDelegate<AnimeStoreLocalization>{

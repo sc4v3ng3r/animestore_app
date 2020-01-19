@@ -38,5 +38,4 @@ There is two ways to install Anime Store app. The first one and most easy is get
 
 **Notes:**
 > * On Android ```flutter run --release``` build type will fail because you haven't the build release KEY.
-> 
-> * On iOS the app is running well but the Video Player Page was not tested on real Iphone device.
+> * On iOS the app is running fine but it wasn't published on App Store.

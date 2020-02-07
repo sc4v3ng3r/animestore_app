@@ -142,7 +142,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               SliverOverlapAbsorber(
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: appBar,
+                child: appBar,
               ),
               SliverToBoxAdapter(
                 child: animeTitleSection(detailsStore.currentAnimeItem.title),

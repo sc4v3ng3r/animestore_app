@@ -1,3 +1,6 @@
+## [1.3.1+1] - 07/02/2020
+* Bugfix in crawler api after anitube website changes.
+
 ## [1.3.0+1] - 02/01/2020
 * New Player page available
 * Next and Previous episode in sequency
@@ -8,7 +11,7 @@
 * About app page info
 * Data model changes
 
-## [1.2.2+4] - 15/12/2010
+## [1.2.2+4] - 15/12/2019
 * Adding Animations
 * Layout Fixes and new gestures support
 * New Crawler API usage.

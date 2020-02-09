@@ -1,3 +1,6 @@
+## [1.3.7+7] - 09/02/2020
+* Another change of video streaming url on anitube website. Fixing again this issue.
+
 ## [1.3.1+1] - 07/02/2020
 * Bugfix in crawler api after anitube website changes.
 

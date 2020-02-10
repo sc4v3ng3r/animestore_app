@@ -520,7 +520,10 @@ class _HomePageState extends State<HomePage>
           boxFit: BoxFit.fill,
           dotSize: 6.0,
           overlayShadow: true,
-          images: List.generate(appStore.dayReleaseList.length, (index) {
+          
+          images: List.generate(
+            (appStore.dayReleaseList.length >= 12) ? 12 :
+            appStore.dayReleaseList.length, (index) {
             var heroTag =
                 '${appStore.dayReleaseList[index].id}$HER_TAG_CAROUSEL';
             return ItemView(

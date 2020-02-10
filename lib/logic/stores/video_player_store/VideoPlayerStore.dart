@@ -72,7 +72,8 @@ abstract class _VideoPlayerStore with Store {
       if (episodeLoadingStatus != EpisodeStatus.ERROR){
         setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING_DONE);
         controller?.dispose();
-        controller = VideoPlayerController.network(currentEpisode.streamingUrl,
+        print('The url will be ${currentEpisode.streamingUrl.trim()}');
+        controller = VideoPlayerController.network(currentEpisode.streamingUrl.trim(),
           httpHeaders: {'Referer': currentEpisode.referer} );
         
         controller.initialize().then( 

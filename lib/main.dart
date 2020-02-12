@@ -14,7 +14,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-
   runApp(new MyApp());
 
   SystemChrome.setSystemUIOverlayStyle(

@@ -1,4 +1,4 @@
-import 'package:anime_app/ui/theme/ColorValues.dart';
+import 'package:anime_app/ui/component/button/RoundedRaisedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 
@@ -51,22 +51,22 @@ class UnavailableVideoWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 
-                _createButton(
-                  label: locale.back,
+                RoundedRaisedButton(
+                  locale.back,
+                  onPressed: onBackCallback,
                   icon: Icon( Icons.arrow_back,
                     color: Colors.white,
                   ),
-                  callback: onBackCallback,
                 ),
                 
                 Container( width: 16.0 ),
                 
-                _createButton(
-                  callback: retryCallback,
+                RoundedRaisedButton(
+                  locale.tryAgain,
+                  onPressed: retryCallback,
                   icon: Icon(Icons.refresh,
                     color: Colors.white,
                   ),
-                  label: locale.tryAgain,
                 ),
               ],
             ),
@@ -75,16 +75,4 @@ class UnavailableVideoWidget extends StatelessWidget {
       ),
     );
   }
-
-  Widget _createButton({VoidCallback callback, Icon icon,
-    String label, Color backgroundColor }) => RaisedButton.icon(
-                  onPressed: callback,
-                  icon: icon,
-                  label: Text(label,
-                    style: TextStyle(color: textPrimaryColor),
-                  ),
-                  color: backgroundColor ?? accentColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                );
 }

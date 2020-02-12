@@ -147,50 +147,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               SliverToBoxAdapter(
                 child: animeTitleSection(detailsStore.currentAnimeItem.title),
               ),
-
-              // SliverToBoxAdapter(
-              //     child: Observer(
-              //     builder: (_){
-              //       var widget;
-              //       switch (detailsStore.loadingStatus){
-
-              //         case LoadingStatus.DONE:
-              //           widget = Container(
-              //             margin: EdgeInsets.only(top: 24.0),
-              //             child: Row(
-              //             mainAxisSize: MainAxisSize.max,
-              //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //             children: <Widget>[
-              //               RoundedButton(
-              //                 title: locale.addToList,
-              //                 size: 56,
-              //               ),
-
-              //               RoundedButton(
-              //                 title: locale.removeFromList,
-              //                 size: 56,
-              //               ),
-
-              //               RoundedButton(
-              //                 title: locale.titleClearList,
-              //                 size: 56,
-              //               ),
-              //             ],
-              //           ),
-              //           );
-              //           break;
-
-              //         default:
-              //           widget = Container();
-              //           break;
-
-              //       }
-
-              //       return widget;
-              //     },
-              //   ),
-              // ),
-
+              
               // sliver header with tab bars
               Observer(
                 builder: (_) {

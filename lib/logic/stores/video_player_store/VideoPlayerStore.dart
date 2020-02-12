@@ -59,6 +59,7 @@ abstract class _VideoPlayerStore with Store {
       return;
 
     try {
+      print('Loading episode $episodeId');
       setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING);
 
       currentEpisode = await appStore.api.getEpisodeDetails(episodeId,

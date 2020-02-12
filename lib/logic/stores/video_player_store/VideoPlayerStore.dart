@@ -27,7 +27,6 @@ abstract class _VideoPlayerStore with Store {
 
   @observable
   Duration currentPosition = Duration(milliseconds: 0);
-  
 
   void cancelEpisodeLoading() =>
       setEpisodeLoadingStatus(EpisodeStatus.CANCELED);
@@ -71,11 +70,13 @@ abstract class _VideoPlayerStore with Store {
       }
 
       if (episodeLoadingStatus != EpisodeStatus.ERROR){
+        // must be buffering...
         setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING_DONE);
         controller?.dispose();
         print('The url will be ${currentEpisode.streamingUrl.trim()}');
         controller = VideoPlayerController.network(currentEpisode.streamingUrl.trim(),
           httpHeaders: {'Referer': currentEpisode.referer} );
+        
         
         controller.initialize().then( 
           (_){
@@ -87,7 +88,7 @@ abstract class _VideoPlayerStore with Store {
               viewedAt: DateTime.now().millisecond,
             ) ;
           } 
-          );     
+        );     
       }
 
     }

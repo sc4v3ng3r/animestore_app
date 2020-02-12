@@ -1,6 +1,7 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
+import 'package:anime_app/ui/component/video/LoadingVideoWidget.dart';
 import 'package:anime_app/ui/component/video/UnavailableVideoWidget.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anime_app/ui/utils/UiUtils.dart';
@@ -115,11 +116,8 @@ class _VideoWidgetState extends State<VideoWidget>
 
               switch (videoPlayerStore.episodeLoadingStatus) {
                 case EpisodeStatus.BUFFERING:
-                case EpisodeStatus.DOWNLOADING:
-                  currentWidget = buildLoaderWidget();
-                  break;
-
                 case EpisodeStatus.DOWNLOADING_DONE:
+                case EpisodeStatus.DOWNLOADING:
                   currentWidget = buildLoaderWidget();
                   break;
 
@@ -200,8 +198,13 @@ class _VideoWidgetState extends State<VideoWidget>
       );
 
   Widget buildLoaderWidget() => Center(
-        child: CircularProgressIndicator(),
-      );
+        child: LoadingVideoWidget(
+          onCancel:() async {
+            await _prepareToLeave();
+            Navigator.pop(context);
+          } ,
+        ),
+    );
 
   Widget buildTopBarWidget(final Size size) => Align(
         alignment: Alignment.topCenter,

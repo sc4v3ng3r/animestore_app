@@ -73,9 +73,11 @@ abstract class _VideoPlayerStore with Store {
         // must be buffering...
         setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING_DONE);
         controller?.dispose();
-        print('The url will be ${currentEpisode.streamingUrl.trim()}');
-        controller = VideoPlayerController.network(currentEpisode.streamingUrl.trim(),
-          httpHeaders: {'Referer': currentEpisode.referer} );
+        print('The url will be ${currentEpisode.streamingUrl}');
+        controller = VideoPlayerController.network(currentEpisode.streamingUrl,
+          // old http headers of custom plugin version hosted in sc4v3ng3r github repository 
+          // httpHeaders: {'Referer': currentEpisode.referer} 
+          );
         
         
         controller.initialize().then( 
@@ -93,6 +95,7 @@ abstract class _VideoPlayerStore with Store {
 
     }
     on CrawlerApiException catch(ex){
+      print(ex);
       setEpisodeLoadingStatus(EpisodeStatus.ERROR);
       currentEpisode = null;
     }

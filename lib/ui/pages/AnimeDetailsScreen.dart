@@ -60,8 +60,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     applicationStore = Provider.of<ApplicationStore>(context, listen: false);
 
     slideAnimation =
-        Tween<Offset>(begin: Offset(400, .0), end: Offset.zero).animate(
-      CurvedAnimation(
+        Tween<Offset>(begin: Offset(400, .0), end: Offset.zero)
+        .animate(CurvedAnimation(
           curve: Curves.fastLinearToSlowEaseIn, parent: animationController),
     );
 

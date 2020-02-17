@@ -11,7 +11,7 @@ description: A flutter anime watch app
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.3.8+8
+version: 1.3.9+9
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -26,11 +26,13 @@ dependencies:
   anitube_crawler_api:
     git:
       url: git@github.com:sc4v3ng3r/anitube_crawler_api.git
-      ref: f381314c449340bde8497543ed5c9df4905aa245
+      ref: 5d8b5345141d24645326fe9c42ca8fd9d8563bca
 
   provider: ^3.1.0
-  flutter_advanced_networkimage: ^0.6.0-alpha.1
-  video_player:
+  flutter_advanced_networkimage: ^0.7.0
+  video_player: 
+  #^0.10.7
+    # This is the old version hosted in my github. Used when needed http headers values. 
     git:
       url: git@github.com:sc4v3ng3r/flutter-plugins.git
       ref: eedec50bbc65374ed322c38ae729bc6f306f1a71
@@ -44,7 +46,7 @@ dependencies:
   sqflite: ^1.1.7+1
   path: ^1.6.4
   bot_toast: ^2.1.0
-  flutter_svg: ^0.14.2
+  flutter_svg: ^0.17.1
   mobx: ^0.3.9+3
   flutter_mobx: ^0.3.3+3
   mobx_codegen: ^0.3.10+1

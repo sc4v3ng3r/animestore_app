@@ -1,3 +1,7 @@
+## 1.3.9+9 - 17/02/2020
+* Adding new layout components in video load page
+* Using new version of crawler_api avoiding episode streaming fails.
+
 ## [1.3.8+8] - 09/02/2020
 * Hotfix in Carousel widget using 12 as images limit.
 * Using new version of crawler API. Now the crawler tries to get the video streaming url from multiple sources.
@@ -5,10 +9,10 @@
 ## [1.3.7+7] - 09/02/2020
 * Another change of video streaming url on anitube website. Fixing again this issue.
 
-## [1.3.1+1] - 07/02/2020
+## [1.3.1+6] - 07/02/2020
 * Bugfix in crawler api after anitube website changes.
 
-## [1.3.0+1] - 02/01/2020
+## [1.3.0+5] - 02/01/2020
 * New Player page available
 * Next and Previous episode in sequency
 * Improvements in watched episodes tracking
@@ -31,5 +35,5 @@
 ## [1.0.0+2] - 05/12/2019
 * Published as Beta on Google Play Store
 
-## [1.0.0+1] - 03/12/2019
+## [1.0.0] - 03/12/2019
 * Initial release. Published as internal test on Google Play Store

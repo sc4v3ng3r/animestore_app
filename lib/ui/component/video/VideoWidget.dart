@@ -38,7 +38,7 @@ class _VideoWidgetState extends State<VideoWidget>
   VideoPlayerStore videoPlayerStore;
   ApplicationStore appStore;
   AnimeStoreLocalization locale;
-  //static const _DEFAULT_ASPECT_RATIO = 3 / 2;
+  static const _DEFAULT_ASPECT_RATIO = 3 / 2;
 
   @override
   void initState() {
@@ -167,7 +167,7 @@ class _VideoWidgetState extends State<VideoWidget>
               Align(
                 alignment: Alignment.center,
                 child: AspectRatio(
-                  aspectRatio: videoPlayerStore.controller.value.aspectRatio,
+                  aspectRatio: _DEFAULT_ASPECT_RATIO,
                   child: VideoPlayer(videoPlayerStore.controller),
                 ),
               ),

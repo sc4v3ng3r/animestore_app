@@ -1,6 +1,8 @@
 import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
+import 'package:anime_app/ui/component/video/LoadingVideoWidget.dart';
+import 'package:anime_app/ui/component/video/UnavailableVideoWidget.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anime_app/ui/utils/UiUtils.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ import 'package:wakelock/wakelock.dart';
 /// TODO:
 /// handle viewed episode if the anime is on user list.
 /// * Aspect ratio button
-/// * 
+/// *
 
 class VideoWidget extends StatefulWidget {
   final String episodeId;
@@ -36,7 +38,7 @@ class _VideoWidgetState extends State<VideoWidget>
   VideoPlayerStore videoPlayerStore;
   ApplicationStore appStore;
   AnimeStoreLocalization locale;
-  static const _DEFAULT_ASPECT_RATIO = 3 / 2;
+  //static const _DEFAULT_ASPECT_RATIO = 3 / 2;
 
   @override
   void initState() {
@@ -83,14 +85,13 @@ class _VideoWidgetState extends State<VideoWidget>
   }
 
   Future<void> _prepareToLeave() async {
-    if (videoPlayerStore.episodeLoadingStatus ==
-              EpisodeStatus.DOWNLOADING)
-            videoPlayerStore.cancelEpisodeLoading();
+    if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.DOWNLOADING)
+      videoPlayerStore.cancelEpisodeLoading();
 
-          await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-          await SystemChrome.setPreferredOrientations(
-              [DeviceOrientation.portraitUp]);
+    await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -111,32 +112,37 @@ class _VideoWidgetState extends State<VideoWidget>
           color: Colors.transparent,
           child: Observer(
             builder: (_) {
-              Widget widget;
+              Widget currentWidget;
 
               switch (videoPlayerStore.episodeLoadingStatus) {
                 case EpisodeStatus.BUFFERING:
-                case EpisodeStatus.DOWNLOADING:
-                  widget = buildLoaderWidget();
-                  break;
-
                 case EpisodeStatus.DOWNLOADING_DONE:
-                  widget = buildLoaderWidget();
+                case EpisodeStatus.DOWNLOADING:
+                  currentWidget = buildLoaderWidget();
                   break;
 
                 case EpisodeStatus.CANCELED:
-                  widget = Container();
+                  currentWidget = Container();
                   break;
 
                 case EpisodeStatus.ERROR:
-                  widget = buildErrorWidget();
+                  currentWidget = UnavailableVideoWidget(
+                    retryCallback: () => videoPlayerStore.loadEpisodeDetails(
+                      this.widget.episodeId,
+                    ),
+                    onBackCallback: () async {
+                      await _prepareToLeave();
+                      Navigator.pop(context);
+                    },
+                  );
                   break;
 
                 case EpisodeStatus.READY:
-                  widget = buildPlayerWidget(size);
+                  currentWidget = buildPlayerWidget(size);
                   animationController.forward(from: .0);
                   break;
               }
-              return widget;
+              return currentWidget;
             },
           ),
         ),
@@ -161,7 +167,7 @@ class _VideoWidgetState extends State<VideoWidget>
               Align(
                 alignment: Alignment.center,
                 child: AspectRatio(
-                  aspectRatio: _DEFAULT_ASPECT_RATIO,
+                  aspectRatio: videoPlayerStore.controller.value.aspectRatio,
                   child: VideoPlayer(videoPlayerStore.controller),
                 ),
               ),
@@ -192,8 +198,13 @@ class _VideoWidgetState extends State<VideoWidget>
       );
 
   Widget buildLoaderWidget() => Center(
-        child: CircularProgressIndicator(),
-      );
+        child: LoadingVideoWidget(
+          onCancel:() async {
+            await _prepareToLeave();
+            Navigator.pop(context);
+          } ,
+        ),
+    );
 
   Widget buildTopBarWidget(final Size size) => Align(
         alignment: Alignment.topCenter,
@@ -208,21 +219,21 @@ class _VideoWidgetState extends State<VideoWidget>
             leading: Container(),
             actions: <Widget>[
               PopupMenuButton<_MenuOption>(
-                itemBuilder: (context) => popupMenuItems( AnimeStoreLocalization.of(context) ),
+                itemBuilder: (context) =>
+                    popupMenuItems(AnimeStoreLocalization.of(context)),
                 color: Colors.transparent,
                 elevation: .0,
-                offset: Offset(100,40),
+                offset: Offset(100, 40),
                 onSelected: (option) async {
-                  
-                  switch(option){
+                  switch (option) {
                     case _MenuOption.NEXT:
                       videoPlayerStore.nextEpisode();
                       break;
-                    
+
                     case _MenuOption.PREVIOUS:
                       videoPlayerStore.previousEpisode();
                       break;
-                    
+
                     case _MenuOption.EXIT:
                       await _prepareToLeave();
                       Navigator.pop(context);
@@ -370,66 +381,38 @@ class _VideoWidgetState extends State<VideoWidget>
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  Widget buildErrorWidget() => Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Center(
-              child: Icon(
-            Icons.error,
-            color: Colors.red,
-            size: 82,
-          )),
-          Container(
-            height: 10,
-          ),
-          Text(
-            locale.videoUnavailable,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: TextStyle(
-                color: Colors.red, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          RaisedButton(
-            child: Text(locale.back),
-            onPressed: () async {
-              await _prepareToLeave();
-              Navigator.pop(context);
-            },
-          )
-        ],
-      );
-
-  List<PopupMenuItem<_MenuOption>> popupMenuItems(AnimeStoreLocalization locale) {
+  List<PopupMenuItem<_MenuOption>> popupMenuItems(
+      AnimeStoreLocalization locale) {
     var widgetList = <PopupMenuItem<_MenuOption>>[];
 
     if (videoPlayerStore.currentEpisode.previousEpisodeId.isNotEmpty)
-      widgetList.add(
-        UiUtils.createMenuItem<_MenuOption>(
-
-          icon: Icon(Icons.skip_previous,color: Colors.white,),
-          value: _MenuOption.PREVIOUS,
-          title: locale.previous,
-        )
-      );
+      widgetList.add(UiUtils.createMenuItem<_MenuOption>(
+        icon: Icon(
+          Icons.skip_previous,
+          color: Colors.white,
+        ),
+        value: _MenuOption.PREVIOUS,
+        title: locale.previous,
+      ));
 
     if (videoPlayerStore.currentEpisode.nextEpisodeId.isNotEmpty)
-      widgetList.add(
-        UiUtils.createMenuItem<_MenuOption>(
-          icon: Icon(Icons.skip_next, color: Colors.white,),
-          value: _MenuOption.NEXT,
-          title: locale.next,
-        )
-      );
+      widgetList.add(UiUtils.createMenuItem<_MenuOption>(
+        icon: Icon(
+          Icons.skip_next,
+          color: Colors.white,
+        ),
+        value: _MenuOption.NEXT,
+        title: locale.next,
+      ));
 
-    widgetList.add(
-      UiUtils.createMenuItem(
-        icon: Icon(Icons.exit_to_app, color: Colors.white,),
-          value: _MenuOption.EXIT,
-          title: locale.quit,
-      )
-    );
+    widgetList.add(UiUtils.createMenuItem(
+      icon: Icon(
+        Icons.exit_to_app,
+        color: Colors.white,
+      ),
+      value: _MenuOption.EXIT,
+      title: locale.quit,
+    ));
     return widgetList;
   }
 }

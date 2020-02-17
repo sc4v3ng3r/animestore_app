@@ -217,9 +217,7 @@ abstract class _ApplicationStore with Store {
     setAnimeListLoadingStatus(LoadingStatus.DONE);
   }
 
-  Future<AnimeDetails> getAnimeDetails(
-    String id,
-  ) =>
+  Future<AnimeDetails> getAnimeDetails(String id,) =>
       api.getAnimeDetails(id, timeout: TIMEOUT);
 
   Future<void> refreshHome() async {

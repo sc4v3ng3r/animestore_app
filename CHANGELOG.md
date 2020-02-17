@@ -1,3 +1,7 @@
+## [1.3.8+8] - 09/02/2020
+* Hotfix in Carousel widget using 12 as images limit.
+* Using new version of crawler API. Now the crawler tries to get the video streaming url from multiple sources.
+
 ## [1.3.7+7] - 09/02/2020
 * Another change of video streaming url on anitube website. Fixing again this issue.
 

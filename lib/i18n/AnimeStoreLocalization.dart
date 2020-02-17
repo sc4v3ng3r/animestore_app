@@ -8,7 +8,6 @@ abstract class AnimeStoreLocalization {
     return Localizations.of<AnimeStoreLocalization>(context, AnimeStoreLocalization);
   }
 
-
   String get topAnimes;
 
   String get mostViewedAnimes;

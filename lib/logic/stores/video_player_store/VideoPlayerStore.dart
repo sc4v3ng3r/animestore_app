@@ -1,7 +1,9 @@
+import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
 import 'package:video_player/video_player.dart';
+import 'dart:async' as NativeAsync;
 
 part 'VideoPlayerStore.g.dart';
 
@@ -74,31 +76,41 @@ abstract class _VideoPlayerStore with Store {
         setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING_DONE);
         controller?.dispose();
         print('The url will be ${currentEpisode.streamingUrl}');
-        controller = VideoPlayerController.network(currentEpisode.streamingUrl,
+        controller = VideoPlayerController.network(
+          currentEpisode.streamingUrl,
           // old http headers of custom plugin version hosted in sc4v3ng3r github repository 
           // httpHeaders: {'Referer': currentEpisode.referer} 
           );
         
+        await controller.initialize().timeout(Duration(seconds: VIDEO_INIT_TIMEOUT),  );
+      
+        controller.addListener( _controllerListener );
+        setEpisodeLoadingStatus(EpisodeStatus.READY);
         
-        controller.initialize().then( 
-          (_){
-            controller.addListener( _controllerListener );
-            setEpisodeLoadingStatus(EpisodeStatus.READY);
-            playOrPause();
-            appStore.addWatchedEpisode(episodeId, 
-              episodeTitle: currentEpisode.title,
-              viewedAt: DateTime.now().millisecond,
-            ) ;
-          } 
-        );     
+        playOrPause();
+        
+        appStore.addWatchedEpisode(episodeId, 
+          episodeTitle: currentEpisode.title,
+          viewedAt: DateTime.now().millisecond,
+        ) ;   
       }
 
     }
     on CrawlerApiException catch(ex){
       print(ex);
-      setEpisodeLoadingStatus(EpisodeStatus.ERROR);
-      currentEpisode = null;
+      _handleVideoLoadingException();
     }
+
+    // handling timeout exception
+    on NativeAsync.TimeoutException catch(ex){
+      print(ex);
+      _handleVideoLoadingException();
+    }
+  }
+
+  void _handleVideoLoadingException(){
+    setEpisodeLoadingStatus(EpisodeStatus.ERROR);
+    currentEpisode = null;
   }
 
   void _controllerListener(){

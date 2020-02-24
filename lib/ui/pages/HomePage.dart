@@ -525,7 +525,7 @@ class _HomePageState extends State<HomePage>
             (appStore.dayReleaseList.length >= 12) ? 12 :
             appStore.dayReleaseList.length, (index) {
             var heroTag =
-                '${appStore.dayReleaseList[index].id}$HER_TAG_CAROUSEL';
+                '${appStore.dayReleaseList[index].id}$HERO_TAG_CAROUSEL';
             return ItemView(
               borderRadius: .0,
               tooltip: appStore.dayReleaseList[index].title,

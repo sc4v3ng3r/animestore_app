@@ -6,11 +6,11 @@ import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/TapableText.dart';
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
-import 'package:anime_app/ui/component/dialog/AnimeStoreAcceptDialog.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';
+import 'package:anime_app/ui/pages/MyAnimeListPage.dart';
 import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
@@ -170,30 +170,10 @@ class _HomePageState extends State<HomePage>
               heroTag: HeroTags.TAG_MY_LIST,
               iconColor: accentColor,
               iconData: Icons.video_library,
-              onTap: () => _openAnimeItemGridPage(
-                context,
-                appStore.myAnimeMap.values.toList(),
-                locale.myAnimeList,
-                HeroTags.TAG_MY_LIST,
-                actions: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => AnimeStoreAcceptDialog(
-                                title: locale.titleClearList,
-                                bodyMessage: locale.messageClearList,
-                                onConfirm: () {
-                                  appStore.clearMyList();
-                                  Navigator.popUntil(context,
-                                      (Route<dynamic> route) => route.isFirst);
-                                },
-                                onCancel: () => Navigator.pop(context),
-                              ));
-                    },
-                    icon: Icon(Icons.delete_forever),
-                  ),
-                ],
+              onTap:  () => Navigator.push(context, 
+                CupertinoPageRoute(
+                  builder: (context) => MyAnimeListPage(heroTag: HeroTags.TAG_MY_LIST,)
+                ),
               ),
             ),
     );

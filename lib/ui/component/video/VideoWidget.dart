@@ -38,7 +38,9 @@ class _VideoWidgetState extends State<VideoWidget>
   VideoPlayerStore videoPlayerStore;
   ApplicationStore appStore;
   AnimeStoreLocalization locale;
+  
   static const _DEFAULT_ASPECT_RATIO = 3 / 2;
+  static const _BACKGROUND_OPACITY_LEVEL = .5;
 
   @override
   void initState() {
@@ -88,6 +90,9 @@ class _VideoWidgetState extends State<VideoWidget>
     if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.DOWNLOADING)
       videoPlayerStore.cancelEpisodeLoading();
 
+    if (videoPlayerStore.isPlaying)
+      await videoPlayerStore.controller.pause();
+      
     await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
@@ -171,6 +176,23 @@ class _VideoWidgetState extends State<VideoWidget>
                   child: VideoPlayer(videoPlayerStore.controller),
                 ),
               ),
+
+              // here new widget
+
+              Positioned.fill(
+                child: AnimatedBuilder(
+                animation: animationController,
+                builder: (_, __){
+                  return FadeTransition(
+                    opacity: opacityAnimation,
+                    child: Container(
+                      color: Colors.black.withOpacity( _BACKGROUND_OPACITY_LEVEL ),
+                    ),
+                  );
+                },
+              ),
+              ),
+              
               AnimatedBuilder(
                 animation: animationController,
                 builder: (_, __) => SlideTransition(

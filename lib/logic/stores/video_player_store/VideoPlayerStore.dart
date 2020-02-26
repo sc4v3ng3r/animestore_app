@@ -141,9 +141,7 @@ abstract class _VideoPlayerStore with Store {
 
   void dispose() {
     controller?.removeListener( _controllerListener );
-    
     controller?.dispose();
-
   }
 
   void seekTo(int seconds) => controller.seekTo(

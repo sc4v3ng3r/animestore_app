@@ -30,13 +30,12 @@ dependencies:
 
   provider: ^3.1.0
   flutter_advanced_networkimage: ^0.7.0
-  video_player: 
-  #^0.10.7
+  video_player: ^0.10.8
     # This is the old version hosted in my github. Used when needed http headers values. 
-    git:
-      url: git@github.com:sc4v3ng3r/flutter-plugins.git
-      ref: eedec50bbc65374ed322c38ae729bc6f306f1a71
-      path: packages/video_player
+    #git:
+    #  url: git@github.com:sc4v3ng3r/flutter-plugins.git
+    #  ref: eedec50bbc65374ed322c38ae729bc6f306f1a71
+    #  path: packages/video_player
       
   build_runner: ^1.7.2
   carousel_pro: ^1.0.0

@@ -30,9 +30,9 @@ dependencies:
 
   provider: '3.1.0'
   flutter_advanced_networkimage: ^0.7.0
-  #video_player: ^0.10.8
-  video_player:
-    path: /Users/mac/fork/plugins/packages/video_player/video_player
+  video_player: ^0.10.8
+  #video_player:
+  #  path: /Users/mac/fork/plugins/packages/video_player/video_player
     # This is the old version hosted in my github. Used when needed http headers values. 
     #git:
     #  url: git@github.com:sc4v3ng3r/flutter-plugins.git

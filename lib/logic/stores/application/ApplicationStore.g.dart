@@ -12,16 +12,16 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   final _$mainAnimeListAtom = Atom(name: '_ApplicationStore.mainAnimeList');
 
   @override
-  ObservableList<AnimeItem> get mainAnimeList {
+  ObservableList<AnimeItem> get feedAnimeList {
     _$mainAnimeListAtom.context.enforceReadPolicy(_$mainAnimeListAtom);
     _$mainAnimeListAtom.reportObserved();
-    return super.mainAnimeList;
+    return super.feedAnimeList;
   }
 
   @override
-  set mainAnimeList(ObservableList<AnimeItem> value) {
+  set feedAnimeList(ObservableList<AnimeItem> value) {
     _$mainAnimeListAtom.context.conditionallyRunInAction(() {
-      super.mainAnimeList = value;
+      super.feedAnimeList = value;
       _$mainAnimeListAtom.reportChanged();
     }, _$mainAnimeListAtom, name: '${_$mainAnimeListAtom.name}_set');
   }

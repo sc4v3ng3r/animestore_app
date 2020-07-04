@@ -26,8 +26,9 @@ abstract class _ApplicationStore with Store {
 
   bool isFirstHomePageView = true;
 
+  // This list holds the anime feed list.
   @observable
-  ObservableList<AnimeItem> mainAnimeList = ObservableList();
+  ObservableList<AnimeItem> feedAnimeList = ObservableList();
 
   @observable
   ObservableList<AnimeItem> mostRecentAnimeList = ObservableList();
@@ -41,6 +42,7 @@ abstract class _ApplicationStore with Store {
   @observable
   ObservableList<String> genreList = ObservableList();
 
+  /// Animes which the user has added to list. The map holds <animeId, AnimeItem>.
   @observable
   ObservableMap<String, AnimeItem> myAnimeMap = ObservableMap();
 
@@ -108,7 +110,7 @@ abstract class _ApplicationStore with Store {
       animeListLoadingStatus = status;
 
   @action
-  addAnimeItem(List<AnimeItem> data) => mainAnimeList.addAll(data);
+  addAnimeItem(List<AnimeItem> data) => feedAnimeList.addAll(data);
 
   @action
   setAppInitialization(AppInitStatus status) => appInitStatus = status;

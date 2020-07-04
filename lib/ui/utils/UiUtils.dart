@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:anime_app/ui/component/DotSpinner.dart';
 
 class UiUtils {
-
+  
   static Widget appTitleWidget() => const TitleHeaderWidget(
       iconData: Icons.video_library,
       title: 'AnimeApp'

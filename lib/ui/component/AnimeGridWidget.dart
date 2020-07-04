@@ -56,12 +56,12 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
               delegate: SliverChildBuilderDelegate(
                     (context, index) {
                   return Tooltip(
-                    message: appStore.mainAnimeList[index].title,
+                    message: appStore.feedAnimeList[index].title,
                     child: ItemView(
                       width: itemWidth,
                       height: itemHeight,
-                      imageUrl: appStore.mainAnimeList[index].imageUrl,
-                      imageHeroTag: appStore.mainAnimeList[index].id,
+                      imageUrl: appStore.feedAnimeList[index].imageUrl,
+                      imageHeroTag: appStore.feedAnimeList[index].id,
                       onTap: () {
                         Navigator.push(
                             context,
@@ -69,10 +69,10 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                                 builder: (context) => Provider<AnimeDetailsStore>(
                                   builder: (_) => AnimeDetailsStore(
                                     Provider.of<ApplicationStore>(context),
-                                    appStore.mainAnimeList[index],
+                                    appStore.feedAnimeList[index],
                                   ),
                                   child: AnimeDetailsScreen(
-                                    heroTag: appStore.mainAnimeList[index].id,
+                                    heroTag: appStore.feedAnimeList[index].id,
                                   ),
                                 ),
                             )
@@ -81,7 +81,7 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                     ),
                   );
                 },
-                childCount: appStore.mainAnimeList.length,
+                childCount: appStore.feedAnimeList.length,
               ),
 
           );

@@ -1,10 +1,7 @@
 import 'package:anime_app/main.dart' as app;
-import 'package:flutter_driver/driver_extension.dart';
 
-void main () {
+void main() {
+  //enableFlutterDriverExtension();
 
-  enableFlutterDriverExtension();
-
-  app.main();
-
+  //app.main();
 }

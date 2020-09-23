@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
+import 'package:video_player_header/video_player_header.dart';
+// import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
 /// TODO:
@@ -38,7 +39,7 @@ class _VideoWidgetState extends State<VideoWidget>
   VideoPlayerStore videoPlayerStore;
   ApplicationStore appStore;
   AnimeStoreLocalization locale;
-  
+
   static const _DEFAULT_ASPECT_RATIO = 3 / 2;
   static const _BACKGROUND_OPACITY_LEVEL = .5;
 
@@ -90,9 +91,8 @@ class _VideoWidgetState extends State<VideoWidget>
     if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.DOWNLOADING)
       videoPlayerStore.cancelEpisodeLoading();
 
-    if (videoPlayerStore.isPlaying)
-      await videoPlayerStore.controller.pause();
-      
+    if (videoPlayerStore.isPlaying) await videoPlayerStore.controller.pause();
+
     await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
@@ -173,7 +173,9 @@ class _VideoWidgetState extends State<VideoWidget>
                 alignment: Alignment.center,
                 child: AspectRatio(
                   aspectRatio: _DEFAULT_ASPECT_RATIO,
-                  child: VideoPlayer(videoPlayerStore.controller),
+                  child: VideoPlayer(
+                    videoPlayerStore.controller,
+                  ),
                 ),
               ),
 
@@ -181,18 +183,19 @@ class _VideoWidgetState extends State<VideoWidget>
 
               Positioned.fill(
                 child: AnimatedBuilder(
-                animation: animationController,
-                builder: (_, __){
-                  return FadeTransition(
-                    opacity: opacityAnimation,
-                    child: Container(
-                      color: Colors.black.withOpacity( _BACKGROUND_OPACITY_LEVEL ),
-                    ),
-                  );
-                },
+                  animation: animationController,
+                  builder: (_, __) {
+                    return FadeTransition(
+                      opacity: opacityAnimation,
+                      child: Container(
+                        color:
+                            Colors.black.withOpacity(_BACKGROUND_OPACITY_LEVEL),
+                      ),
+                    );
+                  },
+                ),
               ),
-              ),
-              
+
               AnimatedBuilder(
                 animation: animationController,
                 builder: (_, __) => SlideTransition(
@@ -221,12 +224,12 @@ class _VideoWidgetState extends State<VideoWidget>
 
   Widget buildLoaderWidget() => Center(
         child: LoadingVideoWidget(
-          onCancel:() async {
+          onCancel: () async {
             await _prepareToLeave();
             Navigator.pop(context);
-          } ,
+          },
         ),
-    );
+      );
 
   Widget buildTopBarWidget(final Size size) => Align(
         alignment: Alignment.topCenter,

@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:anime_app/ui/theme/ColorValues.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
+// import 'package:flutter_advanced_networkimage/provider.dart';
 
 typedef OnTap = void Function();
 
@@ -31,49 +32,44 @@ class ItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final stack = Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-
-            (imageUrl == null)
-                ?
-                  Align(
-                   alignment: Alignment.center,
-                   child: child,
-                  )
-                :
-
-            Positioned.fill(
-              child: Hero(
-                tag: this.imageHeroTag ?? UniqueKey().toString(),
-                child: Image(
+      fit: StackFit.expand,
+      children: <Widget>[
+        (imageUrl == null)
+            ? Align(
+                alignment: Alignment.center,
+                child: child,
+              )
+            : Positioned.fill(
+                child: Hero(
+                  tag: this.imageHeroTag ?? UniqueKey().toString(),
+                  child: Image(
                     fit: BoxFit.fill,
-                    image: AdvancedNetworkImage(
-                      imageUrl,
-                      useDiskCache: true,
-                      retryLimit: 4,
-                    ),
+                    image: CachedNetworkImageProvider(imageUrl),
+                    // image: AdvancedNetworkImage(
+                    //   imageUrl,
+                    //   useDiskCache: true,
+                    //   retryLimit: 4,
+                    // ),
+                  ),
                 ),
               ),
-            ),
+        Positioned.fill(
+          child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onTap,
+              )),
+        ),
+      ],
+    );
 
-            Positioned.fill(
-              child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: onTap,
-                  )
-              ),
-            ),
-          ],
-        );
-
-    final containerChild = (tooltip == null) ? stack :
-      Tooltip(
-        message: tooltip,
-        child: stack,
-      );    
+    final containerChild = (tooltip == null)
+        ? stack
+        : Tooltip(
+            message: tooltip,
+            child: stack,
+          );
     return ClipRRect(
       borderRadius: BorderRadius.circular(this.borderRadius ?? .0),
       clipBehavior: Clip.antiAlias,
@@ -83,10 +79,8 @@ class ItemView extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor ?? secondaryColor,
         ),
-
         child: containerChild,
       ),
     );
   }
-  
 }

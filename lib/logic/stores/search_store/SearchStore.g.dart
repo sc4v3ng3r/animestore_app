@@ -6,65 +6,60 @@ part of 'SearchStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SearchStore on _SearchStore, Store {
   final _$isLoadingMoreAtom = Atom(name: '_SearchStore.isLoadingMore');
 
   @override
   bool get isLoadingMore {
-    _$isLoadingMoreAtom.context.enforceReadPolicy(_$isLoadingMoreAtom);
-    _$isLoadingMoreAtom.reportObserved();
+    _$isLoadingMoreAtom.reportRead();
     return super.isLoadingMore;
   }
 
   @override
   set isLoadingMore(bool value) {
-    _$isLoadingMoreAtom.context.conditionallyRunInAction(() {
+    _$isLoadingMoreAtom.reportWrite(value, super.isLoadingMore, () {
       super.isLoadingMore = value;
-      _$isLoadingMoreAtom.reportChanged();
-    }, _$isLoadingMoreAtom, name: '${_$isLoadingMoreAtom.name}_set');
+    });
   }
 
   final _$searchItemListAtom = Atom(name: '_SearchStore.searchItemList');
 
   @override
   ObservableList<AnimeItem> get searchItemList {
-    _$searchItemListAtom.context.enforceReadPolicy(_$searchItemListAtom);
-    _$searchItemListAtom.reportObserved();
+    _$searchItemListAtom.reportRead();
     return super.searchItemList;
   }
 
   @override
   set searchItemList(ObservableList<AnimeItem> value) {
-    _$searchItemListAtom.context.conditionallyRunInAction(() {
+    _$searchItemListAtom.reportWrite(value, super.searchItemList, () {
       super.searchItemList = value;
-      _$searchItemListAtom.reportChanged();
-    }, _$searchItemListAtom, name: '${_$searchItemListAtom.name}_set');
+    });
   }
 
   final _$searchStateAtom = Atom(name: '_SearchStore.searchState');
 
   @override
   SearchState get searchState {
-    _$searchStateAtom.context.enforceReadPolicy(_$searchStateAtom);
-    _$searchStateAtom.reportObserved();
+    _$searchStateAtom.reportRead();
     return super.searchState;
   }
 
   @override
   set searchState(SearchState value) {
-    _$searchStateAtom.context.conditionallyRunInAction(() {
+    _$searchStateAtom.reportWrite(value, super.searchState, () {
       super.searchState = value;
-      _$searchStateAtom.reportChanged();
-    }, _$searchStateAtom, name: '${_$searchStateAtom.name}_set');
+    });
   }
 
   final _$_SearchStoreActionController = ActionController(name: '_SearchStore');
 
   @override
   dynamic setLoadingMore(bool flag) {
-    final _$actionInfo = _$_SearchStoreActionController.startAction();
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.setLoadingMore');
     try {
       return super.setLoadingMore(flag);
     } finally {
@@ -74,7 +69,8 @@ mixin _$SearchStore on _SearchStore, Store {
 
   @override
   dynamic addSearchItemList(List<AnimeItem> data) {
-    final _$actionInfo = _$_SearchStoreActionController.startAction();
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.addSearchItemList');
     try {
       return super.addSearchItemList(data);
     } finally {
@@ -84,7 +80,8 @@ mixin _$SearchStore on _SearchStore, Store {
 
   @override
   dynamic setSearchItems(List<AnimeItem> data) {
-    final _$actionInfo = _$_SearchStoreActionController.startAction();
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.setSearchItems');
     try {
       return super.setSearchItems(data);
     } finally {
@@ -94,7 +91,8 @@ mixin _$SearchStore on _SearchStore, Store {
 
   @override
   dynamic setSearchStatus(SearchState state) {
-    final _$actionInfo = _$_SearchStoreActionController.startAction();
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.setSearchStatus');
     try {
       return super.setSearchStatus(state);
     } finally {
@@ -104,7 +102,8 @@ mixin _$SearchStore on _SearchStore, Store {
 
   @override
   dynamic clearSearchItems() {
-    final _$actionInfo = _$_SearchStoreActionController.startAction();
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.clearSearchItems');
     try {
       return super.clearSearchItems();
     } finally {
@@ -114,11 +113,21 @@ mixin _$SearchStore on _SearchStore, Store {
 
   @override
   dynamic clearSearch() {
-    final _$actionInfo = _$_SearchStoreActionController.startAction();
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.clearSearch');
     try {
       return super.clearSearch();
     } finally {
       _$_SearchStoreActionController.endAction(_$actionInfo);
     }
+  }
+
+  @override
+  String toString() {
+    return '''
+isLoadingMore: ${isLoadingMore},
+searchItemList: ${searchItemList},
+searchState: ${searchState}
+    ''';
   }
 }

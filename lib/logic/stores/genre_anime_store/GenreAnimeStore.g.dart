@@ -6,58 +6,52 @@ part of 'GenreAnimeStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
   final _$animeItemsAtom = Atom(name: '_GenreAnimeStore.animeItems');
 
   @override
   ObservableList<AnimeItem> get animeItems {
-    _$animeItemsAtom.context.enforceReadPolicy(_$animeItemsAtom);
-    _$animeItemsAtom.reportObserved();
+    _$animeItemsAtom.reportRead();
     return super.animeItems;
   }
 
   @override
   set animeItems(ObservableList<AnimeItem> value) {
-    _$animeItemsAtom.context.conditionallyRunInAction(() {
+    _$animeItemsAtom.reportWrite(value, super.animeItems, () {
       super.animeItems = value;
-      _$animeItemsAtom.reportChanged();
-    }, _$animeItemsAtom, name: '${_$animeItemsAtom.name}_set');
+    });
   }
 
   final _$loadingStatusAtom = Atom(name: '_GenreAnimeStore.loadingStatus');
 
   @override
   LoadingStatus get loadingStatus {
-    _$loadingStatusAtom.context.enforceReadPolicy(_$loadingStatusAtom);
-    _$loadingStatusAtom.reportObserved();
+    _$loadingStatusAtom.reportRead();
     return super.loadingStatus;
   }
 
   @override
   set loadingStatus(LoadingStatus value) {
-    _$loadingStatusAtom.context.conditionallyRunInAction(() {
+    _$loadingStatusAtom.reportWrite(value, super.loadingStatus, () {
       super.loadingStatus = value;
-      _$loadingStatusAtom.reportChanged();
-    }, _$loadingStatusAtom, name: '${_$loadingStatusAtom.name}_set');
+    });
   }
 
   final _$isLoadingMoreAtom = Atom(name: '_GenreAnimeStore.isLoadingMore');
 
   @override
   bool get isLoadingMore {
-    _$isLoadingMoreAtom.context.enforceReadPolicy(_$isLoadingMoreAtom);
-    _$isLoadingMoreAtom.reportObserved();
+    _$isLoadingMoreAtom.reportRead();
     return super.isLoadingMore;
   }
 
   @override
   set isLoadingMore(bool value) {
-    _$isLoadingMoreAtom.context.conditionallyRunInAction(() {
+    _$isLoadingMoreAtom.reportWrite(value, super.isLoadingMore, () {
       super.isLoadingMore = value;
-      _$isLoadingMoreAtom.reportChanged();
-    }, _$isLoadingMoreAtom, name: '${_$isLoadingMoreAtom.name}_set');
+    });
   }
 
   final _$_GenreAnimeStoreActionController =
@@ -65,7 +59,8 @@ mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
 
   @override
   dynamic setIsLoadingMore(bool flag) {
-    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction();
+    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction(
+        name: '_GenreAnimeStore.setIsLoadingMore');
     try {
       return super.setIsLoadingMore(flag);
     } finally {
@@ -75,7 +70,8 @@ mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
 
   @override
   dynamic setLoadingStatus(LoadingStatus data) {
-    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction();
+    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction(
+        name: '_GenreAnimeStore.setLoadingStatus');
     try {
       return super.setLoadingStatus(data);
     } finally {
@@ -85,7 +81,8 @@ mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
 
   @override
   dynamic setAnimesItem(List<AnimeItem> data) {
-    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction();
+    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction(
+        name: '_GenreAnimeStore.setAnimesItem');
     try {
       return super.setAnimesItem(data);
     } finally {
@@ -95,11 +92,21 @@ mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
 
   @override
   dynamic addAnimeItems(List<AnimeItem> data) {
-    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction();
+    final _$actionInfo = _$_GenreAnimeStoreActionController.startAction(
+        name: '_GenreAnimeStore.addAnimeItems');
     try {
       return super.addAnimeItems(data);
     } finally {
       _$_GenreAnimeStoreActionController.endAction(_$actionInfo);
     }
+  }
+
+  @override
+  String toString() {
+    return '''
+animeItems: ${animeItems},
+loadingStatus: ${loadingStatus},
+isLoadingMore: ${isLoadingMore}
+    ''';
   }
 }

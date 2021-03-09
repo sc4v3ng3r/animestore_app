@@ -51,18 +51,20 @@ dependencies:
   #path: ^1.6.4
   bot_toast: ^4.0.0+1
   flutter_svg: ^0.19.0
-  mobx: '^0.3.9+3'
-  flutter_mobx: '^0.3.3+3'
-  mobx_codegen: '^0.3.10+1'
-  build_runner: ^1.7.2
+  mobx: ^1.2.1+4
+  flutter_mobx: ^1.1.0+2
+  #mobx: '^0.3.9+3'
+  #flutter_mobx: '^0.3.3+3'
+  #mobx_codegen: '^0.3.10+1'
+  #build_runner: ^1.7.2
   flutter_localizations:
     sdk: flutter
-  #flutter_cupertino_localizations: ^1.0.1
-  #intl_translation: ^0.17.7
   intl: ^0.17.0
   package_info: ^2.0.0
 
 dev_dependencies:
+  mobx_codegen: ^1.1.2
+  build_runner: ^1.11.5
   flutter_test:
     sdk: flutter
   test: any

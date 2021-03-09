@@ -1,4 +1,4 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class AnimeStoreAcceptDialog extends StatelessWidget {
       borderRadius: BorderRadius.circular(24.0),
     );
 
-    final locale = AnimeStoreLocalization.of(context);
+    final locale = S.of(context);
 
     return AlertDialog(
       backgroundColor: primaryColor,
@@ -36,19 +36,16 @@ class AnimeStoreAcceptDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          
           Text(
             bodyMessage,
             style: TextStyle(color: Colors.white),
           ),
-
           Container(
             margin: EdgeInsets.only(top: 24.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                
                 RaisedButton(
                   shape: defaultShape,
                   onPressed: onCancel,
@@ -56,7 +53,6 @@ class AnimeStoreAcceptDialog extends StatelessWidget {
                   child: Text(locale.cancel),
                   color: accentColor,
                 ),
-                
                 FlatButton(
                   onPressed: onConfirm,
                   shape: defaultShape,

@@ -2,10 +2,11 @@ import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
+import 'package:video_player/video_player.dart';
 // import 'package:video_player/video_player.dart';
 import 'dart:async' as NativeAsync;
 
-import 'package:video_player_header/video_player_header.dart';
+// import 'package:video_player_header/video_player_header.dart';
 
 part 'VideoPlayerStore.g.dart';
 
@@ -83,7 +84,7 @@ abstract class _VideoPlayerStore with Store {
         print('The url will be ${currentEpisode.streamingUrl}');
         controller = VideoPlayerController.network(
           currentEpisode.streamingUrl,
-          headers: {'Referer': currentEpisode.referer},
+          // headers: {'Referer': currentEpisode.referer},
           // old http headers of custom plugin version hosted in sc4v3ng3r github repository
           // httpHeaders: {'Referer': currentEpisode.referer}
         );

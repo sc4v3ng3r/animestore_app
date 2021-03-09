@@ -1,4 +1,4 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
@@ -32,7 +32,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   static const _RELATED_TAG = 'RELATED_TAG';
   ApplicationStore applicationStore;
   AnimeDetailsStore detailsStore;
-  AnimeStoreLocalization locale;
+  S locale;
   AnimationController animationController;
   Animation slideAnimation;
   Animation scaleAnimation;
@@ -75,7 +75,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
-    locale = AnimeStoreLocalization.of(context);
+    locale = S.of(context);
 
     final size = MediaQuery.of(context).size;
     final expandedHeight = size.width * .9;
@@ -488,7 +488,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                               CupertinoPageRoute(
                                 builder: (context) =>
                                     Provider<AnimeDetailsStore>(
-                                  builder: (_) => AnimeDetailsStore(
+                                  create: (_) => AnimeDetailsStore(
                                       applicationStore, anime,
                                       shouldLoadSuggestions: false),
                                   child: AnimeDetailsScreen(

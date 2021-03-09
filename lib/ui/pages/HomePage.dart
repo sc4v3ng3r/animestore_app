@@ -1,4 +1,4 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    final AnimeStoreLocalization locale = AnimeStoreLocalization.of(context);
+    final S locale = S.of(context);
 
     final ScrollController topAnimesController =
         ScrollController(initialScrollOffset: appStore.topAnimeOffset);
@@ -170,10 +170,12 @@ class _HomePageState extends State<HomePage>
               heroTag: HeroTags.TAG_MY_LIST,
               iconColor: accentColor,
               iconData: Icons.video_library,
-              onTap:  () => Navigator.push(context, 
+              onTap: () => Navigator.push(
+                context,
                 CupertinoPageRoute(
-                  builder: (context) => MyAnimeListPage(heroTag: HeroTags.TAG_MY_LIST,)
-                ),
+                    builder: (context) => MyAnimeListPage(
+                          heroTag: HeroTags.TAG_MY_LIST,
+                        )),
               ),
             ),
     );
@@ -257,7 +259,7 @@ class _HomePageState extends State<HomePage>
   }
 
   SliverPadding _createHeaderSection(BuildContext context,
-      {@required AnimeStoreLocalization locale,
+      {@required S locale,
       IconData iconData,
       Color iconColor,
       String title,
@@ -480,7 +482,7 @@ class _HomePageState extends State<HomePage>
           context,
           CupertinoPageRoute(
             builder: (context) => Provider<AnimeDetailsStore>(
-              builder: (_) => AnimeDetailsStore(appStore, anime),
+              create: (_) => AnimeDetailsStore(appStore, anime),
               child: AnimeDetailsScreen(
                 heroTag: heroTag,
               ),
@@ -500,10 +502,10 @@ class _HomePageState extends State<HomePage>
           boxFit: BoxFit.fill,
           dotSize: 6.0,
           overlayShadow: true,
-          
           images: List.generate(
-            (appStore.dayReleaseList.length >= 12) ? 12 :
-            appStore.dayReleaseList.length, (index) {
+              (appStore.dayReleaseList.length >= 12)
+                  ? 12
+                  : appStore.dayReleaseList.length, (index) {
             var heroTag =
                 '${appStore.dayReleaseList[index].id}$HERO_TAG_CAROUSEL';
             return ItemView(

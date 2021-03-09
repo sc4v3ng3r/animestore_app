@@ -17,14 +17,13 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
   final String heroTag;
   final List<Widget> actions;
 
-  const DefaultAnimeItemGridPage({Key key,
+  const DefaultAnimeItemGridPage({
+    Key key,
     @required this.gridItems,
     @required this.title,
     this.actions,
     this.heroTag,
-  }
-    ) : super(key: key);
-
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,43 +37,40 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
-
           AnimeStoreHeroAppBar(
             title: title,
             heroTag: heroTag,
             actions: actions,
           ),
-
           SliverGridItemView(
             childAspectRatio: (itemWidth / itemHeight),
             delegate: SliverChildBuilderDelegate(
-                (context, index){
-                  return  Tooltip(
-                    message: gridItems[index].title,
-                    child: ItemView(
-                      width: itemWidth,
-                      height: itemHeight,
-                      imageUrl: gridItems[index].imageUrl,
-                      imageHeroTag: gridItems[index].id,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => Provider<AnimeDetailsStore>(
-                                builder: (_) => AnimeDetailsStore(
-                                  Provider.of<ApplicationStore>(context),
-                                  gridItems[index],
-                                ),
-                                child: AnimeDetailsScreen(
-                                  heroTag: gridItems[index].id,
-                                ),
+              (context, index) {
+                return Tooltip(
+                  message: gridItems[index].title,
+                  child: ItemView(
+                    width: itemWidth,
+                    height: itemHeight,
+                    imageUrl: gridItems[index].imageUrl,
+                    imageHeroTag: gridItems[index].id,
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Provider<AnimeDetailsStore>(
+                              create: (_) => AnimeDetailsStore(
+                                Provider.of<ApplicationStore>(context),
+                                gridItems[index],
                               ),
-                            )
-                        );
-                      },
-                    ),
-                  );
-                },
+                              child: AnimeDetailsScreen(
+                                heroTag: gridItems[index].id,
+                              ),
+                            ),
+                          ));
+                    },
+                  ),
+                );
+              },
               childCount: gridItems.length,
             ),
           )

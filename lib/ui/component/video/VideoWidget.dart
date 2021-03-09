@@ -1,4 +1,4 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
 import 'package:anime_app/ui/component/video/LoadingVideoWidget.dart';
@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player_header/video_player_header.dart';
+import 'package:video_player/video_player.dart';
+// import 'package:video_player_header/video_player_header.dart';
 // import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -38,7 +39,7 @@ class _VideoWidgetState extends State<VideoWidget>
 
   VideoPlayerStore videoPlayerStore;
   ApplicationStore appStore;
-  AnimeStoreLocalization locale;
+  S locale;
 
   static const _DEFAULT_ASPECT_RATIO = 3 / 2;
   static const _BACKGROUND_OPACITY_LEVEL = .5;
@@ -100,7 +101,7 @@ class _VideoWidgetState extends State<VideoWidget>
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    locale = AnimeStoreLocalization.of(context);
+    locale = S.of(context);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -244,8 +245,7 @@ class _VideoWidgetState extends State<VideoWidget>
             leading: Container(),
             actions: <Widget>[
               PopupMenuButton<_MenuOption>(
-                itemBuilder: (context) =>
-                    popupMenuItems(AnimeStoreLocalization.of(context)),
+                itemBuilder: (context) => popupMenuItems(S.of(context)),
                 color: Colors.transparent,
                 elevation: .0,
                 offset: Offset(100, 40),
@@ -406,8 +406,7 @@ class _VideoWidgetState extends State<VideoWidget>
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  List<PopupMenuItem<_MenuOption>> popupMenuItems(
-      AnimeStoreLocalization locale) {
+  List<PopupMenuItem<_MenuOption>> popupMenuItems(S locale) {
     var widgetList = <PopupMenuItem<_MenuOption>>[];
 
     if (videoPlayerStore.currentEpisode.previousEpisodeId.isNotEmpty)

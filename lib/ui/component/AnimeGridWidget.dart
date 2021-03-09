@@ -25,7 +25,8 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
   void initState() {
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
-    _controller = ScrollController(initialScrollOffset: appStore.mainAnimeListOffset);
+    _controller =
+        ScrollController(initialScrollOffset: appStore.mainAnimeListOffset);
     _controller.addListener(_listener);
   }
 
@@ -34,7 +35,8 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
 
     if (_controller.position.pixels >
         (_controller.position.maxScrollExtent -
-            (_controller.position.maxScrollExtent / 4))) await appStore.loadAnimeList();
+            (_controller.position.maxScrollExtent / 4)))
+      await appStore.loadAnimeList();
   }
 
   @override
@@ -49,60 +51,58 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
       controller: _controller,
       physics: BouncingScrollPhysics(),
       slivers: <Widget>[
-       // appBar,
+        // appBar,
         Observer(builder: (context) {
           return SliverGridItemView(
-              childAspectRatio: (itemWidth / itemHeight),
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                  return Tooltip(
-                    message: appStore.feedAnimeList[index].title,
-                    child: ItemView(
-                      width: itemWidth,
-                      height: itemHeight,
-                      imageUrl: appStore.feedAnimeList[index].imageUrl,
-                      imageHeroTag: appStore.feedAnimeList[index].id,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => Provider<AnimeDetailsStore>(
-                                  builder: (_) => AnimeDetailsStore(
-                                    Provider.of<ApplicationStore>(context),
-                                    appStore.feedAnimeList[index],
-                                  ),
-                                  child: AnimeDetailsScreen(
-                                    heroTag: appStore.feedAnimeList[index].id,
-                                  ),
-                                ),
-                            )
-                        );
-                      },
-                    ),
-                  );
-                },
-                childCount: appStore.feedAnimeList.length,
-              ),
-
+            childAspectRatio: (itemWidth / itemHeight),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return Tooltip(
+                  message: appStore.feedAnimeList[index].title,
+                  child: ItemView(
+                    width: itemWidth,
+                    height: itemHeight,
+                    imageUrl: appStore.feedAnimeList[index].imageUrl,
+                    imageHeroTag: appStore.feedAnimeList[index].id,
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Provider<AnimeDetailsStore>(
+                              create: (_) => AnimeDetailsStore(
+                                Provider.of<ApplicationStore>(context),
+                                appStore.feedAnimeList[index],
+                              ),
+                              child: AnimeDetailsScreen(
+                                heroTag: appStore.feedAnimeList[index].id,
+                              ),
+                            ),
+                          ));
+                    },
+                  ),
+                );
+              },
+              childCount: appStore.feedAnimeList.length,
+            ),
           );
         }),
 
         SliverToBoxAdapter(
-          child: Observer( builder: (_) =>
-          (appStore.animeListLoadingStatus == LoadingStatus.LOADING) ?
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.all(8.0),
-                  child: UiUtils.centredDotLoader()),
-              ],
-            ) : Container(),
+          child: Observer(
+            builder: (_) =>
+                (appStore.animeListLoadingStatus == LoadingStatus.LOADING)
+                    ? Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                              margin: EdgeInsets.all(8.0),
+                              child: UiUtils.centredDotLoader()),
+                        ],
+                      )
+                    : Container(),
           ),
         ),
-
       ],
     );
   }

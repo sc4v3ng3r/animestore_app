@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="PLATFORM" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="12.0.1" />
+        <option name="modules">
+          <set>
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-2.0.0/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.27/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-0.0.1+2/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+8/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-0.0.5/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.0.0+2/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/video_player-2.1.1/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/video_player_web-2.0.0/android" />
+            <option value="$USER_HOME$/Documents/dev/flutter/.pub-cache/hosted/pub.dartlang.org/wakelock-0.1.4+2/android" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+        <option name="useQualifiedModuleNames" value="true" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

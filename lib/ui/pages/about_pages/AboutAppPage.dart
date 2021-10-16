@@ -25,11 +25,11 @@ class AboutAppPage extends StatelessWidget {
           ),
           ListTile(
             title: Text(locale.versionTitle),
-            subtitle: Text(info.version ?? ''),
+            subtitle: Text(info.version),
           ),
           ListTile(
             title: Text(locale.buildNumberTitle),
-            subtitle: Text(info.buildNumber ?? ''),
+            subtitle: Text(info.buildNumber),
           ),
         ],
       ),

@@ -19,9 +19,9 @@ import '../theme/ColorValues.dart';
 import '../utils/UiUtils.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
-  final String heroTag;
+  final String? heroTag;
 
-  const AnimeDetailsScreen({Key key, this.heroTag}) : super(key: key);
+  const AnimeDetailsScreen({Key? key, this.heroTag}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AnimeDetailsScreen();
@@ -30,12 +30,12 @@ class AnimeDetailsScreen extends StatefulWidget {
 class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     with SingleTickerProviderStateMixin {
   static const _RELATED_TAG = 'RELATED_TAG';
-  ApplicationStore applicationStore;
-  AnimeDetailsStore detailsStore;
-  S locale;
-  AnimationController animationController;
-  Animation slideAnimation;
-  Animation scaleAnimation;
+  late ApplicationStore applicationStore;
+  late AnimeDetailsStore detailsStore;
+  late S locale;
+  late AnimationController animationController;
+  late Animation<Offset> slideAnimation;
+  late Animation scaleAnimation;
   final ScrollController listController = ScrollController();
 
   static final _defaultSectionStyle = TextStyle(
@@ -166,8 +166,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                               ),
                             ],
                           ),
-                          offsetValue:
-                              MediaQuery.of(context).padding.bottom ?? .0,
+                          offsetValue: MediaQuery.of(context).padding.bottom,
                         ),
                       );
                       break;
@@ -213,9 +212,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   }
 
   Widget _createWithSlideTransition(
-      {@required Widget child,
-      @required Animation<Offset> animation,
-      @required AnimationController controller}) {
+      {required Widget child,
+      required Animation<Offset> animation,
+      required AnimationController controller}) {
     return AnimatedBuilder(
       animation: controller,
       builder: (_, __) => SlideTransition(
@@ -270,7 +269,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                                   size: 34.0,
                                   color: (isWatched)
                                       ? accentColor
-                                      : Colors.grey[300].withOpacity(.7),
+                                      : Colors.grey[300]?.withOpacity(.7),
                                 ),
                                 title: Text(
                                   detailsStore
@@ -403,7 +402,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
         ),
       );
 
-  Widget buildResumeSection(String resume) => Column(
+  Widget buildResumeSection(String? resume) => Column(
         children: <Widget>[
           Text(
             locale.resume,
@@ -539,7 +538,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     );
   }
 
-  Widget _buildUnavaiableWidget(String text, {IconData iconData}) {
+  Widget _buildUnavaiableWidget(String text, {IconData? iconData}) {
     return Container(
       margin: EdgeInsets.only(top: 16.0),
       child: Column(
@@ -600,17 +599,15 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar, {this.offsetValue});
+  _SliverAppBarDelegate(this._tabBar, {this.offsetValue = .0});
 
   final TabBar _tabBar;
   final double offsetValue;
   static const _PADDING = 32.0;
   @override
-  double get minExtent =>
-      _tabBar.preferredSize.height + _PADDING + (offsetValue ?? .0);
+  double get minExtent => _tabBar.preferredSize.height + _PADDING + offsetValue;
   @override
-  double get maxExtent =>
-      _tabBar.preferredSize.height + _PADDING + (offsetValue ?? .0);
+  double get maxExtent => _tabBar.preferredSize.height + _PADDING + offsetValue;
 
   @override
   Widget build(

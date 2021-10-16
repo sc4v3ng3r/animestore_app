@@ -37,7 +37,7 @@ import 'package:provider/provider.dart';
 //onTap: () {},
 //);
 class RecentEpisodeListPage extends StatelessWidget {
-  const RecentEpisodeListPage({Key key}) : super(key: key);
+  const RecentEpisodeListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
 import '../utils/UiUtils.dart';
 
 class AnimeGridWidget extends StatefulWidget {
@@ -17,9 +16,9 @@ class AnimeGridWidget extends StatefulWidget {
 }
 
 class _AnimeGridWidgetState extends State<AnimeGridWidget> {
-  ApplicationStore appStore;
+  late ApplicationStore appStore;
 
-  ScrollController _controller;
+  late ScrollController _controller;
 
   @override
   void initState() {

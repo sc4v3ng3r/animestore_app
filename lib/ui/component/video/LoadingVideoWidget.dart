@@ -3,9 +3,9 @@ import 'package:anime_app/ui/component/button/RoundedRaisedButton.dart';
 import 'package:flutter/material.dart';
 
 class LoadingVideoWidget extends StatelessWidget {
-  final VoidCallback onCancel;
+  final VoidCallback? onCancel;
 
-  const LoadingVideoWidget({Key key, this.onCancel}) : super(key: key);
+  const LoadingVideoWidget({Key? key, this.onCancel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

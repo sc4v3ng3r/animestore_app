@@ -64,11 +64,11 @@ class AboutListWidget extends StatelessWidget {
         color: Colors.white,
       );
   Widget _buildItem(
-          {@required VoidCallback onTap,
-          @required String title,
-          String subtitle,
-          @required Widget icon,
-          Widget trailing}) =>
+          {required VoidCallback onTap,
+          required String title,
+          String? subtitle,
+          required Widget icon,
+          Widget? trailing}) =>
       Container(
         child: ListTile(
           onTap: onTap,

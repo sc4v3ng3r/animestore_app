@@ -12,15 +12,15 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  ApplicationStore appStore;
-  AnimationController controller;
-  AnimationController dotController;
+  late ApplicationStore appStore;
+  late AnimationController controller;
+  late AnimationController dotController;
 
-  Animation transformAnimation;
-  Animation textTransition;
-  Animation iconTransition;
-  Animation borderAnimation;
-  Animation loaderTransition;
+  late Animation<double> transformAnimation;
+  late Animation<Offset> textTransition;
+  late Animation<Offset> iconTransition;
+  late Animation<double> borderAnimation;
+  late Animation<Offset> loaderTransition;
 
   @override
   void dispose() {
@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
     controller.forward().then((_) {
       dotController.forward();
       appStore.initApp();
-    }  );
+    });
   }
 
   @override
@@ -127,31 +127,26 @@ class _SplashScreenState extends State<SplashScreen>
                     builder: (_, __) => SlideTransition(
                       position: textTransition,
                       child: Text(
-                            'Anime Store',
-                            style: TextStyle(
-                                color: textPrimaryColor,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32
-                            ),
-                          ),
+                        'Anime Store',
+                        style: TextStyle(
+                            color: textPrimaryColor,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32),
+                      ),
                     ),
                   ),
                 ),
-              
                 AnimatedBuilder(
                   animation: dotController,
-                  builder: (context, child){
+                  builder: (context, child) {
                     return SlideTransition(
                       position: loaderTransition,
                       child: DotSpinner(),
-
-
                     );
                   },
                 ),
               ],
-              
             ),
           ),
         ),

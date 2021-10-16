@@ -17,8 +17,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   MainScreenNavigation currentNav = MainScreenNavigation.HOME;
-  ApplicationStore appStore;
-  S locale;
+  late ApplicationStore appStore;
+  late S locale;
 
   @override
   void initState() {

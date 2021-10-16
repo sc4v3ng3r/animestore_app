@@ -12,10 +12,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
 class MyAnimeListPage extends StatelessWidget {
-  final String heroTag;
+  final String? heroTag;
 
   const MyAnimeListPage({
-    Key key,
+    Key? key,
     this.heroTag,
   }) : super(key: key);
 

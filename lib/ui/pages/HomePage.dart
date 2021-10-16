@@ -16,7 +16,7 @@ import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anime_app/ui/utils/HeroTags.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
-import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -25,7 +25,7 @@ import 'package:random_color/random_color.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -39,10 +39,10 @@ class _HomePageState extends State<HomePage>
     fontSize: 18,
   );
 
-  ApplicationStore appStore;
-  AnimationController controller;
-  Animation carouselAnimation;
-  Animation headerAnimation;
+  late ApplicationStore appStore;
+  late AnimationController controller;
+  late Animation<Offset> carouselAnimation;
+  late Animation<Offset> headerAnimation;
   final GlobalKey<RefreshIndicatorState> refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
 
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage>
   @override
   void dispose() {
     appStore.isFirstHomePageView = false;
-    controller?.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -259,13 +259,13 @@ class _HomePageState extends State<HomePage>
   }
 
   SliverPadding _createHeaderSection(BuildContext context,
-      {@required S locale,
-      IconData iconData,
-      Color iconColor,
-      String title,
+      {required S locale,
+      IconData? iconData,
+      Color? iconColor,
+      required String title,
       bool viewMore = true,
-      String heroTag,
-      Function onTap}) {
+      String? heroTag,
+      VoidCallback? onTap}) {
     final layout = Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -306,10 +306,10 @@ class _HomePageState extends State<HomePage>
   }
 
   SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore,
-      {List<AnimeItem> data,
-      double width,
-      String tag,
-      ScrollController controller}) {
+      {required List<AnimeItem> data,
+      required double width,
+      String? tag,
+      required ScrollController controller}) {
     final listWidget = ListView.builder(
       controller: controller,
       itemBuilder: (context, index) {
@@ -347,7 +347,9 @@ class _HomePageState extends State<HomePage>
   }
 
   SliverToBoxAdapter _createHorizontaCustomAnimelList(ApplicationStore appStore,
-          {double width, String tag, ScrollController controller}) =>
+          {required double width,
+          String? tag,
+          required ScrollController controller}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width * 1.4,
@@ -384,10 +386,9 @@ class _HomePageState extends State<HomePage>
       );
 
   SliverToBoxAdapter _createHorizontalGenreList(
-          {List<String> data,
-          double width,
-          String tag,
-          ScrollController controller}) =>
+          {required List<String> data,
+          required double width,
+          required ScrollController controller}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width * .9,
@@ -446,10 +447,7 @@ class _HomePageState extends State<HomePage>
       );
 
   SliverToBoxAdapter _createHorizontalEpisodeList(BuildContext context,
-          {List<EpisodeItem> data,
-          double width,
-          String tag,
-          ScrollController controller}) =>
+          {required List<EpisodeItem> data, required double width}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width + 24,
@@ -490,10 +488,10 @@ class _HomePageState extends State<HomePage>
           ));
 
   Widget _createDayReleaseCarousel(
-          {BuildContext context,
-          ApplicationStore appStore,
-          double width,
-          height}) =>
+          {required BuildContext context,
+          required ApplicationStore appStore,
+          required double width,
+          required double height}) =>
       Observer(builder: (_) {
         return Carousel(
           showIndicator: true,
@@ -524,7 +522,7 @@ class _HomePageState extends State<HomePage>
 
   void _openAnimeItemGridPage(
       BuildContext context, List<AnimeItem> data, String title, String heroTag,
-      {List<Widget> actions}) {
+      {List<Widget>? actions}) {
     Navigator.push(
         context,
         CupertinoPageRoute(

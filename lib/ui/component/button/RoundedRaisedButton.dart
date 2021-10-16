@@ -2,14 +2,18 @@ import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 
 class RoundedRaisedButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String label;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final double radius;
-  final Icon icon;
+  final Icon? icon;
 
   const RoundedRaisedButton(this.label,
-      {Key key, this.onPressed, this.backgroundColor, this.radius, this.icon})
+      {Key? key,
+      this.onPressed,
+      this.backgroundColor,
+      this.radius = 25,
+      this.icon})
       : super(key: key);
 
   @override
@@ -22,8 +26,8 @@ class RoundedRaisedButton extends StatelessWidget {
         style: TextStyle(color: textPrimaryColor),
       ),
       color: backgroundColor ?? accentColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius ?? 25)),
+      shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
     );
   }
 }

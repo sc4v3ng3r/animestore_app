@@ -14,7 +14,7 @@ import 'package:anime_app/ui/utils/UiUtils.dart';
 class GenreAnimePage extends StatefulWidget {
   final String genreName;
 
-  const GenreAnimePage({Key key, @required this.genreName}) : super(key: key);
+  const GenreAnimePage({Key? key, required this.genreName}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _GenreAnimePageState();
@@ -22,8 +22,8 @@ class GenreAnimePage extends StatefulWidget {
 
 class _GenreAnimePageState extends State<GenreAnimePage> {
   final ScrollController _controller = ScrollController();
-  ApplicationStore appStore;
-  GenreAnimeStore store;
+  late ApplicationStore appStore;
+  late GenreAnimeStore store;
 
   @override
   void initState() {
@@ -38,7 +38,6 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
   void dispose() {
     super.dispose();
     _controller.removeListener(_listener);
-    store = null;
   }
 
   void _listener() async {

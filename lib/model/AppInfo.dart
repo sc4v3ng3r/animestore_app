@@ -3,5 +3,8 @@ class AppInfo {
   final String appName;
   final String buildNumber;
 
-  AppInfo({this.version, this.appName, this.buildNumber});
+  AppInfo(
+      {required this.version,
+      required this.appName,
+      required this.buildNumber});
 }

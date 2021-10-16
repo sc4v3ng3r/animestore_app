@@ -179,7 +179,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
 
   @override
   dynamic addWatchedEpisode(String episodeId,
-      {String episodeTitle, int viewedAt}) {
+      {String? episodeTitle, int? viewedAt}) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.addWatchedEpisode');
     try {

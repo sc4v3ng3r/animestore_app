@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 class AnimeStoreAcceptDialog extends StatelessWidget {
   final String title;
-  final VoidCallback onConfirm;
-  final VoidCallback onCancel;
+  final VoidCallback? onConfirm;
+  final VoidCallback? onCancel;
   final String bodyMessage;
 
   const AnimeStoreAcceptDialog({
-    Key key,
-    this.title,
-    this.bodyMessage,
+    Key? key,
+    required this.title,
+    required this.bodyMessage,
     this.onConfirm,
     this.onCancel,
   }) : super(key: key);

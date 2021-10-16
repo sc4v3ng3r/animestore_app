@@ -2,9 +2,9 @@ import 'package:anime_app/database/DatabaseProvider.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/model/AppInfo.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
+import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 import 'package:package_info/package_info.dart';
-
 import 'package:anime_app/model/EpisodeWatched.dart';
 
 part 'ApplicationStore.g.dart';
@@ -12,11 +12,11 @@ part 'ApplicationStore.g.dart';
 class ApplicationStore = _ApplicationStore with _$ApplicationStore;
 
 abstract class _ApplicationStore with Store {
-  final AniTubeApi api = AniTubeApi();
+  final AniTubeApi api = AniTubeApi(Dio());
   final DatabaseProvider databaseProvider = DatabaseProvider();
   static const DEFAULT_PAGES_LOADING = 4;
   static const TIMEOUT = 10000;
-  AppInfo _appInfo;
+  late AppInfo _appInfo;
 
   double topAnimeOffset = 0,
       myListOffset = 0,
@@ -70,8 +70,8 @@ abstract class _ApplicationStore with Store {
   @action
   addWatchedEpisode(
     String episodeId, {
-    String episodeTitle,
-    int viewedAt,
+    String? episodeTitle,
+    int? viewedAt,
   }) {
     if (!watchedEpisodeMap.containsKey(episodeId)) {
       var item = EpisodeWatched(
@@ -150,9 +150,8 @@ abstract class _ApplicationStore with Store {
     }
   }
 
-  
   bool isEpisodeWatched(String episodeId) =>
-      watchedEpisodeMap.containsKey(episodeId) ?? false;
+      watchedEpisodeMap.containsKey(episodeId);
 
   void initApp() async {
     if (appInitStatus == AppInitStatus.INITIALIZED) return;
@@ -219,8 +218,12 @@ abstract class _ApplicationStore with Store {
     setAnimeListLoadingStatus(LoadingStatus.DONE);
   }
 
-  Future<AnimeDetails> getAnimeDetails(String id,) =>
-      api.getAnimeDetails(id, timeout: TIMEOUT);
+  Future<AnimeDetails> getAnimeDetails(
+    String id,
+  ) =>
+      api.getAnimeDetails(
+        id,
+      );
 
   Future<void> refreshHome() async {
     await getHomePageInfo();
@@ -238,8 +241,8 @@ abstract class _ApplicationStore with Store {
   }
 
   Future<void> getGenresAvailable() async {
-    List<String> data = await api.getGenresAvailable(timeout: TIMEOUT);
-    setGenreList(data);
+    List<Genre> data = await api.getGenresAvailable();
+    setGenreList(data.map((e) => e.title).toList());
   }
 
   Future<void> loadMyAnimeMap() async {

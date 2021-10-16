@@ -3,16 +3,13 @@ import 'package:anime_app/ui/component/button/RoundedRaisedButton.dart';
 import 'package:flutter/material.dart';
 
 class UnavailableVideoWidget extends StatelessWidget {
-  final double width, height;
-  final VoidCallback retryCallback, onBackCallback;
+  final VoidCallback? retryCallback, onBackCallback;
 
-  const UnavailableVideoWidget(
-      {Key key,
-      this.onBackCallback,
-      this.retryCallback,
-      this.width,
-      this.height})
-      : super(key: key);
+  const UnavailableVideoWidget({
+    Key? key,
+    this.onBackCallback,
+    this.retryCallback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

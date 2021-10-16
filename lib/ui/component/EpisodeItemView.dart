@@ -1,28 +1,27 @@
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_advanced_networkimage/provider.dart';
 
 class EpisodeItemView extends StatelessWidget {
   final String title;
   final String imageUrl;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final double width, height;
-  final double borderRadius;
-  final double fontSize;
-  final Color fontColor;
-  final Color backgroundColor;
+  final double? borderRadius;
+  final double? fontSize;
+  final Color? fontColor;
+  final Color? backgroundColor;
 
   const EpisodeItemView(
-      {Key key,
-      this.title,
-      this.width,
-      this.height,
+      {Key? key,
+      required this.title,
+      required this.width,
+      required this.height,
       this.fontColor,
       this.backgroundColor,
       this.fontSize,
       this.borderRadius = 12.0,
-      this.imageUrl,
+      required this.imageUrl,
       this.onTap})
       : super(key: key);
 
@@ -51,11 +50,6 @@ class EpisodeItemView extends StatelessWidget {
                       child: Image(
                         fit: BoxFit.fill,
                         image: CachedNetworkImageProvider(imageUrl),
-                        // image: AdvancedNetworkImage(
-                        //   imageUrl,
-                        //   useDiskCache: true,
-                        //   retryLimit: 4,
-                        // ),
                       ),
                     ),
                     Align(
@@ -63,7 +57,7 @@ class EpisodeItemView extends StatelessWidget {
                       child: Icon(
                         Icons.play_circle_outline,
                         size: height / 2,
-                        color: Colors.grey[300].withOpacity(.7),
+                        color: Colors.grey[300]?.withOpacity(.7),
                       ),
                     ),
                     Positioned.fill(

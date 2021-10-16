@@ -10,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-
 import '../utils/UiUtils.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -19,11 +18,11 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  ScrollController _controller;
+  late ScrollController _controller;
   final TextEditingController _searchController =
       TextEditingController(text: '');
-  SearchStore searchStore;
-  S locale;
+  late SearchStore searchStore;
+  late S locale;
 
   @override
   void initState() {

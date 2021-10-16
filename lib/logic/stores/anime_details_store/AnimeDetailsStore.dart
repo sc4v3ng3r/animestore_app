@@ -34,7 +34,7 @@ abstract class _AnimeDetailsStore with Store {
   late AnimeDetails animeDetails;
 
   @observable
-  late ObservableList<AnimeItem> relatedAnimes = ObservableList.of([]);
+  ObservableList<AnimeItem>? relatedAnimes;
 
   _AnimeDetailsStore(this.applicationStore, this.currentAnimeItem,
       {this.shouldLoadSuggestions = true});
@@ -100,27 +100,4 @@ abstract class _AnimeDetailsStore with Store {
       setRelatedAnimes([]);
     });
   }
-
-  // Future<Uint8List> extractDominantColor(Uint8List imgData) async {
-  //   final double size = 180;
-  //   var img = Image.memory(
-  //     imgData,
-  //     width: size,
-  //     height: size,
-  //   );
-  //   final imgSize = Size(size, size);
-  //   PaletteGenerator.fromImageProvider(
-  //     img.image,
-  //     size: imgSize,
-  //     region: Offset.zero & imgSize,
-  //     maximumColorCount: 4,
-  //   ).then((generator) {
-  //     if (generator.dominantColor != null) {
-  //       print('We got dominant color!');
-  //       setBackgroundColor(generator.dominantColor.color);
-  //     }
-  //   });
-
-  //   return imgData;
-  // }
 }

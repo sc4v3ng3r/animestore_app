@@ -368,10 +368,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   }
 
   Widget animeTitleSection(String title) => Container(
-        margin: EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: .0),
+        margin:
+            const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: .0),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          //margin: EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -450,7 +450,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                   return Container(
                       margin: EdgeInsets.symmetric(vertical: 16.0),
                       child: UiUtils.centredDotLoader());
-                else if (detailsStore.relatedAnimes.isEmpty)
+                else if (detailsStore.relatedAnimes!.isEmpty)
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -471,7 +471,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                     child: ListView.builder(
                       controller: listController,
                       itemBuilder: (context, index) {
-                        var anime = detailsStore.relatedAnimes[index];
+                        var anime = detailsStore.relatedAnimes![index];
                         var heroTag = '${anime.id}$_RELATED_TAG';
                         return Padding(
                           padding: EdgeInsets.symmetric(
@@ -500,7 +500,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                         );
                       },
                       scrollDirection: Axis.horizontal,
-                      itemCount: detailsStore.relatedAnimes.length,
+                      itemCount: detailsStore.relatedAnimes!.length,
                       physics: BouncingScrollPhysics(),
                     ),
                   );

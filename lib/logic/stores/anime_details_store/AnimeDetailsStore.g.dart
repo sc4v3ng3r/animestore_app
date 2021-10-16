@@ -73,13 +73,13 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
   final _$relatedAnimesAtom = Atom(name: '_AnimeDetailsStore.relatedAnimes');
 
   @override
-  ObservableList<AnimeItem> get relatedAnimes {
+  ObservableList<AnimeItem>? get relatedAnimes {
     _$relatedAnimesAtom.reportRead();
     return super.relatedAnimes;
   }
 
   @override
-  set relatedAnimes(ObservableList<AnimeItem> value) {
+  set relatedAnimes(ObservableList<AnimeItem>? value) {
     _$relatedAnimesAtom.reportWrite(value, super.relatedAnimes, () {
       super.relatedAnimes = value;
     });

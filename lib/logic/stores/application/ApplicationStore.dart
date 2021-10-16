@@ -15,7 +15,6 @@ abstract class _ApplicationStore with Store {
   final AniTubeApi api = AniTubeApi(Dio());
   final DatabaseProvider databaseProvider = DatabaseProvider();
   static const DEFAULT_PAGES_LOADING = 4;
-  static const TIMEOUT = 10000;
   late AppInfo _appInfo;
 
   double topAnimeOffset = 0,

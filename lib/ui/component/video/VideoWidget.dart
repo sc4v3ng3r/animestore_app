@@ -11,12 +11,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
-import 'package:video_player/video_player.dart';
-
-/// TODO:
-/// handle viewed episode if the anime is on user list.
-/// * Aspect ratio button
-/// *
 
 class VideoWidget extends StatefulWidget {
   final String episodeId;

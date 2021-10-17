@@ -1,7 +1,7 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
+import 'package:anime_app/src/features/search/presenter/controller/SearchStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import '../utils/UiUtils.dart';
+import '../../../../../ui/utils/UiUtils.dart';
 
 class SearchWidget extends StatefulWidget {
   @override

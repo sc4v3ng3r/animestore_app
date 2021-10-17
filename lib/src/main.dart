@@ -1,6 +1,7 @@
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
+import 'package:anime_app/src/di/dependency_injection.dart';
+import 'package:anime_app/src/features/search/presenter/controller/SearchStore.dart';
 import 'package:anime_app/ui/pages/MainScreen.dart';
 import 'package:anime_app/ui/pages/RetryPage.dart';
 import 'package:anime_app/ui/pages/SplashScreen.dart';
@@ -11,15 +12,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'generated/l10n.dart';
+import '../generated/l10n.dart';
 
-void main() {
-  runApp(new MyApp());
-
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.black,
   ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  WidgetsFlutterBinding.ensureInitialized();
+
+  DepedencyInjection().registerDependencies();
+  runApp(new MyApp());
 }
 
 class MyApp extends StatelessWidget {

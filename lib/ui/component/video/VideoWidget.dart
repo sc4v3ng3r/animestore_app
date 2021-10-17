@@ -173,7 +173,6 @@ class _VideoWidgetState extends State<VideoWidget>
               ),
 
               // here new widget
-
               Positioned.fill(
                 child: AnimatedBuilder(
                   animation: animationController,
@@ -235,6 +234,7 @@ class _VideoWidgetState extends State<VideoWidget>
             elevation: .0,
             centerTitle: true,
             leading: Container(),
+            actionsIconTheme: IconThemeData(color: Colors.white),
             actions: <Widget>[
               PopupMenuButton<_MenuOption>(
                 itemBuilder: (context) => popupMenuItems(S.of(context)),

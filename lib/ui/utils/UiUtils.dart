@@ -31,8 +31,13 @@ class UiUtils {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Container(margin: EdgeInsets.only(right: 8.0), child: icon),
-          Text(title),
+          Container(margin: const EdgeInsets.only(right: 8.0), child: icon),
+          Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
     );

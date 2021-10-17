@@ -2,10 +2,8 @@ import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
-// import 'package:video_player/video_player.dart';
+import 'package:video_player/video_player.dart';
 import 'dart:async' as NativeAsync;
-
-import 'package:video_player_header/video_player_header.dart';
 
 part 'VideoPlayerStore.g.dart';
 
@@ -17,7 +15,8 @@ enum EpisodeStatus {
   CANCELED,
   ERROR,
   BUFFERING,
-  READY
+  READY,
+  NONE
 }
 
 abstract class _VideoPlayerStore with Store {
@@ -26,11 +25,11 @@ abstract class _VideoPlayerStore with Store {
   _VideoPlayerStore(this.appStore);
 
   @observable
-  EpisodeStatus episodeLoadingStatus;
+  EpisodeStatus episodeLoadingStatus = EpisodeStatus.NONE;
 
-  EpisodeDetails currentEpisode;
+  late EpisodeDetails? currentEpisode;
 
-  VideoPlayerController controller;
+  VideoPlayerController? controller;
 
   @observable
   bool isPlaying = false;
@@ -56,9 +55,9 @@ abstract class _VideoPlayerStore with Store {
   void playOrPause() {
     if (controller == null) return;
 
-    controller.value.isPlaying ? controller.pause() : controller.play();
+    controller!.value.isPlaying ? controller!.pause() : controller!.play();
 
-    _setPlayingStatus(controller.value.isPlaying);
+    _setPlayingStatus(controller!.value.isPlaying);
   }
 
   void loadEpisodeDetails(String episodeId) async {
@@ -68,8 +67,9 @@ abstract class _VideoPlayerStore with Store {
       print('Loading episode $episodeId');
       setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING);
 
-      currentEpisode =
-          await appStore.api.getEpisodeDetails(episodeId, timeout: 10000);
+      currentEpisode = await appStore.api.getEpisodeDetails(
+        episodeId,
+      );
 
       if (episodeLoadingStatus == EpisodeStatus.CANCELED) {
         currentEpisode = null;
@@ -80,26 +80,26 @@ abstract class _VideoPlayerStore with Store {
         // must be buffering...
         setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING_DONE);
         controller?.dispose();
-        print('The url will be ${currentEpisode.streamingUrl}');
+        print('The url will be ${currentEpisode!.streamingUrl}');
         controller = VideoPlayerController.network(
-          currentEpisode.streamingUrl,
-          headers: {'Referer': currentEpisode.referer},
+          currentEpisode!.streamingUrl,
+          httpHeaders: {'Referer': currentEpisode!.referer},
           // old http headers of custom plugin version hosted in sc4v3ng3r github repository
           // httpHeaders: {'Referer': currentEpisode.referer}
         );
 
-        await controller.initialize().timeout(
+        await controller!.initialize().timeout(
               Duration(seconds: VIDEO_INIT_TIMEOUT),
             );
 
-        controller.addListener(_controllerListener);
+        controller!.addListener(_controllerListener);
         setEpisodeLoadingStatus(EpisodeStatus.READY);
 
         playOrPause();
 
         appStore.addWatchedEpisode(
           episodeId,
-          episodeTitle: currentEpisode.title,
+          episodeTitle: currentEpisode!.title,
           viewedAt: DateTime.now().millisecond,
         );
       }
@@ -121,28 +121,28 @@ abstract class _VideoPlayerStore with Store {
   }
 
   void _controllerListener() {
-    _setCurrentPosition(controller.value.position);
+    _setCurrentPosition(controller!.value.position);
 
     // if is the end of the reproduction
-    if (controller.value.position.inMilliseconds >=
-            controller.value.duration.inMilliseconds &&
-        currentEpisode.nextEpisodeId.isNotEmpty) nextEpisode();
+    if (controller!.value.position.inMilliseconds >=
+            controller!.value.duration.inMilliseconds &&
+        currentEpisode!.nextEpisodeId.isNotEmpty) nextEpisode();
   }
 
   void nextEpisode() async {
     _prepareControllerToAnotherEpisode();
-    loadEpisodeDetails(currentEpisode.nextEpisodeId);
+    loadEpisodeDetails(currentEpisode!.nextEpisodeId);
   }
 
   void previousEpisode() async {
     _prepareControllerToAnotherEpisode();
-    loadEpisodeDetails(currentEpisode.previousEpisodeId);
+    loadEpisodeDetails(currentEpisode!.previousEpisodeId);
   }
 
   void _prepareControllerToAnotherEpisode() {
-    if (controller.value.isPlaying) controller.pause();
+    if (controller!.value.isPlaying) controller!.pause();
 
-    controller.removeListener(_controllerListener);
+    controller!.removeListener(_controllerListener);
   }
 
   void dispose() {
@@ -151,5 +151,5 @@ abstract class _VideoPlayerStore with Store {
   }
 
   void seekTo(int seconds) =>
-      controller.seekTo(Duration(seconds: (seconds < 0) ? 0 : seconds));
+      controller!.seekTo(Duration(seconds: (seconds < 0) ? 0 : seconds));
 }

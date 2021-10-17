@@ -1,7 +1,6 @@
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_advanced_networkimage/provider.dart';
 
 class CustomListNotification extends StatelessWidget {
   final String imagePath;
@@ -9,7 +8,11 @@ class CustomListNotification extends StatelessWidget {
   final String subtitle;
   final bool flag;
   const CustomListNotification(
-      {Key key, this.imagePath, this.flag, this.title, this.subtitle})
+      {Key? key,
+      required this.imagePath,
+      required this.flag,
+      required this.title,
+      this.subtitle = ""})
       : super(key: key);
 
   @override
@@ -39,7 +42,7 @@ class CustomListNotification extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(subtitle),
-          trailing: (flag == null || flag)
+          trailing: flag
               ? Icon(
                   Icons.done,
                   color: Colors.greenAccent,

@@ -1,17 +1,17 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 
 class AnimeStoreAcceptDialog extends StatelessWidget {
   final String title;
-  final VoidCallback onConfirm;
-  final VoidCallback onCancel;
+  final VoidCallback? onConfirm;
+  final VoidCallback? onCancel;
   final String bodyMessage;
 
   const AnimeStoreAcceptDialog({
-    Key key,
-    this.title,
-    this.bodyMessage,
+    Key? key,
+    required this.title,
+    required this.bodyMessage,
     this.onConfirm,
     this.onCancel,
   }) : super(key: key);
@@ -22,7 +22,7 @@ class AnimeStoreAcceptDialog extends StatelessWidget {
       borderRadius: BorderRadius.circular(24.0),
     );
 
-    final locale = AnimeStoreLocalization.of(context);
+    final locale = S.of(context);
 
     return AlertDialog(
       backgroundColor: primaryColor,
@@ -36,33 +36,43 @@ class AnimeStoreAcceptDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          
           Text(
             bodyMessage,
             style: TextStyle(color: Colors.white),
           ),
-
           Container(
             margin: EdgeInsets.only(top: 24.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                
-                RaisedButton(
-                  shape: defaultShape,
+                ElevatedButton(
                   onPressed: onCancel,
-                  textColor: Colors.white,
                   child: Text(locale.cancel),
-                  color: accentColor,
+                  style: ElevatedButton.styleFrom(
+                    shape: defaultShape,
+                    primary: accentColor,
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-                
-                FlatButton(
+
+                TextButton(
                   onPressed: onConfirm,
-                  shape: defaultShape,
-                  textColor: Colors.white,
-                  child: Text(locale.confirm),
+                  child: Text(
+                    locale.confirm,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
+                // FlatButton(
+                //   onPressed: onConfirm,
+                //   shape: defaultShape,
+                //   textColor: Colors.white,
+                //   child: Text(locale.confirm),
+                // ),
               ],
             ),
           ),

@@ -11,23 +11,24 @@ class OpenSourceLibraryPage extends StatelessWidget {
       appBar: AnimeStoreIconAppBar(),
       body: ListView.builder(
         physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index){
+        itemBuilder: (context, index) {
           var title = libraries[index];
           var subtitle = librariesMap[title];
           return libraryItem(title, subtitle);
         },
-
         itemCount: libraries.length,
       ),
     );
   }
 
-  Widget libraryItem(String title, String subtitle) =>
-    ListTile(
-      title: Text(title, style: TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w500
-      ),),
-      subtitle: Text(subtitle, textAlign: TextAlign.justify,),
-    );
+  Widget libraryItem(String title, String? subtitle) => ListTile(
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+        ),
+        subtitle: Text(
+          subtitle ?? "",
+          textAlign: TextAlign.justify,
+        ),
+      );
 }

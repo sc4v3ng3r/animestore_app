@@ -1,4 +1,3 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
@@ -12,15 +11,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'generated/l10n.dart';
 
 void main() {
   runApp(new MyApp());
 
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.black,
-      )
-  );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.black,
+  ));
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 }
 
@@ -28,61 +26,49 @@ class MyApp extends StatelessWidget {
   final ApplicationStore appStore = ApplicationStore();
 
   @override
-  Widget build(BuildContext context) =>
-    MultiProvider(
+  Widget build(BuildContext context) => MultiProvider(
         providers: [
           Provider<ApplicationStore>.value(value: appStore),
           Provider<SearchStore>.value(value: SearchStore(appStore)),
         ],
-
-      child: BotToastInit(
         child: MaterialApp(
-          title: 'AniStore',
-          navigatorObservers: [BotToastNavigatorObserver()],
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData().copyWith(
-            brightness: Brightness.light,
+            title: 'AniStore',
+            builder: BotToastInit(),
+            navigatorObservers: [BotToastNavigatorObserver()],
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData().copyWith(
+              brightness: Brightness.dark,
 
-            scaffoldBackgroundColor: primaryColor,
-            accentColor: accentColor,
+              scaffoldBackgroundColor: primaryColor,
+              // primaryColor: primaryColor,
 
-            // text theme
-            textTheme: TextTheme().copyWith(
-              body1: TextStyle(
-                color: textPrimaryColor
-              )
+              // text theme
+              textTheme: TextTheme()
+                  .copyWith(bodyText2: TextStyle(color: textPrimaryColor)),
+              colorScheme:
+                  ColorScheme.fromSwatch().copyWith(secondary: accentColor),
             ),
-          ),
-
-          localizationsDelegates: [
-            const AnimeStoreLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-
-          supportedLocales: [
-            const Locale('en'),
-            const Locale('pt'),
-          ],
-
-          home: Observer(
-              builder: (context){
-                var widget;
-                switch(appStore.appInitStatus){
-                  case AppInitStatus.INITIALIZING:
-                    widget = SplashScreen();
-                    break;
-                  case AppInitStatus.INITIALIZED:
-                    widget = MainScreen();
-                    break;
-                  case AppInitStatus.INIT_ERROR:
-                    widget = RetryPage();
-                    break;
-                }
-                return widget;
+            localizationsDelegates: [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            home: Observer(builder: (context) {
+              var widget;
+              switch (appStore.appInitStatus) {
+                case AppInitStatus.INITIALIZING:
+                  widget = SplashScreen();
+                  break;
+                case AppInitStatus.INITIALIZED:
+                  widget = MainScreen();
+                  break;
+                case AppInitStatus.INIT_ERROR:
+                  widget = RetryPage();
+                  break;
               }
-          )
-        ),
-      ),
-    );
+              return widget;
+            })),
+      );
 }

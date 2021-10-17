@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-enum DotType {
-  square, circle, diamond, icon
-}
-class DotSpinner extends StatefulWidget {
 
+enum DotType { square, circle, diamond, icon }
+
+class DotSpinner extends StatefulWidget {
   final Color dotOneColor;
   final Color dotTwoColor;
   final Color dotThreeColor;
@@ -13,15 +12,14 @@ class DotSpinner extends StatefulWidget {
   final Icon dotIcon;
   final double height;
 
-  DotSpinner({
-    this.dotOneColor = Colors.white70,
-    this.dotTwoColor = Colors.white30,
-    this.dotThreeColor = Colors.white,
-    this.duration = const Duration(milliseconds: 1000),
-    this.dotType = DotType.circle,
-    this.height = 20.0,
-    this.dotIcon = const Icon(Icons.blur_on)
-  });
+  DotSpinner(
+      {this.dotOneColor = Colors.white70,
+      this.dotTwoColor = Colors.white30,
+      this.dotThreeColor = Colors.white,
+      this.duration = const Duration(milliseconds: 1000),
+      this.dotType = DotType.circle,
+      this.height = 20.0,
+      this.dotIcon = const Icon(Icons.blur_on)});
 
   @override
   _DotSpinnerState createState() => _DotSpinnerState();
@@ -29,17 +27,16 @@ class DotSpinner extends StatefulWidget {
 
 class _DotSpinnerState extends State<DotSpinner>
     with SingleTickerProviderStateMixin {
-  Animation<double> animation_1;
-  Animation<double> animation_2;
-  Animation<double> animation_3;
-  AnimationController controller;
+  late Animation<double> animation_1;
+  late Animation<double> animation_2;
+  late Animation<double> animation_3;
+  late AnimationController controller;
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-        duration: widget.duration, vsync: this);
+    controller = AnimationController(duration: widget.duration, vsync: this);
 
     animation_1 = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -80,7 +77,11 @@ class _DotSpinnerState extends State<DotSpinner>
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Opacity(
-            opacity: (animation_1.value <= 0.4 ? 2.5 * animation_1.value : (animation_1.value > 0.40 && animation_1.value <= 0.60) ? 1.0 : 2.5 - (2.5 * animation_1.value)),
+            opacity: (animation_1.value <= 0.4
+                ? 2.5 * animation_1.value
+                : (animation_1.value > 0.40 && animation_1.value <= 0.60)
+                    ? 1.0
+                    : 2.5 - (2.5 * animation_1.value)),
             child: new Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Dot(
@@ -92,7 +93,11 @@ class _DotSpinnerState extends State<DotSpinner>
             ),
           ),
           Opacity(
-            opacity: (animation_2.value <= 0.4 ? 2.5 * animation_2.value : (animation_2.value > 0.40 && animation_2.value <= 0.60)? 1.0 : 2.5 - (2.5 * animation_2.value)),
+            opacity: (animation_2.value <= 0.4
+                ? 2.5 * animation_2.value
+                : (animation_2.value > 0.40 && animation_2.value <= 0.60)
+                    ? 1.0
+                    : 2.5 - (2.5 * animation_2.value)),
             child: new Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Dot(
@@ -104,7 +109,11 @@ class _DotSpinnerState extends State<DotSpinner>
             ),
           ),
           Opacity(
-            opacity: (animation_3.value <= 0.4 ? 2.5 * animation_3.value : (animation_3.value > 0.40 && animation_3.value <= 0.60) ? 1.0 : 2.5 - (2.5 * animation_3.value)),
+            opacity: (animation_3.value <= 0.4
+                ? 2.5 * animation_3.value
+                : (animation_3.value > 0.40 && animation_3.value <= 0.60)
+                    ? 1.0
+                    : 2.5 - (2.5 * animation_3.value)),
             child: new Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Dot(
@@ -122,7 +131,6 @@ class _DotSpinnerState extends State<DotSpinner>
 
   @override
   void dispose() {
-
     controller.dispose();
     super.dispose();
   }
@@ -131,24 +139,36 @@ class _DotSpinnerState extends State<DotSpinner>
 class Dot extends StatelessWidget {
   final double radius;
   final Color color;
-  final DotType type;
+  final DotType? type;
   final Icon icon;
 
-  Dot({this.radius, this.color, this.type, this.icon});
+  Dot(
+      {required this.radius,
+      required this.color,
+      this.type,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return new Center(
-      child: type == DotType.icon ?
-          Icon(icon.icon, color: color, size: 1.3 * radius,)
+      child: type == DotType.icon
+          ? Icon(
+              icon.icon,
+              color: color,
+              size: 1.3 * radius,
+            )
           : new Transform.rotate(
-        angle: type == DotType.diamond ? pi/4 : 0.0,
-        child: Container(
-          width: radius,
-          height: radius,
-          decoration: BoxDecoration(color: color, shape: type == DotType.circle? BoxShape.circle : BoxShape.rectangle),
-        ),
-      ),
+              angle: type == DotType.diamond ? pi / 4 : 0.0,
+              child: Container(
+                width: radius,
+                height: radius,
+                decoration: BoxDecoration(
+                    color: color,
+                    shape: type == DotType.circle
+                        ? BoxShape.circle
+                        : BoxShape.rectangle),
+              ),
+            ),
     );
   }
 }

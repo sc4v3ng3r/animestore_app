@@ -1,4 +1,4 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/app_bar/AnimeStoreHeroAppBar.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
@@ -7,7 +7,6 @@ import 'package:anime_app/ui/utils/HeroTags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 //
 //return ItemView(
@@ -38,44 +37,42 @@ import 'package:provider/provider.dart';
 //onTap: () {},
 //);
 class RecentEpisodeListPage extends StatelessWidget {
-
-  const RecentEpisodeListPage({Key key }) : super(key: key);
+  const RecentEpisodeListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var applicationStore = Provider.of<ApplicationStore>(context);
-    final locale = AnimeStoreLocalization.of(context);
+    final locale = S.of(context);
     var data = applicationStore.latestEpisodes;
 
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
-
           AnimeStoreHeroAppBar(
             title: locale.latestEpisodes,
             heroTag: HeroTags.TAG_LATEST_EPISODES,
           ),
-
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0, ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 8.0,
+            ),
             sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return EpisodeItemView(
-                        width: size.width,
-                        height: size.width / 1.5,
-                        title: data[index].title,
-                        imageUrl: data[index].imageUrl,
-                        fontSize: 18,
-                        fontColor: Colors.white,
-                        onTap: ()=> _playEpisode(context, data[index].id),
-                      );
-                    },
-
-                  childCount: data.length,
-                ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return EpisodeItemView(
+                    width: size.width,
+                    height: size.width / 1.5,
+                    title: data[index].title,
+                    imageUrl: data[index].imageUrl,
+                    fontSize: 18,
+                    fontColor: Colors.white,
+                    onTap: () => _playEpisode(context, data[index].id),
+                  );
+                },
+                childCount: data.length,
+              ),
             ),
           ),
         ],
@@ -84,14 +81,11 @@ class RecentEpisodeListPage extends StatelessWidget {
   }
 
   void _playEpisode(BuildContext context, String episodeId) {
-    Navigator.push(context,
+    Navigator.push(
+        context,
         CupertinoPageRoute(
-            builder: (context) =>
-                VideoPlayerScreen(
+            builder: (context) => VideoPlayerScreen(
                   episodeId: episodeId,
-                )
-        )
-    );
-
+                )));
   }
 }

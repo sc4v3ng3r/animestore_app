@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-405238252/android.package_info.iml" filepath="$PROJECT_DIR$/.idea/modules/-405238252/android.package_info.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1920446720/android.path_provider.iml" filepath="$PROJECT_DIR$/.idea/modules/1920446720/android.path_provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-535810261/android.path_provider_linux.iml" filepath="$PROJECT_DIR$/.idea/modules/-535810261/android.path_provider_linux.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-489402893/android.path_provider_macos.iml" filepath="$PROJECT_DIR$/.idea/modules/-489402893/android.path_provider_macos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1652031255/android.path_provider_windows.iml" filepath="$PROJECT_DIR$/.idea/modules/1652031255/android.path_provider_windows.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-847491870/android.sqflite.iml" filepath="$PROJECT_DIR$/.idea/modules/-847491870/android.sqflite.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1465225588/android.video_player.iml" filepath="$PROJECT_DIR$/.idea/modules/1465225588/android.video_player.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1152973561/android.video_player_web.iml" filepath="$PROJECT_DIR$/.idea/modules/-1152973561/android.video_player_web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-810054074/android.wakelock.iml" filepath="$PROJECT_DIR$/.idea/modules/-810054074/android.wakelock.iml" />
+    </modules>
+  </component>
+</project>

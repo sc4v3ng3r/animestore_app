@@ -1,4 +1,4 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/video_player_store/VideoPlayerStore.dart';
 import 'package:anime_app/ui/component/video/LoadingVideoWidget.dart';
@@ -9,19 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player_header/video_player_header.dart';
-// import 'package:video_player/video_player.dart';
+import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
-
-/// TODO:
-/// handle viewed episode if the anime is on user list.
-/// * Aspect ratio button
-/// *
 
 class VideoWidget extends StatefulWidget {
   final String episodeId;
 
-  const VideoWidget({Key key, @required this.episodeId}) : super(key: key);
+  const VideoWidget({Key? key, required this.episodeId}) : super(key: key);
   @override
   _VideoWidgetState createState() => _VideoWidgetState();
 }
@@ -31,21 +25,21 @@ enum _MenuOption { NEXT, PREVIOUS, EXIT }
 class _VideoWidgetState extends State<VideoWidget>
     with TickerProviderStateMixin {
   //VideoPlayerController videoController;
-  AnimationController animationController;
+  late AnimationController animationController;
 
-  Animation topDownTransition, downTopTransition;
-  Animation opacityAnimation;
+  late Animation<Offset> topDownTransition, downTopTransition;
+  late Animation<double> opacityAnimation;
 
-  VideoPlayerStore videoPlayerStore;
-  ApplicationStore appStore;
-  AnimeStoreLocalization locale;
+  late VideoPlayerStore videoPlayerStore;
+  late ApplicationStore appStore;
+  late S locale;
 
   static const _DEFAULT_ASPECT_RATIO = 3 / 2;
   static const _BACKGROUND_OPACITY_LEVEL = .5;
 
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
     Wakelock.enable();
@@ -81,7 +75,7 @@ class _VideoWidgetState extends State<VideoWidget>
 
   @override
   void dispose() {
-    animationController?.dispose();
+    animationController.dispose();
     videoPlayerStore.dispose();
     Wakelock.disable();
     super.dispose();
@@ -91,16 +85,17 @@ class _VideoWidgetState extends State<VideoWidget>
     if (videoPlayerStore.episodeLoadingStatus == EpisodeStatus.DOWNLOADING)
       videoPlayerStore.cancelEpisodeLoading();
 
-    if (videoPlayerStore.isPlaying) await videoPlayerStore.controller.pause();
+    if (videoPlayerStore.isPlaying) await videoPlayerStore.controller!.pause();
 
-    await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    locale = AnimeStoreLocalization.of(context);
+    locale = S.of(context);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -123,6 +118,7 @@ class _VideoWidgetState extends State<VideoWidget>
                 case EpisodeStatus.BUFFERING:
                 case EpisodeStatus.DOWNLOADING_DONE:
                 case EpisodeStatus.DOWNLOADING:
+                case EpisodeStatus.NONE:
                   currentWidget = buildLoaderWidget();
                   break;
 
@@ -173,14 +169,11 @@ class _VideoWidgetState extends State<VideoWidget>
                 alignment: Alignment.center,
                 child: AspectRatio(
                   aspectRatio: _DEFAULT_ASPECT_RATIO,
-                  child: VideoPlayer(
-                    videoPlayerStore.controller,
-                  ),
+                  child: VideoPlayer(videoPlayerStore.controller!),
                 ),
               ),
 
               // here new widget
-
               Positioned.fill(
                 child: AnimatedBuilder(
                   animation: animationController,
@@ -242,10 +235,10 @@ class _VideoWidgetState extends State<VideoWidget>
             elevation: .0,
             centerTitle: true,
             leading: Container(),
+            actionsIconTheme: IconThemeData(color: Colors.white),
             actions: <Widget>[
               PopupMenuButton<_MenuOption>(
-                itemBuilder: (context) =>
-                    popupMenuItems(AnimeStoreLocalization.of(context)),
+                itemBuilder: (context) => popupMenuItems(S.of(context)),
                 color: Colors.transparent,
                 elevation: .0,
                 offset: Offset(100, 40),
@@ -271,7 +264,7 @@ class _VideoWidgetState extends State<VideoWidget>
               width: size.width,
               height: 100,
               child: Text(
-                videoPlayerStore.currentEpisode.title,
+                videoPlayerStore.currentEpisode!.title,
                 maxLines: 3,
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -367,7 +360,7 @@ class _VideoWidgetState extends State<VideoWidget>
                             .toDouble(),
                         min: .0,
                         max: videoPlayerStore
-                            .controller.value.duration.inSeconds
+                            .controller!.value.duration.inSeconds
                             .toDouble(),
                         onChanged: (value) =>
                             videoPlayerStore.seekTo(value.toInt()),
@@ -380,7 +373,7 @@ class _VideoWidgetState extends State<VideoWidget>
                       margin: EdgeInsets.only(left: 24.0, bottom: 8.0),
                       child: Text(
                         "${_printDuration(videoPlayerStore.currentPosition)}" +
-                            " / ${_printDuration(videoPlayerStore.controller.value.duration)}",
+                            " / ${_printDuration(videoPlayerStore.controller!.value.duration)}",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -406,11 +399,10 @@ class _VideoWidgetState extends State<VideoWidget>
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
 
-  List<PopupMenuItem<_MenuOption>> popupMenuItems(
-      AnimeStoreLocalization locale) {
-    var widgetList = <PopupMenuItem<_MenuOption>>[];
+  List<PopupMenuItem<_MenuOption>> popupMenuItems(S locale) {
+    List<PopupMenuItem<_MenuOption>> widgetList = [];
 
-    if (videoPlayerStore.currentEpisode.previousEpisodeId.isNotEmpty)
+    if (videoPlayerStore.currentEpisode!.previousEpisodeId.isNotEmpty)
       widgetList.add(UiUtils.createMenuItem<_MenuOption>(
         icon: Icon(
           Icons.skip_previous,
@@ -420,7 +412,7 @@ class _VideoWidgetState extends State<VideoWidget>
         title: locale.previous,
       ));
 
-    if (videoPlayerStore.currentEpisode.nextEpisodeId.isNotEmpty)
+    if (videoPlayerStore.currentEpisode!.nextEpisodeId.isNotEmpty)
       widgetList.add(UiUtils.createMenuItem<_MenuOption>(
         icon: Icon(
           Icons.skip_next,

@@ -14,45 +14,41 @@ import 'package:anime_app/ui/utils/UiUtils.dart';
 class GenreAnimePage extends StatefulWidget {
   final String genreName;
 
-  const GenreAnimePage({Key key, @required this.genreName}) : super(key: key);
+  const GenreAnimePage({Key? key, required this.genreName}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _GenreAnimePageState();
-
 }
 
 class _GenreAnimePageState extends State<GenreAnimePage> {
-
   final ScrollController _controller = ScrollController();
-  ApplicationStore appStore;
-  GenreAnimeStore store;
+  late ApplicationStore appStore;
+  late GenreAnimeStore store;
 
   @override
   void initState() {
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
-    store = GenreAnimeStore(appStore,widget.genreName );
+    store = GenreAnimeStore(appStore, widget.genreName);
     store.init();
-    _controller.addListener( _listener );
+    _controller.addListener(_listener);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.removeListener( _listener );
-    store = null;
+    _controller.removeListener(_listener);
   }
 
   void _listener() async {
-    if (_controller.position.pixels > (_controller.position.maxScrollExtent -
-        (_controller.position.maxScrollExtent / 4)) )
+    if (_controller.position.pixels >
+        (_controller.position.maxScrollExtent -
+            (_controller.position.maxScrollExtent / 4)))
       return await store.loadMore();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2.5;
@@ -63,75 +59,73 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
         controller: _controller,
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
-          SliverToBoxAdapter(child: Container(),),
-
+          SliverToBoxAdapter(
+            child: Container(),
+          ),
           Observer(
-            builder: (_) =>
-            (store.loadingStatus == LoadingStatus.LOADING) ?
-                SliverToBoxAdapter(
-                  child: Container(
-                    height: size.height,
-                    width: size.width,
-                    child: UiUtils.centredDotLoader(),
-                  ),
-                )
-                : (store.loadingStatus == LoadingStatus.ERROR) ?
-                  SliverToBoxAdapter(
-                    child: Center(child: Text('ERROR'),),
-                  ) :
-
-                Observer(
-                  builder: (_) =>
-                      SliverGridItemView(
-                        childAspectRatio: (itemWidth / itemHeight),
-                        delegate: SliverChildBuilderDelegate(
-                            (context, index){
+            builder: (_) => (store.loadingStatus == LoadingStatus.LOADING)
+                ? SliverToBoxAdapter(
+                    child: Container(
+                      height: size.height,
+                      width: size.width,
+                      child: UiUtils.centredDotLoader(),
+                    ),
+                  )
+                : (store.loadingStatus == LoadingStatus.ERROR)
+                    ? SliverToBoxAdapter(
+                        child: Center(
+                          child: Text('ERROR'),
+                        ),
+                      )
+                    : Observer(
+                        builder: (_) => SliverGridItemView(
+                          childAspectRatio: (itemWidth / itemHeight),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
                               var anime = store.animeItems[index];
                               var heroTag = '${anime.id}-$index';
 
-                          return Tooltip(
-                            message: anime.title ,
-                            child: ItemView(
-                              imageHeroTag: heroTag,
-                              width: itemWidth,
-                              height: itemHeight,
-                              imageUrl: anime.imageUrl,
-                              onTap: (){
-                                Navigator.push(context,
-                                  CupertinoPageRoute(
-                                      builder: (context) => Provider<AnimeDetailsStore>(
-                                        builder: (_) => AnimeDetailsStore(appStore, anime),
-                                        child: AnimeDetailsScreen(heroTag: heroTag,),
-                                      ),
-                                    )
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        childCount: store.animeItems.length,
-                      ),),
-                ),
-
-
+                              return Tooltip(
+                                message: anime.title,
+                                child: ItemView(
+                                  imageHeroTag: heroTag,
+                                  width: itemWidth,
+                                  height: itemHeight,
+                                  imageUrl: anime.imageUrl,
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) =>
+                                              Provider<AnimeDetailsStore>(
+                                            create: (_) => AnimeDetailsStore(
+                                                appStore, anime),
+                                            child: AnimeDetailsScreen(
+                                              heroTag: heroTag,
+                                            ),
+                                          ),
+                                        ));
+                                  },
+                                ),
+                              );
+                            },
+                            childCount: store.animeItems.length,
+                          ),
+                        ),
+                      ),
           ),
-
           Observer(
-            builder: (_) =>
-                SliverToBoxAdapter(
-                  child: (store.isLoadingMore) ?
-                  _loadingWidget()
-                      : Container(),
-                ),
+            builder: (_) => SliverToBoxAdapter(
+              child: (store.isLoadingMore) ? _loadingWidget() : Container(),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _loadingWidget() =>
-  Container(
-      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-      child: UiUtils.centredDotLoader(),          
-  );
+  Widget _loadingWidget() => Container(
+        margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+        child: UiUtils.centredDotLoader(),
+      );
 }

@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 
 class AnimeStoreHeroAppBar extends StatelessWidget {
   final String title;
-  final List<Widget> actions;
-  final Object heroTag;
+  final List<Widget>? actions;
+  final Object? heroTag;
 
   const AnimeStoreHeroAppBar(
-      {Key key, this.heroTag, @required this.title, this.actions})
-      : assert(title != null),
-        super(key: key);
+      {Key? key, this.heroTag, required this.title, this.actions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +18,15 @@ class AnimeStoreHeroAppBar extends StatelessWidget {
       elevation: 4.0,
 
       title: Hero(
-        tag: heroTag,
+        tag: heroTag ?? UniqueKey().toString(),
         child: Container(
           child: Material(
             color: Colors.transparent,
-
             elevation: .0,
             child: Text(title,
-                style: Theme.of(context).textTheme.title.copyWith(
-                  color: textPrimaryColor,
-            )),
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      color: textPrimaryColor,
+                    )),
           ),
         ),
       ),

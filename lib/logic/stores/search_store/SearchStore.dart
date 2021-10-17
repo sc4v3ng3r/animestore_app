@@ -4,7 +4,7 @@ import 'package:mobx/mobx.dart';
 
 part 'SearchStore.g.dart';
 
-enum SearchState {SEARCHING, DONE, ERROR, NONE}
+enum SearchState { SEARCHING, DONE, ERROR, NONE }
 
 class SearchStore = _SearchStore with _$SearchStore;
 
@@ -32,15 +32,21 @@ abstract class _SearchStore with Store {
 
   //@action setQueryText(String text) => currentQuery = text;
 
-  @action setLoadingMore(bool flag) => isLoadingMore = flag;
+  @action
+  setLoadingMore(bool flag) => isLoadingMore = flag;
 
-  @action addSearchItemList(List<AnimeItem> data) => searchItemList.addAll(data);
+  @action
+  addSearchItemList(List<AnimeItem> data) => searchItemList.addAll(data);
 
-  @action setSearchItems(List<AnimeItem> data) => searchItemList = ObservableList.of(data);
+  @action
+  setSearchItems(List<AnimeItem> data) =>
+      searchItemList = ObservableList.of(data);
 
-  @action setSearchStatus(SearchState state) => searchState = state;
+  @action
+  setSearchStatus(SearchState state) => searchState = state;
 
-  @action clearSearchItems() => searchItemList.clear();
+  @action
+  clearSearchItems() => searchItemList.clear();
 
   @action
   clearSearch() {
@@ -53,8 +59,7 @@ abstract class _SearchStore with Store {
   }
 
   void search(String search) async {
-    if (searchState == SearchState.SEARCHING)
-      return;
+    if (searchState == SearchState.SEARCHING) return;
 
     this.currentQuery = search;
     clearSearchItems();
@@ -62,70 +67,64 @@ abstract class _SearchStore with Store {
     _maxPageNumber = 1;
 
     try {
-
       setSearchStatus(SearchState.SEARCHING);
       List<AnimeItem> results = [];
 
-      if (_pageNumberToLoad <= _maxPageNumber){
-        var pageInfo = await _loadData(currentQuery,_pageNumberToLoad );
+      if (_pageNumberToLoad <= _maxPageNumber) {
+        var pageInfo = await _loadData(currentQuery, _pageNumberToLoad);
         _pageNumberToLoad++;
-        _maxPageNumber = int.parse( pageInfo.maxPageNumber );
+        _maxPageNumber = int.parse(pageInfo.maxPageNumber);
 
-        results.addAll( pageInfo.animes );
+        results.addAll(pageInfo.animes);
 
-        if ((_pageNumberToLoad + PAGE_LOAD_NUMBER ) <= _maxPageNumber ){
-          for(var i=0 ; i < PAGE_LOAD_NUMBER; i++){
+        if ((_pageNumberToLoad + PAGE_LOAD_NUMBER) <= _maxPageNumber) {
+          for (var i = 0; i < PAGE_LOAD_NUMBER; i++) {
             var pageData = await _loadData(currentQuery, _pageNumberToLoad);
             _pageNumberToLoad++;
-            results.addAll( pageData.animes );
+            results.addAll(pageData.animes);
           }
         }
         setSearchItems(results);
       }
 
       setSearchStatus(SearchState.DONE);
-    }
-    on CrawlerApiException catch(ex){
+    } on CrawlerApiException catch (ex) {
       print(ex);
       setSearchStatus(SearchState.ERROR);
     }
   }
 
-
   Future<void> loadMore() async {
-    if (isLoadingMore)
-      return;
+    if (isLoadingMore) return;
 
-    if (_pageNumberToLoad <= _maxPageNumber){
+    if (_pageNumberToLoad <= _maxPageNumber) {
       try {
         setLoadingMore(true);
         List<AnimeItem> results = [];
 
-        for(var i=0 ; i < 2; i++){
+        for (var i = 0; i < 2; i++) {
           var pageData = await _loadData(currentQuery, _pageNumberToLoad);
           _pageNumberToLoad++;
-          results.addAll( pageData.animes );
+          results.addAll(pageData.animes);
         }
         setLoadingMore(false);
         this.addSearchItemList(results);
-      }
-
-      on CrawlerApiException catch(ex){
+      } on CrawlerApiException catch (ex) {
         print(ex);
         setLoadingMore(false);
       }
     }
-
   }
 
-  Future< AnimeListPageInfo > _loadData(String query, int number) async {
+  Future<AnimeListPageInfo> _loadData(String query, int number) async {
     var searchPage;
     if (query.length == 1)
-      searchPage = await applicationStore.api
-          .getAnimeListPageData(
-        startWith: query, pageNumber: number,);
+      searchPage = await applicationStore.api.getAnimeListPageData(
+        startsWith: query,
+        pageNumber: number,
+      );
     else
-     searchPage = await applicationStore.api.search(query, pageNumber: number);
+      searchPage = await applicationStore.api.search(query, pageNumber: number);
 
     return searchPage;
   }

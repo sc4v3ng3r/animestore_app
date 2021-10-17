@@ -1,4 +1,4 @@
-import 'package:anime_app/i18n/AnimeStoreLocalization.dart';
+import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
@@ -19,9 +19,9 @@ import '../theme/ColorValues.dart';
 import '../utils/UiUtils.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
-  final String heroTag;
+  final String? heroTag;
 
-  const AnimeDetailsScreen({Key key, this.heroTag}) : super(key: key);
+  const AnimeDetailsScreen({Key? key, this.heroTag}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AnimeDetailsScreen();
@@ -30,12 +30,12 @@ class AnimeDetailsScreen extends StatefulWidget {
 class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     with SingleTickerProviderStateMixin {
   static const _RELATED_TAG = 'RELATED_TAG';
-  ApplicationStore applicationStore;
-  AnimeDetailsStore detailsStore;
-  AnimeStoreLocalization locale;
-  AnimationController animationController;
-  Animation slideAnimation;
-  Animation scaleAnimation;
+  late ApplicationStore applicationStore;
+  late AnimeDetailsStore detailsStore;
+  late S locale;
+  late AnimationController animationController;
+  late Animation<Offset> slideAnimation;
+  late Animation scaleAnimation;
   final ScrollController listController = ScrollController();
 
   static final _defaultSectionStyle = TextStyle(
@@ -75,7 +75,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
-    locale = AnimeStoreLocalization.of(context);
+    locale = S.of(context);
 
     final size = MediaQuery.of(context).size;
     final expandedHeight = size.width * .9;
@@ -166,8 +166,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                               ),
                             ],
                           ),
-                          offsetValue:
-                              MediaQuery.of(context).padding.bottom ?? .0,
+                          offsetValue: MediaQuery.of(context).padding.bottom,
                         ),
                       );
                       break;
@@ -189,7 +188,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
               if (detailsStore.loadingStatus == LoadingStatus.LOADING)
                 return Container(
-                  // height: 200,
                   child: UiUtils.centredDotLoader(),
                 );
 
@@ -213,9 +211,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   }
 
   Widget _createWithSlideTransition(
-      {@required Widget child,
-      @required Animation<Offset> animation,
-      @required AnimationController controller}) {
+      {required Widget child,
+      required Animation<Offset> animation,
+      required AnimationController controller}) {
     return AnimatedBuilder(
       animation: controller,
       builder: (_, __) => SlideTransition(
@@ -270,7 +268,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                                   size: 34.0,
                                   color: (isWatched)
                                       ? accentColor
-                                      : Colors.grey[300].withOpacity(.7),
+                                      : Colors.grey[300]?.withOpacity(.7),
                                 ),
                                 title: Text(
                                   detailsStore
@@ -369,10 +367,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   }
 
   Widget animeTitleSection(String title) => Container(
-        margin: EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: .0),
+        margin:
+            const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: .0),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.0),
-          //margin: EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -403,7 +401,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
         ),
       );
 
-  Widget buildResumeSection(String resume) => Column(
+  Widget buildResumeSection(String? resume) => Column(
         children: <Widget>[
           Text(
             locale.resume,
@@ -451,7 +449,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                   return Container(
                       margin: EdgeInsets.symmetric(vertical: 16.0),
                       child: UiUtils.centredDotLoader());
-                else if (detailsStore.relatedAnimes.isEmpty)
+                else if (detailsStore.relatedAnimes!.isEmpty)
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -472,7 +470,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                     child: ListView.builder(
                       controller: listController,
                       itemBuilder: (context, index) {
-                        var anime = detailsStore.relatedAnimes[index];
+                        var anime = detailsStore.relatedAnimes![index];
                         var heroTag = '${anime.id}$_RELATED_TAG';
                         return Padding(
                           padding: EdgeInsets.symmetric(
@@ -488,7 +486,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                               CupertinoPageRoute(
                                 builder: (context) =>
                                     Provider<AnimeDetailsStore>(
-                                  builder: (_) => AnimeDetailsStore(
+                                  create: (_) => AnimeDetailsStore(
                                       applicationStore, anime,
                                       shouldLoadSuggestions: false),
                                   child: AnimeDetailsScreen(
@@ -501,7 +499,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                         );
                       },
                       scrollDirection: Axis.horizontal,
-                      itemCount: detailsStore.relatedAnimes.length,
+                      itemCount: detailsStore.relatedAnimes!.length,
                       physics: BouncingScrollPhysics(),
                     ),
                   );
@@ -539,7 +537,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     );
   }
 
-  Widget _buildUnavaiableWidget(String text, {IconData iconData}) {
+  Widget _buildUnavaiableWidget(String text, {IconData? iconData}) {
     return Container(
       margin: EdgeInsets.only(top: 16.0),
       child: Column(
@@ -577,9 +575,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               ),
               Text(locale.dataUnavailable),
               Container(
-                margin: EdgeInsets.only(top: 16),
-                child: RaisedButton.icon(
-                  onPressed: () => detailsStore.loadAnimeDetails(),
+                margin: const EdgeInsets.only(top: 16),
+                child: ElevatedButton.icon(
+                  onPressed: detailsStore.loadAnimeDetails,
                   icon: Icon(
                     Icons.refresh,
                     color: Colors.white,
@@ -588,9 +586,11 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                     locale.tryAgain,
                     style: TextStyle(color: textPrimaryColor),
                   ),
-                  color: accentColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)),
+                    primary: accentColor,
+                  ),
                 ),
               ),
             ],
@@ -600,17 +600,15 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this._tabBar, {this.offsetValue});
+  _SliverAppBarDelegate(this._tabBar, {this.offsetValue = .0});
 
   final TabBar _tabBar;
   final double offsetValue;
   static const _PADDING = 32.0;
   @override
-  double get minExtent =>
-      _tabBar.preferredSize.height + _PADDING + (offsetValue ?? .0);
+  double get minExtent => _tabBar.preferredSize.height + _PADDING + offsetValue;
   @override
-  double get maxExtent =>
-      _tabBar.preferredSize.height + _PADDING + (offsetValue ?? .0);
+  double get maxExtent => _tabBar.preferredSize.height + _PADDING + offsetValue;
 
   @override
   Widget build(

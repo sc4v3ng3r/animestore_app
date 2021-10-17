@@ -20,7 +20,7 @@ abstract class _AnimeDetailsStore with Store {
   final bool shouldLoadSuggestions;
 
   @observable
-  Color backgroundColor = IMAGE_BACKGROUND_COLOR!;
+  Color backgroundColor = imageBackgroundColor!;
 
   @observable
   LoadingStatus loadingStatus = LoadingStatus.NONE;

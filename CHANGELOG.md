@@ -1,9 +1,12 @@
-## 1.4.0+10 -
+## [1.5.0] - 16/10/2021
+* Using Flutter 2 with null safety
+
+## [1.4.0+10] -
 * Handling video intialization timeout
 * Adding Background opcity in video player page
 * Using official video player plugin
 
-## 1.3.9+9 - 17/02/2020
+## [1.3.9+9] - 17/02/2020
 * Adding new layout components in video load page
 * Using new version of crawler_api avoiding episode streaming fails.
 

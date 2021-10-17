@@ -18,16 +18,13 @@ class RoundedRaisedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton.icon(
-      onPressed: onPressed,
-      icon: icon ?? Container(),
-      label: Text(
-        label,
-        style: TextStyle(color: textPrimaryColor),
-      ),
-      color: backgroundColor ?? accentColor,
-      shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
-    );
+    return ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: icon ?? Container(),
+        label: Text(label, style: TextStyle(color: textPrimaryColor)),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius)),
+        ));
   }
 }

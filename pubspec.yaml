@@ -32,9 +32,7 @@ dependencies:
   cached_network_image: ^3.1.0
   video_player: ^2.1.1
   carousel_pro_nullsafety: ^1.0.2
-  #carousel_pro: ^1.0.0
   wakelock: ^0.5.1
-  #palette_generator: ^0.2.0
   random_color: ^1.0.6-nullsafety
   sqflite: ^2.0.0+2
   path: ^1.8.0

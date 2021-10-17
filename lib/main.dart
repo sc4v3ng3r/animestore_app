@@ -40,11 +40,13 @@ class MyApp extends StatelessWidget {
               brightness: Brightness.dark,
 
               scaffoldBackgroundColor: primaryColor,
-              accentColor: accentColor,
+              // primaryColor: primaryColor,
 
               // text theme
               textTheme: TextTheme()
                   .copyWith(bodyText2: TextStyle(color: textPrimaryColor)),
+              colorScheme:
+                  ColorScheme.fromSwatch().copyWith(secondary: accentColor),
             ),
             localizationsDelegates: [
               S.delegate,

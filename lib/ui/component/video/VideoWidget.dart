@@ -39,7 +39,7 @@ class _VideoWidgetState extends State<VideoWidget>
 
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
     Wakelock.enable();
@@ -87,7 +87,8 @@ class _VideoWidgetState extends State<VideoWidget>
 
     if (videoPlayerStore.isPlaying) await videoPlayerStore.controller!.pause();
 
-    await SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 

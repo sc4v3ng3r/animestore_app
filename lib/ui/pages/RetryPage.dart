@@ -45,17 +45,17 @@ class RetryPage extends StatelessWidget {
               ),
               Container(
                 margin: EdgeInsets.only(top: defaultMargin),
-                child: RaisedButton.icon(
-                  onPressed: () => appStore.appRetry(),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  color: Colors.white,
+                child: ElevatedButton.icon(
+                  onPressed: appStore.appRetry,
                   icon: Icon(
                     Icons.refresh,
                     color: Colors.green,
                   ),
-                  label: Text(locale.tryAgain),
+                  label: Text(
+                    locale.tryAgain,
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                  style: ElevatedButton.styleFrom(primary: Colors.white),
                 ),
               )
             ],

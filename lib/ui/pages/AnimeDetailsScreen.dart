@@ -188,7 +188,6 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
               if (detailsStore.loadingStatus == LoadingStatus.LOADING)
                 return Container(
-                  // height: 200,
                   child: UiUtils.centredDotLoader(),
                 );
 
@@ -576,9 +575,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               ),
               Text(locale.dataUnavailable),
               Container(
-                margin: EdgeInsets.only(top: 16),
-                child: RaisedButton.icon(
-                  onPressed: () => detailsStore.loadAnimeDetails(),
+                margin: const EdgeInsets.only(top: 16),
+                child: ElevatedButton.icon(
+                  onPressed: detailsStore.loadAnimeDetails,
                   icon: Icon(
                     Icons.refresh,
                     color: Colors.white,
@@ -587,9 +586,11 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                     locale.tryAgain,
                     style: TextStyle(color: textPrimaryColor),
                   ),
-                  color: accentColor,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25)),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25)),
+                    primary: accentColor,
+                  ),
                 ),
               ),
             ],

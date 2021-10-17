@@ -46,19 +46,33 @@ class AnimeStoreAcceptDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                RaisedButton(
-                  shape: defaultShape,
+                ElevatedButton(
                   onPressed: onCancel,
-                  textColor: Colors.white,
                   child: Text(locale.cancel),
-                  color: accentColor,
+                  style: ElevatedButton.styleFrom(
+                    shape: defaultShape,
+                    primary: accentColor,
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-                FlatButton(
+
+                TextButton(
                   onPressed: onConfirm,
-                  shape: defaultShape,
-                  textColor: Colors.white,
-                  child: Text(locale.confirm),
+                  child: Text(
+                    locale.confirm,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
+                // FlatButton(
+                //   onPressed: onConfirm,
+                //   shape: defaultShape,
+                //   textColor: Colors.white,
+                //   child: Text(locale.confirm),
+                // ),
               ],
             ),
           ),

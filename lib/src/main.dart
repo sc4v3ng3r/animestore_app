@@ -1,7 +1,7 @@
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/src/di/dependency_injection.dart';
-import 'package:anime_app/src/features/search/presenter/controller/SearchStore.dart';
+import 'package:anime_app/src/features/search/presenter/controller/search_store.dart';
 import 'package:anime_app/ui/pages/MainScreen.dart';
 import 'package:anime_app/ui/pages/RetryPage.dart';
 import 'package:anime_app/ui/pages/SplashScreen.dart';
@@ -18,9 +18,8 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.black,
   ));
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   WidgetsFlutterBinding.ensureInitialized();
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   DepedencyInjection().registerDependencies();
   runApp(new MyApp());
 }
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MultiProvider(
         providers: [
           Provider<ApplicationStore>.value(value: appStore),
-          Provider<SearchStore>.value(value: SearchStore(appStore)),
+          Provider<SearchStore>.value(value: SearchStore(getIt())),
         ],
         child: MaterialApp(
             title: 'AniStore',

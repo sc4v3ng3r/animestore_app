@@ -1,7 +1,7 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/src/features/search/presenter/controller/SearchStore.dart';
+import 'package:anime_app/src/features/search/presenter/controller/search_store.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';

@@ -27,4 +27,25 @@ class SearchDatasourceImp extends SearchDataSource {
       throw AppExecutionException();
     }
   }
+
+  @override
+  Future<SearchPage> searchWhereStartsWith(
+      {required String search, required int pageNumber}) async {
+    try {
+      final pageData = await api.getAnimeListPageData(
+          pageNumber: pageNumber, startsWith: search);
+
+      return SearchPage(
+        results: pageData.animes,
+        maxPageNumber: int.parse(pageData.maxPageNumber),
+        pageNumber: int.parse(pageData.pageNumber),
+      );
+    } on CrawlerApiException catch (apiException) {
+      throw AppNetworkExpcetion(
+          message: "${apiException.errorType}", code: 700);
+    } catch (exception) {
+      print(exception);
+      throw AppExecutionException();
+    }
+  }
 }

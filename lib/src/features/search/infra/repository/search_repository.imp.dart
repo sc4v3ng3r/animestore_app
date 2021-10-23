@@ -1,5 +1,4 @@
 import 'package:anime_app/src/features/search/domain/model/search_page.dart';
-import 'package:anime_app/src/features/search/domain/model/search_result.dart';
 import 'package:anime_app/src/features/error/failure/animeapp_failure.dart';
 import 'package:anime_app/src/features/search/domain/repository/isearch_repository.dart';
 import 'package:anime_app/src/features/search/infra/datasource/isearch_datasource.dart';
@@ -14,13 +13,15 @@ class SearchRepositoryImp extends SearchRepository {
       {required String query, required int pageNumber}) async {
     AnimeappFailure failure;
     try {
-      final data =
-          await dataSource.search(search: query, pageNumber: pageNumber);
+      final data = (query.length == 1)
+          ? await dataSource.searchWhereStartsWith(
+              search: query, pageNumber: pageNumber)
+          : await dataSource.search(search: query, pageNumber: pageNumber);
+
       return Right(data);
     } catch (ex) {
-      failure = SearchFailure(message: "Wasnt possible searhc $query");
+      failure = SearchFailure(message: "Wasn\'t possible searhc $query");
     }
-
     return Left(failure);
   }
 }

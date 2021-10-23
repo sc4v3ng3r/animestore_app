@@ -1,7 +1,7 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
-import 'package:anime_app/src/features/search/presenter/widget/SearchWidget.dart';
+import 'package:anime_app/src/features/search/presenter/widget/search_widget.dart';
 import 'package:anime_app/ui/component/AboutListWidget.dart';
 import 'package:anime_app/ui/pages/HomePage.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';

@@ -7,9 +7,9 @@ import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
-class DepedencyInjection {
-  static final getIt = GetIt.instance;
+final getIt = GetIt.instance;
 
+class DepedencyInjection {
   void registerDependencies() {
     _initHttpDependencies();
     _initSearchModuleDepencies();

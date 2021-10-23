@@ -7,4 +7,11 @@ class SearchPage {
 
   SearchPage(
       {required this.results, this.pageNumber = 0, this.maxPageNumber = 0});
+
+  SearchPage copyWith(
+          {List<AnimeItem>? results, int? pageNumber, int? maxPageNumber}) =>
+      SearchPage(
+          results: results ?? this.results,
+          maxPageNumber: maxPageNumber ?? this.maxPageNumber,
+          pageNumber: pageNumber ?? this.pageNumber);
 }

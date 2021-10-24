@@ -1,7 +1,8 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/src/di/dependency_injection.dart';
+import 'package:anime_app/src/features/anime_details/presenter/controller/AnimeDetailsStore.dart';
 import 'package:anime_app/ui/component/notification/CustomListNotification.dart';
 import 'package:anime_app/ui/component/video/VideoWidget.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
@@ -487,7 +488,10 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                                 builder: (context) =>
                                     Provider<AnimeDetailsStore>(
                                   create: (_) => AnimeDetailsStore(
-                                      applicationStore, anime,
+                                      applicationStore,
+                                      anime,
+                                      getIt.get(),
+                                      getIt.get(),
                                       shouldLoadSuggestions: false),
                                   child: AnimeDetailsScreen(
                                     heroTag: heroTag,

@@ -1,6 +1,7 @@
 import 'package:anime_app/generated/l10n.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/src/di/dependency_injection.dart';
+import 'package:anime_app/src/features/anime_details/presenter/controller/AnimeDetailsStore.dart';
 import 'package:anime_app/ui/component/app_bar/AnimeStoreHeroAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
@@ -80,6 +81,8 @@ class MyAnimeListPage extends StatelessWidget {
                                 create: (_) => AnimeDetailsStore(
                                   appStore,
                                   animeList[index],
+                                  getIt.get(),
+                                  getIt.get(),
                                 ),
                                 child: AnimeDetailsScreen(
                                   heroTag: animeList[index].id,

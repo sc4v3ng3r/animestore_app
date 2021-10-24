@@ -3,7 +3,7 @@ import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/AnimeGridWidget.dart';
 import 'package:anime_app/src/features/search/presenter/widget/search_widget.dart';
 import 'package:anime_app/ui/component/AboutListWidget.dart';
-import 'package:anime_app/ui/pages/HomePage.dart';
+import 'package:anime_app/src/features/home/presenter/HomePage.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

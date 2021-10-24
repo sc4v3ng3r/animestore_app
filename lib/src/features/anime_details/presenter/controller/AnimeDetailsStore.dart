@@ -1,7 +1,7 @@
-import 'dart:math';
 import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/src/features/anime_details/domain/usecase/anime_details_usecase.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -15,6 +15,8 @@ class AnimeDetailsStore = _AnimeDetailsStore with _$AnimeDetailsStore;
 abstract class _AnimeDetailsStore with Store {
   final ApplicationStore applicationStore;
   final AnimeItem currentAnimeItem;
+  final AnimeDetailsReadUsecase detailsReadUsecase;
+  final AnieDetailsReadRelatedUsecase readRelatedUsecase;
 
   /// if the component should load anime suggestions
   final bool shouldLoadSuggestions;
@@ -37,6 +39,7 @@ abstract class _AnimeDetailsStore with Store {
   ObservableList<AnimeItem>? relatedAnimes;
 
   _AnimeDetailsStore(this.applicationStore, this.currentAnimeItem,
+      this.detailsReadUsecase, this.readRelatedUsecase,
       {this.shouldLoadSuggestions = true});
 
   @action
@@ -58,46 +61,25 @@ abstract class _AnimeDetailsStore with Store {
   void loadAnimeDetails() async {
     if (loadingStatus == LoadingStatus.LOADING) return;
 
-    try {
-      setLoadingStatus(LoadingStatus.LOADING);
-      animeDetails =
-          await applicationStore.getAnimeDetails(currentAnimeItem.id);
+    setLoadingStatus(LoadingStatus.LOADING);
+    final response = await this
+        .detailsReadUsecase
+        .readAnimeDetails(animeId: currentAnimeItem.id);
+
+    response.fold((left) => setLoadingStatus(LoadingStatus.ERROR), (right) {
+      animeDetails = right;
       setLoadingStatus(LoadingStatus.DONE);
       if (shouldLoadSuggestions) _loadAnimeSuggestions();
-    } on CrawlerApiException catch (ex) {
-      print(ex);
-      setLoadingStatus(LoadingStatus.ERROR);
-    }
-  }
-
-  String _generateQuery(List<String> data) {
-    final generator = Random();
-    var totalIndexes = generator.nextInt(data.length + 1);
-    String query = '';
-
-    for (var i = 0; i < totalIndexes; i++) {
-      var index = generator.nextInt(data.length);
-      query += '${data[index]}';
-      data.removeAt(index);
-    }
-
-    return query;
+    });
   }
 
   void _loadAnimeSuggestions() {
-    var genres = animeDetails.genre.split(',');
-    var query =
-        (genres.length > 3) ? _generateQuery(genres) : animeDetails.genre;
-
-    applicationStore.api
-        .search(
-      query,
-    )
-        .then((animeListPage) {
-      setRelatedAnimes(animeListPage.animes);
-    }).catchError((error) {
-      print(error);
-      setRelatedAnimes([]);
+    this
+        .readRelatedUsecase
+        .searchAnimeRealted(detais: animeDetails)
+        .then((value) {
+      value.fold((failure) => setRelatedAnimes([]),
+          (sucessData) => setRelatedAnimes(sucessData));
     });
   }
 }

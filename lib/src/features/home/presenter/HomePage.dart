@@ -1,7 +1,8 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/Constants.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/src/di/dependency_injection.dart';
+import 'package:anime_app/src/features/anime_details/presenter/controller/AnimeDetailsStore.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/TapableText.dart';
@@ -480,7 +481,12 @@ class _HomePageState extends State<HomePage>
           context,
           CupertinoPageRoute(
             builder: (context) => Provider<AnimeDetailsStore>(
-              create: (_) => AnimeDetailsStore(appStore, anime),
+              create: (_) => AnimeDetailsStore(
+                appStore,
+                anime,
+                getIt(),
+                getIt(),
+              ),
               child: AnimeDetailsScreen(
                 heroTag: heroTag,
               ),

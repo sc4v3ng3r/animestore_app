@@ -1,6 +1,7 @@
 import 'package:anime_app/generated/l10n.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/src/di/dependency_injection.dart';
+import 'package:anime_app/src/features/anime_details/presenter/controller/AnimeDetailsStore.dart';
 import 'package:anime_app/src/features/search/presenter/controller/search_store.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
@@ -202,6 +203,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                       create: (_) => AnimeDetailsStore(
                         Provider.of<ApplicationStore>(context),
                         items[index],
+                        getIt.get(),
+                        getIt.get(),
                       ),
                       child: AnimeDetailsScreen(
                         heroTag: items[index].id,

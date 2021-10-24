@@ -21,7 +21,7 @@ class SearchDatasourceImp extends SearchDataSource {
     } on CrawlerApiException catch (exception) {
       print(
           "SearchDatasourceImp::search ${exception.message}|${exception.errorType}");
-      throw AppNetworkExpcetion(message: "", code: 700);
+      throw AppDatasourceExpcetion(message: "", code: 700);
     } catch (ex) {
       print(ex);
       throw AppExecutionException();
@@ -41,7 +41,7 @@ class SearchDatasourceImp extends SearchDataSource {
         pageNumber: int.parse(pageData.pageNumber),
       );
     } on CrawlerApiException catch (apiException) {
-      throw AppNetworkExpcetion(
+      throw AppDatasourceExpcetion(
           message: "${apiException.errorType}", code: 700);
     } catch (exception) {
       print(exception);

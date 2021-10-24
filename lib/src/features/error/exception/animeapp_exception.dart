@@ -4,8 +4,8 @@ abstract class AnimeappException {
   AnimeappException(this.message, this.code);
 }
 
-class AppNetworkExpcetion extends AnimeappException {
-  AppNetworkExpcetion({required String message, required int code})
+class AppDatasourceExpcetion extends AnimeappException {
+  AppDatasourceExpcetion({required String message, required int code})
       : super(message, code);
 }
 

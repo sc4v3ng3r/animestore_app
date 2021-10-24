@@ -1,6 +1,7 @@
 import 'package:anime_app/logic/stores/StoreUtils.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/src/di/dependency_injection.dart';
+import 'package:anime_app/src/features/anime_details/presenter/controller/AnimeDetailsStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
@@ -71,6 +72,8 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                               create: (_) => AnimeDetailsStore(
                                 Provider.of<ApplicationStore>(context),
                                 appStore.feedAnimeList[index],
+                                getIt.get(),
+                                getIt.get(),
                               ),
                               child: AnimeDetailsScreen(
                                 heroTag: appStore.feedAnimeList[index].id,

@@ -1,0 +1,1 @@
+enum AnimeCC { DUBBED, LEGENDED }

@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
 
               // text theme
               textTheme: TextTheme()
-                  .copyWith(bodyText2: TextStyle(color: textPrimaryColor)),
+                  .copyWith(bodyMedium: TextStyle(color: textPrimaryColor)),
               colorScheme:
                   ColorScheme.fromSwatch().copyWith(secondary: accentColor),
             ),

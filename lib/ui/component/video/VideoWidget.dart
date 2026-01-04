@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class VideoWidget extends StatefulWidget {
   final String episodeId;
@@ -42,7 +42,7 @@ class _VideoWidgetState extends State<VideoWidget>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
-    Wakelock.enable();
+    WakelockPlus.enable();
     super.initState();
 
     appStore = Provider.of<ApplicationStore>(context, listen: false);
@@ -77,7 +77,7 @@ class _VideoWidgetState extends State<VideoWidget>
   void dispose() {
     animationController.dispose();
     videoPlayerStore.dispose();
-    Wakelock.disable();
+    WakelockPlus.disable();
     super.dispose();
   }
 

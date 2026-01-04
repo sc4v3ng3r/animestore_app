@@ -4,8 +4,8 @@ import 'package:anime_app/model/AppInfo.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
-import 'package:package_info/package_info.dart';
 import 'package:anime_app/model/EpisodeWatched.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 part 'ApplicationStore.g.dart';
 

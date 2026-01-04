@@ -24,7 +24,7 @@ class AnimeStoreHeroAppBar extends StatelessWidget {
             color: Colors.transparent,
             elevation: .0,
             child: Text(title,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: textPrimaryColor,
                     )),
           ),

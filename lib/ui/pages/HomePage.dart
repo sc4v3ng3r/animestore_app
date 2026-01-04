@@ -16,7 +16,8 @@ import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anime_app/ui/utils/HeroTags.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -493,14 +494,16 @@ class _HomePageState extends State<HomePage>
           required double width,
           required double height}) =>
       Observer(builder: (_) {
-        return Carousel(
-          showIndicator: true,
-          autoplay: false,
-          animationCurve: Curves.easeIn,
-          boxFit: BoxFit.fill,
-          dotSize: 6.0,
-          overlayShadow: true,
-          images: List.generate(
+        return carousel_slider.CarouselSlider(
+          // showIndicator: true,
+          // animationCurve: Curves.easeIn,
+          // boxFit: BoxFit.fill,
+          // dotSize: 6.0,
+          // overlayShadow: true,
+          options: carousel_slider.CarouselOptions(
+            autoPlay: false,
+          ),
+          items: List.generate(
               (appStore.dayReleaseList.length >= 12)
                   ? 12
                   : appStore.dayReleaseList.length, (index) {

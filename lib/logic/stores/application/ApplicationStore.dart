@@ -232,6 +232,7 @@ abstract class _ApplicationStore with Store {
 
   Future<void> getHomePageInfo() async {
     var homePageData = await api.getHomePageData();
+
     setMostRecentAnimeList(homePageData.mostRecentAnimes);
     setTopAnimeList(homePageData.mostShowedAnimes);
     setLatestEpisodes(homePageData.latestEpisodes

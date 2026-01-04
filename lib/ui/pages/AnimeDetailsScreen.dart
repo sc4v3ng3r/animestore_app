@@ -589,7 +589,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25)),
-                    primary: accentColor,
+                    backgroundColor: accentColor,
                   ),
                 ),
               ),

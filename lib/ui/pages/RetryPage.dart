@@ -55,7 +55,8 @@ class RetryPage extends StatelessWidget {
                     locale.tryAgain,
                     style: TextStyle(color: Colors.black87),
                   ),
-                  style: ElevatedButton.styleFrom(primary: Colors.white),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.white),
                 ),
               )
             ],

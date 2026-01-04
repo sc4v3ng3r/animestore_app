@@ -22,6 +22,9 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
+  dompen:
+    path: ../dompen
+
   anitube_crawler_api:
     path: ../anitube_crawler_api
 

@@ -7,13 +7,21 @@ import 'package:mobx/mobx.dart';
 import 'package:anime_app/model/EpisodeWatched.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../src/core/domain/models/content_item.model.dart';
+import '../../../src/core/infrastructure/animestore_content_datasource.dart';
+import '../../../src/features/anitube/external/anitube_home_datasource.impl.dart';
+import '../../../src/features/home/domain/animestore_home_content.model.dart';
+
 part 'ApplicationStore.g.dart';
 
 class ApplicationStore = _ApplicationStore with _$ApplicationStore;
 
 abstract class _ApplicationStore with Store {
   final AniTubeApi api = AniTubeApi(Dio());
+  final AnimestoreContentDatasource<Future<AnimestoreHomeContent>>
+      testHomeDataSource = AnitubeHomeDatasourceImpl();
   final DatabaseProvider databaseProvider = DatabaseProvider();
+
   static const DEFAULT_PAGES_LOADING = 4;
   late AppInfo _appInfo;
 
@@ -30,13 +38,13 @@ abstract class _ApplicationStore with Store {
   ObservableList<AnimeItem> feedAnimeList = ObservableList();
 
   @observable
-  ObservableList<AnimeItem> mostRecentAnimeList = ObservableList();
+  ObservableList<ContentItem> mostRecentAnimeList = ObservableList();
 
   @observable
-  ObservableList<AnimeItem> topAnimeList = ObservableList();
+  ObservableList<ContentItem> topAnimeList = ObservableList();
 
   @observable
-  ObservableList<AnimeItem> dayReleaseList = ObservableList();
+  ObservableList<ContentItem> dayReleaseList = ObservableList();
 
   @observable
   ObservableList<String> genreList = ObservableList();
@@ -49,7 +57,7 @@ abstract class _ApplicationStore with Store {
   ObservableMap<String, EpisodeWatched> watchedEpisodeMap = ObservableMap();
 
   @observable
-  ObservableList<EpisodeItem> latestEpisodes = ObservableList();
+  ObservableList<ContentItem> latestEpisodes = ObservableList();
 
   /// counter of main animes list pages.
   int mainAnimesPageCounter = 1;
@@ -101,7 +109,7 @@ abstract class _ApplicationStore with Store {
   }
 
   @action
-  setLatestEpisodes(List<EpisodeItem> data) =>
+  setLatestEpisodes(List<ContentItem> data) =>
       latestEpisodes = ObservableList.of(data);
 
   @action
@@ -115,15 +123,15 @@ abstract class _ApplicationStore with Store {
   setAppInitialization(AppInitStatus status) => appInitStatus = status;
 
   @action
-  setMostRecentAnimeList(List<AnimeItem> data) =>
+  setMostRecentAnimeList(List<ContentItem> data) =>
       mostRecentAnimeList = ObservableList.of(data);
 
   @action
-  setDailyReleases(List<AnimeItem> data) =>
+  setDailyReleases(List<ContentItem> data) =>
       dayReleaseList = ObservableList.of(data);
 
   @action
-  setTopAnimeList(List<AnimeItem> data) =>
+  setTopAnimeList(List<ContentItem> data) =>
       topAnimeList = ObservableList.of(data);
 
   @action
@@ -232,12 +240,16 @@ abstract class _ApplicationStore with Store {
 
   Future<void> getHomePageInfo() async {
     var homePageData = await api.getHomePageData();
+    final basicHomeContent = await testHomeDataSource
+        .exec(AnimeStoreRequestSettings(baseUrl: '', method: HttpMethod.get));
+    //
 
-    setMostRecentAnimeList(homePageData.mostRecentAnimes);
-    setTopAnimeList(homePageData.mostShowedAnimes);
-    setLatestEpisodes(homePageData.latestEpisodes
+    setMostRecentAnimeList(basicHomeContent.mostViewedAnimes);
+    setTopAnimeList(basicHomeContent.topAnimes);
+    setDailyReleases(basicHomeContent.dailyAnimeReleases);
+
+    setLatestEpisodes(basicHomeContent.recentEpisodes
       ..removeWhere((item) => item.title.contains('anúncios')));
-    setDailyReleases(homePageData.dayReleases);
   }
 
   Future<void> getGenresAvailable() async {

@@ -6,10 +6,11 @@ part of 'GenreAnimeStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
-  final _$animeItemsAtom = Atom(name: '_GenreAnimeStore.animeItems');
+  late final _$animeItemsAtom =
+      Atom(name: '_GenreAnimeStore.animeItems', context: context);
 
   @override
   ObservableList<AnimeItem> get animeItems {
@@ -24,7 +25,8 @@ mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
     });
   }
 
-  final _$loadingStatusAtom = Atom(name: '_GenreAnimeStore.loadingStatus');
+  late final _$loadingStatusAtom =
+      Atom(name: '_GenreAnimeStore.loadingStatus', context: context);
 
   @override
   LoadingStatus get loadingStatus {
@@ -39,7 +41,8 @@ mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
     });
   }
 
-  final _$isLoadingMoreAtom = Atom(name: '_GenreAnimeStore.isLoadingMore');
+  late final _$isLoadingMoreAtom =
+      Atom(name: '_GenreAnimeStore.isLoadingMore', context: context);
 
   @override
   bool get isLoadingMore {
@@ -54,8 +57,8 @@ mixin _$GenreAnimeStore on _GenreAnimeStore, Store {
     });
   }
 
-  final _$_GenreAnimeStoreActionController =
-      ActionController(name: '_GenreAnimeStore');
+  late final _$_GenreAnimeStoreActionController =
+      ActionController(name: '_GenreAnimeStore', context: context);
 
   @override
   dynamic setIsLoadingMore(bool flag) {

@@ -1,26 +1,50 @@
-import '../../../../core/domain/models/Item.model.dart';
+import '../../../../core/domain/models/content_item.model.dart';
 
 /// Item representation for an anime.
-class AnitubeAnimeItemImpl extends Item {
-  static const ID = "id";
-  static const PAGE_URL = "pageUrl";
-  static const IMAGE_URL = "imageUrl";
-  static const TITLE = "title";
-  static const CC = "closeCaption";
-
-  AnitubeAnimeItemImpl(
+class AnitubeAnimeItemDtoImpl extends ContentItem {
+  const AnitubeAnimeItemDtoImpl(
       {required super.id,
       required super.pageUrl,
       required super.title,
       super.imageUrl = '',
       super.closeCaptionType = ''});
 
-  factory AnitubeAnimeItemImpl.fromJson(Map<String, dynamic> json) =>
-      AnitubeAnimeItemImpl(
-        id: json[ID],
-        pageUrl: json[PAGE_URL],
-        title: json[TITLE],
-        imageUrl: json[IMAGE_URL] ?? '',
-        closeCaptionType: json[CC] ?? '',
-      );
+  factory AnitubeAnimeItemDtoImpl.fromJson(Map<String, dynamic> json) {
+    final attributes = json['attributes'] as Map<String, dynamic>? ?? {};
+    final children = json['children'] as Map<String, dynamic>? ?? {};
+
+    // pageUrl
+    final pageUrl = attributes['href'] as String? ?? '';
+
+    // id → último segmento do path do href
+    final id = _extractIdFromUrl(pageUrl);
+
+    // title
+    final title = attributes['title'] as String? ?? '';
+
+    // imageUrl → anime-imagem.attributes.src
+    final imageUrl =
+        (children['anime-imagem']?['attributes']?['src']) as String? ?? '';
+
+    // closeCaptionType → anime-legenda.attributes.text
+    final closeCaptionType =
+        (children['anime-legenda']?['attributes']?['text']) as String? ?? '';
+
+    return AnitubeAnimeItemDtoImpl(
+      id: id,
+      pageUrl: pageUrl,
+      title: title,
+      imageUrl: imageUrl,
+      closeCaptionType: closeCaptionType,
+    );
+  }
+
+  static String _extractIdFromUrl(String url) {
+    if (url.isEmpty) return '';
+
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.pathSegments.isEmpty) return '';
+
+    return uri.pathSegments.last;
+  }
 }

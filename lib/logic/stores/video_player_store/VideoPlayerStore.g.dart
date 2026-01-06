@@ -6,11 +6,11 @@ part of 'VideoPlayerStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$VideoPlayerStore on _VideoPlayerStore, Store {
-  final _$episodeLoadingStatusAtom =
-      Atom(name: '_VideoPlayerStore.episodeLoadingStatus');
+  late final _$episodeLoadingStatusAtom =
+      Atom(name: '_VideoPlayerStore.episodeLoadingStatus', context: context);
 
   @override
   EpisodeStatus get episodeLoadingStatus {
@@ -26,7 +26,8 @@ mixin _$VideoPlayerStore on _VideoPlayerStore, Store {
     });
   }
 
-  final _$isPlayingAtom = Atom(name: '_VideoPlayerStore.isPlaying');
+  late final _$isPlayingAtom =
+      Atom(name: '_VideoPlayerStore.isPlaying', context: context);
 
   @override
   bool get isPlaying {
@@ -41,7 +42,8 @@ mixin _$VideoPlayerStore on _VideoPlayerStore, Store {
     });
   }
 
-  final _$currentPositionAtom = Atom(name: '_VideoPlayerStore.currentPosition');
+  late final _$currentPositionAtom =
+      Atom(name: '_VideoPlayerStore.currentPosition', context: context);
 
   @override
   Duration get currentPosition {
@@ -56,8 +58,8 @@ mixin _$VideoPlayerStore on _VideoPlayerStore, Store {
     });
   }
 
-  final _$_VideoPlayerStoreActionController =
-      ActionController(name: '_VideoPlayerStore');
+  late final _$_VideoPlayerStoreActionController =
+      ActionController(name: '_VideoPlayerStore', context: context);
 
   @override
   dynamic setEpisodeLoadingStatus(EpisodeStatus status) {

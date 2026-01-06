@@ -1,7 +1,7 @@
 import '../../../../core/domain/models/episode_detail.model.dart';
 
-class AnitubeEpisodeVideoDetailImpl extends EpisodeDetails {
-  AnitubeEpisodeVideoDetailImpl({
+class AnitubeEpisodeVideoDetailDtoImpl extends EpisodeDetails {
+  AnitubeEpisodeVideoDetailDtoImpl({
     required String title,
     required String referer,
     required String animeId,
@@ -19,7 +19,7 @@ class AnitubeEpisodeVideoDetailImpl extends EpisodeDetails {
           description: description,
         );
 
-  AnitubeEpisodeVideoDetailImpl.fromJson(Map<String, dynamic> json)
+  AnitubeEpisodeVideoDetailDtoImpl.fromJson(Map<String, dynamic> json)
       : super(
           title: json[EpisodeDetails.TITLE] ?? '',
           streamingUrl: json[EpisodeDetails.STREAM_URL] ?? '',

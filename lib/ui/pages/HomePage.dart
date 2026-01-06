@@ -24,6 +24,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
 
+import '../../src/core/domain/models/content_item.model.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
@@ -138,8 +140,8 @@ class _HomePageState extends State<HomePage>
       iconColor: Colors.amberAccent,
       heroTag: HeroTags.TAG_TOP_ANIMES,
       onTap: () {
-        _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes',
-            HeroTags.TAG_TOP_ANIMES);
+        // _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes',
+        //     HeroTags.TAG_TOP_ANIMES);
       },
     );
 
@@ -188,12 +190,12 @@ class _HomePageState extends State<HomePage>
       iconColor: accentColor,
       title: locale.recentlyUpdated,
       heroTag: HeroTags.TAG_RECENTLY_UPLOADED,
-      onTap: () => _openAnimeItemGridPage(
-        context,
-        appStore.mostRecentAnimeList,
-        locale.recentlyUpdated,
-        HeroTags.TAG_RECENTLY_UPLOADED,
-      ),
+      // onTap: () => _openAnimeItemGridPage(
+      //   context,
+      //   appStore.mostRecentAnimeList,
+      //   locale.recentlyUpdated,
+      //   HeroTags.TAG_RECENTLY_UPLOADED,
+      // ),
     );
 
     final latestEpisodesHeader = _createHeaderSection(
@@ -216,7 +218,7 @@ class _HomePageState extends State<HomePage>
         slivers: <Widget>[
           appBar,
           topAnimesHeader,
-          _createHorizontaAnimelList(
+          _createHorizontaAnimeItemList(
             appStore,
             data: appStore.topAnimeList,
             width: size.width * .42,
@@ -224,7 +226,7 @@ class _HomePageState extends State<HomePage>
             controller: topAnimesController,
           ),
           mostRecentsHeader,
-          _createHorizontaAnimelList(appStore,
+          _createHorizontaAnimeItemList(appStore,
               data: appStore.mostRecentAnimeList,
               width: size.width * .42,
               tag: HERO_TAG_RELEASE,
@@ -306,8 +308,8 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  SliverToBoxAdapter _createHorizontaAnimelList(ApplicationStore appStore,
-      {required List<AnimeItem> data,
+  SliverToBoxAdapter _createHorizontaAnimeItemList(ApplicationStore appStore,
+      {required List<ContentItem> data,
       required double width,
       String? tag,
       required ScrollController controller}) {
@@ -325,8 +327,8 @@ class _HomePageState extends State<HomePage>
             height: width * 1.4,
             imageUrl: anime.imageUrl,
             imageHeroTag: heroTag,
-            onTap: () =>
-                _openAnimeDetailsPage(context, anime, heroTag, appStore),
+            // onTap: () =>
+            //     _openAnimeDetailsPage(context, anime, heroTag, appStore),
           ),
         );
       },
@@ -448,7 +450,7 @@ class _HomePageState extends State<HomePage>
       );
 
   SliverToBoxAdapter _createHorizontalEpisodeList(BuildContext context,
-          {required List<EpisodeItem> data, required double width}) =>
+          {required List<ContentItem> data, required double width}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width + 24,
@@ -467,7 +469,7 @@ class _HomePageState extends State<HomePage>
                 ),
               );
             },
-            itemCount: data.length ~/ 8,
+            itemCount: data.length,
           ),
         ),
       );
@@ -516,8 +518,8 @@ class _HomePageState extends State<HomePage>
               width: width,
               imageHeroTag: heroTag,
               height: height,
-              onTap: () => _openAnimeDetailsPage(
-                  context, appStore.dayReleaseList[index], heroTag, appStore),
+              // onTap: () => _openAnimeDetailsPage(
+              //     context, appStore.dayReleaseList[index], heroTag, appStore),
             );
           }),
         );

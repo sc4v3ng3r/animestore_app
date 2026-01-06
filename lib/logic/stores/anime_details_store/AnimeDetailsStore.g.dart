@@ -6,11 +6,11 @@ part of 'AnimeDetailsStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
-  final _$backgroundColorAtom =
-      Atom(name: '_AnimeDetailsStore.backgroundColor');
+  late final _$backgroundColorAtom =
+      Atom(name: '_AnimeDetailsStore.backgroundColor', context: context);
 
   @override
   Color get backgroundColor {
@@ -25,7 +25,8 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     });
   }
 
-  final _$loadingStatusAtom = Atom(name: '_AnimeDetailsStore.loadingStatus');
+  late final _$loadingStatusAtom =
+      Atom(name: '_AnimeDetailsStore.loadingStatus', context: context);
 
   @override
   LoadingStatus get loadingStatus {
@@ -40,7 +41,8 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     });
   }
 
-  final _$visualizedEpsAtom = Atom(name: '_AnimeDetailsStore.visualizedEps');
+  late final _$visualizedEpsAtom =
+      Atom(name: '_AnimeDetailsStore.visualizedEps', context: context);
 
   @override
   ObservableList<String> get visualizedEps {
@@ -55,7 +57,8 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     });
   }
 
-  final _$tabChoiceAtom = Atom(name: '_AnimeDetailsStore.tabChoice');
+  late final _$tabChoiceAtom =
+      Atom(name: '_AnimeDetailsStore.tabChoice', context: context);
 
   @override
   TabChoice get tabChoice {
@@ -70,7 +73,8 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     });
   }
 
-  final _$relatedAnimesAtom = Atom(name: '_AnimeDetailsStore.relatedAnimes');
+  late final _$relatedAnimesAtom =
+      Atom(name: '_AnimeDetailsStore.relatedAnimes', context: context);
 
   @override
   ObservableList<AnimeItem>? get relatedAnimes {
@@ -85,8 +89,8 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
     });
   }
 
-  final _$_AnimeDetailsStoreActionController =
-      ActionController(name: '_AnimeDetailsStore');
+  late final _$_AnimeDetailsStoreActionController =
+      ActionController(name: '_AnimeDetailsStore', context: context);
 
   @override
   dynamic setLoadingStatus(LoadingStatus data) {

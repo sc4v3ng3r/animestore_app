@@ -1,4 +1,4 @@
-import './item.model.dart';
+import 'content_item.model.dart';
 
 /// This class holds read only details information
 /// about a specific anime. All these information are
@@ -25,7 +25,7 @@ abstract class AnimeDetails {
   // final Map<String, dynamic> _data;
 
   /// The list of anime episode Items.
-  final List<Item> episodes;
+  final List<ContentItem> episodes;
 
   /// The anime title
   final String title;

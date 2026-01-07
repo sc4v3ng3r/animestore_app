@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"ios":{"default":{"projectId":"animestore-app","appId":"1:414287274166:ios:7f41c02f548fc13b6b8617","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"animestore-app","configurations":{"ios":"1:414287274166:ios:7f41c02f548fc13b6b8617"}}}}}}

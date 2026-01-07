@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAME0ZkazSaJ4Wa00LNvFtZc_zQibA5zmc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>414287274166</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>boaventura.com.br.animeApp</string>
+	<key>PROJECT_ID</key>
+	<string>animestore-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>animestore-app.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:414287274166:ios:7f41c02f548fc13b6b8617</string>
+</dict>
+</plist>

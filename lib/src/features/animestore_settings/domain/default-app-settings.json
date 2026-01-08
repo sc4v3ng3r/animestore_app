@@ -1,0 +1,34 @@
+{
+  "animestore-app-settings": {
+    "features": {
+      "home": {
+        "isEnable": true,
+        "parser-declaration": {},
+        "api-settings": {
+          "baseUrl": "https://www.anitube.news/",
+          "path": "",
+          "method": "get",
+          "headers": {
+            "Accept": "application/json"
+          },
+          "queryParams": {},
+          "body": {}
+        }
+      },
+      "anime-details": {
+        "isEnable": true,
+        "parser-declaration": {},
+        "api-settings": {
+          "baseUrl": "https://www.anitube.news",
+          "path": "/video/{%1%}/",
+          "headers": {
+            "Accept": "application/json"
+          },
+          "queryParams": {},
+          "body": {}
+        }
+        
+      }
+    }
+  }
+}

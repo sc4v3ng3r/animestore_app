@@ -2,6 +2,8 @@ import 'package:anime_app/firebase_options.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
+import 'package:anime_app/src/core/external/global_declarations.dart';
+import 'package:anime_app/src/features/animestore_settings/external/di/animestore_settings_dependency_injector.impl.dart';
 import 'package:anime_app/ui/pages/MainScreen.dart';
 import 'package:anime_app/ui/pages/RetryPage.dart';
 import 'package:anime_app/ui/pages/SplashScreen.dart';
@@ -21,6 +23,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  _registerDependencies();
   runApp(new MyApp());
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -78,4 +82,8 @@ class MyApp extends StatelessWidget {
               return widget;
             })),
       );
+}
+
+void _registerDependencies() {
+  AnimestoreSettingsDependencyInjectorImp(getIt).inject();
 }

@@ -8,7 +8,9 @@ import 'package:anime_app/model/EpisodeWatched.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../src/core/domain/models/content_item.model.dart';
+import '../../../src/core/external/global_declarations.dart';
 import '../../../src/core/infrastructure/animestore_content_datasource.dart';
+import '../../../src/features/animestore_settings/infrastructure/repository/animestore_remote_app_settings.repo.impl.dart';
 import '../../../src/features/anitube/external/anitube_home_datasource.impl.dart';
 import '../../../src/features/home/domain/animestore_home_content.model.dart';
 
@@ -239,6 +241,11 @@ abstract class _ApplicationStore with Store {
   }
 
   Future<void> getHomePageInfo() async {
+    final settingsRepository =
+        getIt<AnimestoreRemoteAppSettingsRepositoryImpl>();
+
+    final appSettings = await settingsRepository.getAppSettings();
+
     var homePageData = await api.getHomePageData();
     final basicHomeContent = await testHomeDataSource
         .exec(AnimeStoreRequestSettings(baseUrl: '', method: HttpMethod.get));

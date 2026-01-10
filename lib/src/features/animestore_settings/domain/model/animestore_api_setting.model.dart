@@ -1,4 +1,4 @@
-import 'package:anime_app/src/core/domain/models/utils/jsonable.dart';
+import 'package:anime_app/src/core/domain/models/utils/mapable.dart';
 
 enum ApiMethod { get, post, put, delete }
 

@@ -1,11 +1,10 @@
+import 'package:anime_app/src/core/domain/models/http/animestore_http_request.model.dart';
 import 'package:anime_app/src/core/domain/models/utils/mapable.dart';
-
-enum ApiMethod { get, post, put, delete }
 
 abstract class AnimeStoreApiSetting with Mapable {
   final String baseUrl;
   final String path;
-  final ApiMethod method;
+  final HttpMethod method;
   final Map<String, dynamic> headers;
   final Map<String, dynamic> queryParams;
   final Map<String, dynamic> body;
@@ -57,13 +56,13 @@ class AnimeStoreApiSettingImpl extends AnimeStoreApiSetting {
   }
 }
 
-extension ApiMethodType on ApiMethod {
+extension ApiMethodType on HttpMethod {
   String get name => toString().split('.').last;
 
-  static ApiMethod fromString(String value) {
-    return ApiMethod.values.firstWhere(
+  static HttpMethod fromString(String value) {
+    return HttpMethod.values.firstWhere(
       (e) => e.name == value.toLowerCase(),
-      orElse: () => ApiMethod.get,
+      orElse: () => HttpMethod.get,
     );
   }
 }

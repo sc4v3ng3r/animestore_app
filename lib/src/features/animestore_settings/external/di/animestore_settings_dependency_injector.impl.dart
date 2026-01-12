@@ -1,4 +1,4 @@
-import 'package:anime_app/src/core/infrastructure/animestore_dependecy_injector.dart';
+import 'package:anime_app/src/core/infrastructure/di/animestore_dependecy_injector.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get_it/get_it.dart';
 

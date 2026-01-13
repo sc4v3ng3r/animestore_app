@@ -16,7 +16,7 @@ class AnitubeHomeDatasourceImpl
 
   @override
   Future<AnimestoreHomeContent> exec(AnimeStoreContentSettings settings) async {
-    final response = await _httpClient.request(settings.requestSettings);
+    final response = await _httpClient.request(settings.request);
 
     final results = _parser.parse(
         contentToParse: response.responseData,

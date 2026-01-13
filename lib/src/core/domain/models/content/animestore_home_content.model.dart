@@ -1,4 +1,4 @@
-import '../../../core/domain/models/content_item.model.dart';
+import '../content_item.model.dart';
 
 abstract class AnimestoreHomeContent {
   final List<ContentItem> topAnimes;

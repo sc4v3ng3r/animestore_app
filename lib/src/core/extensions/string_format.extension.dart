@@ -10,4 +10,16 @@ extension StringFormat on String {
 
     return result;
   }
+
+  String extractIdFromUrl() {
+    if (isEmpty) return '';
+
+    final uri = Uri.tryParse(this);
+    if (uri == null) return '';
+
+    final segments = uri.pathSegments.where((s) => s.isNotEmpty).toList();
+    if (segments.isEmpty) return '';
+
+    return segments.last;
+  }
 }

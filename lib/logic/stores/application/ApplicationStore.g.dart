@@ -29,13 +29,13 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       Atom(name: '_ApplicationStore.mostRecentAnimeList', context: context);
 
   @override
-  ObservableList<ContentItem> get mostRecentAnimeList {
+  ObservableList<AnimestoreContentItem> get mostRecentAnimeList {
     _$mostRecentAnimeListAtom.reportRead();
     return super.mostRecentAnimeList;
   }
 
   @override
-  set mostRecentAnimeList(ObservableList<ContentItem> value) {
+  set mostRecentAnimeList(ObservableList<AnimestoreContentItem> value) {
     _$mostRecentAnimeListAtom.reportWrite(value, super.mostRecentAnimeList, () {
       super.mostRecentAnimeList = value;
     });
@@ -45,13 +45,13 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       Atom(name: '_ApplicationStore.topAnimeList', context: context);
 
   @override
-  ObservableList<ContentItem> get topAnimeList {
+  ObservableList<AnimestoreContentItem> get topAnimeList {
     _$topAnimeListAtom.reportRead();
     return super.topAnimeList;
   }
 
   @override
-  set topAnimeList(ObservableList<ContentItem> value) {
+  set topAnimeList(ObservableList<AnimestoreContentItem> value) {
     _$topAnimeListAtom.reportWrite(value, super.topAnimeList, () {
       super.topAnimeList = value;
     });
@@ -61,13 +61,13 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       Atom(name: '_ApplicationStore.dayReleaseList', context: context);
 
   @override
-  ObservableList<ContentItem> get dayReleaseList {
+  ObservableList<AnimestoreContentItem> get dayReleaseList {
     _$dayReleaseListAtom.reportRead();
     return super.dayReleaseList;
   }
 
   @override
-  set dayReleaseList(ObservableList<ContentItem> value) {
+  set dayReleaseList(ObservableList<AnimestoreContentItem> value) {
     _$dayReleaseListAtom.reportWrite(value, super.dayReleaseList, () {
       super.dayReleaseList = value;
     });
@@ -125,13 +125,13 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       Atom(name: '_ApplicationStore.latestEpisodes', context: context);
 
   @override
-  ObservableList<ContentItem> get latestEpisodes {
+  ObservableList<AnimestoreContentItem> get latestEpisodes {
     _$latestEpisodesAtom.reportRead();
     return super.latestEpisodes;
   }
 
   @override
-  set latestEpisodes(ObservableList<ContentItem> value) {
+  set latestEpisodes(ObservableList<AnimestoreContentItem> value) {
     _$latestEpisodesAtom.reportWrite(value, super.latestEpisodes, () {
       super.latestEpisodes = value;
     });
@@ -231,7 +231,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic setLatestEpisodes(List<ContentItem> data) {
+  dynamic setLatestEpisodes(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.setLatestEpisodes');
     try {
@@ -275,7 +275,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic setMostRecentAnimeList(List<ContentItem> data) {
+  dynamic setMostRecentAnimeList(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.setMostRecentAnimeList');
     try {
@@ -286,7 +286,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic setDailyReleases(List<ContentItem> data) {
+  dynamic setDailyReleases(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.setDailyReleases');
     try {
@@ -297,7 +297,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic setTopAnimeList(List<ContentItem> data) {
+  dynamic setTopAnimeList(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.setTopAnimeList');
     try {

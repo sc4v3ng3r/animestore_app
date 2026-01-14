@@ -2,26 +2,28 @@ import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
+import 'package:anime_app/src/core/domain/models/animestore_anime_details.model.dart';
 import 'package:anime_app/ui/component/notification/CustomListNotification.dart';
 import 'package:anime_app/ui/component/video/VideoWidget.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
-import '../theme/ColorValues.dart';
 import '../utils/UiUtils.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
   final String? heroTag;
+  final ApplicationStore applicationStore;
+  final AnimeDetailsStore detailsStore;
 
-  const AnimeDetailsScreen({Key? key, this.heroTag}) : super(key: key);
+  const AnimeDetailsScreen(
+      {required this.applicationStore,
+      required this.detailsStore,
+      super.key,
+      this.heroTag});
 
   @override
   State<StatefulWidget> createState() => _AnimeDetailsScreen();
@@ -50,15 +52,23 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   }
 
   @override
+  void didUpdateWidget(covariant AnimeDetailsScreen oldWidget) {
+    super.didUpdateWidget(widget.detailsStore.currentAnimeItem.id ==
+            oldWidget.detailsStore.currentAnimeItem.id
+        ? oldWidget
+        : widget);
+  }
+
+  @override
   void initState() {
     super.initState();
-    detailsStore = Provider.of<AnimeDetailsStore>(context, listen: false);
+    applicationStore = widget.applicationStore;
+    detailsStore = widget.detailsStore;
+
     detailsStore.loadAnimeDetails();
 
     animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 2000));
-
-    applicationStore = Provider.of<ApplicationStore>(context, listen: false);
 
     slideAnimation =
         Tween<Offset>(begin: Offset(400, .0), end: Offset.zero).animate(
@@ -95,7 +105,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
       floating: false,
       pinned: false,
       snap: false,
-      leading: Container(),
+      leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(CupertinoIcons.back)),
       expandedHeight: expandedHeight,
       backgroundColor: primaryColor,
       flexibleSpace: FlexibleSpaceBar(
@@ -347,8 +359,8 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   }
 
   void _addToList() {
-    applicationStore.addToAnimeMap(
-        detailsStore.currentAnimeItem.id, detailsStore.currentAnimeItem);
+    // applicationStore.addToAnimeMap(
+    //     detailsStore.currentAnimeItem.id, detailsStore.currentAnimeItem);
     _showNotificationToast(locale.addedToList, true);
   }
 
@@ -387,16 +399,16 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
         ),
       );
 
-  Widget buildDetailsSection(AnimeDetails data) => Container(
+  Widget buildDetailsSection(AnimestoreAnimeDetails animeDetails) => Container(
         margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Column(
           children: <Widget>[
-            _buildInfoRow('${locale.genre}: ', data.genre),
-            _buildInfoRow('${locale.studio}: ', data.studio),
-            _buildInfoRow('${locale.author}: ', data.author),
-            _buildInfoRow('${locale.director}: ', data.director),
-            _buildInfoRow('${locale.episodes}: ', data.episodesNumber),
-            _buildInfoRow('${locale.year}: ', data.year),
+            _buildInfoRow('${locale.genre}: ', animeDetails.genre),
+            _buildInfoRow('${locale.studio}: ', animeDetails.studio),
+            _buildInfoRow('${locale.author}: ', animeDetails.author),
+            _buildInfoRow('${locale.director}: ', animeDetails.director),
+            _buildInfoRow('${locale.episodes}: ', animeDetails.episodesNumber),
+            _buildInfoRow('${locale.year}: ', animeDetails.year),
           ],
         ),
       );
@@ -481,20 +493,20 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                             height: height,
                             imageUrl: anime.imageUrl,
                             imageHeroTag: heroTag,
-                            onTap: () => Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) =>
-                                    Provider<AnimeDetailsStore>(
-                                  create: (_) => AnimeDetailsStore(
-                                      applicationStore, anime,
-                                      shouldLoadSuggestions: false),
-                                  child: AnimeDetailsScreen(
-                                    heroTag: heroTag,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // onTap: () => Navigator.push(
+                            //   context,
+                            //   CupertinoPageRoute(
+                            //     builder: (context) =>
+                            //         Provider<AnimeDetailsStore>(
+                            //       create: (_) => AnimeDetailsStore(
+                            //           applicationStore, anime,
+                            //           shouldLoadSuggestions: false),
+                            //       child: AnimeDetailsScreen(
+                            //         heroTag: heroTag,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ),
                         );
                       },

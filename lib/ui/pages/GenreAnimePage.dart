@@ -93,18 +93,18 @@ class _GenreAnimePageState extends State<GenreAnimePage> {
                                   height: itemHeight,
                                   imageUrl: anime.imageUrl,
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        CupertinoPageRoute(
-                                          builder: (context) =>
-                                              Provider<AnimeDetailsStore>(
-                                            create: (_) => AnimeDetailsStore(
-                                                appStore, anime),
-                                            child: AnimeDetailsScreen(
-                                              heroTag: heroTag,
-                                            ),
-                                          ),
-                                        ));
+                                    // Navigator.push(
+                                    //     context,
+                                    //     CupertinoPageRoute(
+                                    //       builder: (context) =>
+                                    //           Provider<AnimeDetailsStore>(
+                                    //         create: (_) => AnimeDetailsStore(
+                                    //             appStore, anime),
+                                    //         child: AnimeDetailsScreen(
+                                    //           heroTag: heroTag,
+                                    //         ),
+                                    //       ),
+                                    //     ));
                                   },
                                 ),
                               );

@@ -64,19 +64,19 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
                     imageUrl: appStore.feedAnimeList[index].imageUrl,
                     imageHeroTag: appStore.feedAnimeList[index].id,
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Provider<AnimeDetailsStore>(
-                              create: (_) => AnimeDetailsStore(
-                                Provider.of<ApplicationStore>(context),
-                                appStore.feedAnimeList[index],
-                              ),
-                              child: AnimeDetailsScreen(
-                                heroTag: appStore.feedAnimeList[index].id,
-                              ),
-                            ),
-                          ));
+                      // Navigator.push(
+                      //     context,
+                      //     CupertinoPageRoute(
+                      //       builder: (context) => Provider<AnimeDetailsStore>(
+                      //         create: (_) => AnimeDetailsStore(
+                      //           Provider.of<ApplicationStore>(context),
+                      //           appStore.feedAnimeList[index],
+                      //         ),
+                      //         child: AnimeDetailsScreen(
+                      //           heroTag: appStore.feedAnimeList[index].id,
+                      //         ),
+                      //       ),
+                      //     ));
                     },
                   ),
                 );

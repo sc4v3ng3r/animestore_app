@@ -195,20 +195,20 @@ class _SearchWidgetState extends State<SearchWidget> {
               imageUrl: items[index].imageUrl,
               imageHeroTag: items[index].id,
               onTap: () {
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => Provider<AnimeDetailsStore>(
-                      create: (_) => AnimeDetailsStore(
-                        Provider.of<ApplicationStore>(context),
-                        items[index],
-                      ),
-                      child: AnimeDetailsScreen(
-                        heroTag: items[index].id,
-                      ),
-                    ),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   CupertinoPageRoute(
+                //     builder: (context) => Provider<AnimeDetailsStore>(
+                //       create: (_) => AnimeDetailsStore(
+                //         Provider.of<ApplicationStore>(context),
+                //         items[index],
+                //       ),
+                //       child: AnimeDetailsScreen(
+                //         heroTag: items[index].id,
+                //       ),
+                //     ),
+                //   ),
+                // );
               },
             );
           },

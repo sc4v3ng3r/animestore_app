@@ -54,19 +54,19 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
                     imageUrl: gridItems[index].imageUrl,
                     imageHeroTag: gridItems[index].id,
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => Provider<AnimeDetailsStore>(
-                              create: (_) => AnimeDetailsStore(
-                                Provider.of<ApplicationStore>(context),
-                                gridItems[index],
-                              ),
-                              child: AnimeDetailsScreen(
-                                heroTag: gridItems[index].id,
-                              ),
-                            ),
-                          ));
+                      // Navigator.push(
+                      //     context,
+                      //     CupertinoPageRoute(
+                      //       builder: (context) => Provider<AnimeDetailsStore>(
+                      //         create: (_) => AnimeDetailsStore(
+                      //           Provider.of<ApplicationStore>(context),
+                      //           gridItems[index],
+                      //         ),
+                      //         child: AnimeDetailsScreen(
+                      //           heroTag: gridItems[index].id,
+                      //         ),
+                      //       ),
+                      //     ));
                     },
                   ),
                 );

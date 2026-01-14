@@ -1,4 +1,5 @@
 import '../../../../core/domain/models/animestore_content_item.model.dart';
+import '../../../../core/extensions/string_format.extension.dart';
 
 /// Item representation for an anime.
 class AnitubeAnimeItemDtoImpl extends AnimestoreContentItem {
@@ -17,7 +18,7 @@ class AnitubeAnimeItemDtoImpl extends AnimestoreContentItem {
     final pageUrl = attributes['href'] as String? ?? '';
 
     // id → último segmento do path do href
-    final id = _extractIdFromUrl(pageUrl);
+    final id = pageUrl.extractIdFromUrl();
 
     // title
     final title = attributes['title'] as String? ?? '';
@@ -37,17 +38,5 @@ class AnitubeAnimeItemDtoImpl extends AnimestoreContentItem {
       imageUrl: imageUrl,
       closeCaptionType: closeCaptionType,
     );
-  }
-
-  static String _extractIdFromUrl(String url) {
-    if (url.isEmpty) return '';
-
-    final uri = Uri.tryParse(url);
-    if (uri == null) return '';
-
-    final segments = uri.pathSegments.where((s) => s.isNotEmpty).toList();
-    if (segments.isEmpty) return '';
-
-    return segments.last;
   }
 }

@@ -24,7 +24,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
 
-import '../../src/core/domain/models/content_item.model.dart';
+import '../../src/core/domain/models/animestore_content_item.model.dart';
+import '../../src/core/external/global_declarations.dart';
+import '../../src/features/anitube/external/datasource/anitube_anime_details_datasource.impl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -309,7 +311,7 @@ class _HomePageState extends State<HomePage>
   }
 
   SliverToBoxAdapter _createHorizontaAnimeItemList(ApplicationStore appStore,
-      {required List<ContentItem> data,
+      {required List<AnimestoreContentItem> data,
       required double width,
       String? tag,
       required ScrollController controller}) {
@@ -327,8 +329,8 @@ class _HomePageState extends State<HomePage>
             height: width * 1.4,
             imageUrl: anime.imageUrl,
             imageHeroTag: heroTag,
-            // onTap: () =>
-            //     _openAnimeDetailsPage(context, anime, heroTag, appStore),
+            onTap: () =>
+                _openAnimeDetailsPage(context, anime, heroTag, appStore),
           ),
         );
       },
@@ -374,8 +376,8 @@ class _HomePageState extends State<HomePage>
                       height: width * 1.4,
                       imageUrl: anime.imageUrl,
                       imageHeroTag: heroTag,
-                      onTap: () => _openAnimeDetailsPage(
-                          context, anime, heroTag, appStore),
+                      // onTap: () => _openAnimeDetailsPage(
+                      //     context, anime, heroTag, appStore),
                     ),
                   );
                 },
@@ -450,7 +452,7 @@ class _HomePageState extends State<HomePage>
       );
 
   SliverToBoxAdapter _createHorizontalEpisodeList(BuildContext context,
-          {required List<ContentItem> data, required double width}) =>
+          {required List<AnimestoreContentItem> data, required double width}) =>
       SliverToBoxAdapter(
         child: Container(
           height: width + 24,
@@ -477,16 +479,16 @@ class _HomePageState extends State<HomePage>
   void _openLatestEpisodePage(BuildContext context) => Navigator.push(context,
       CupertinoPageRoute(builder: (context) => RecentEpisodeListPage()));
 
-  void _openAnimeDetailsPage(BuildContext context, AnimeItem anime,
+  void _openAnimeDetailsPage(BuildContext context, AnimestoreContentItem anime,
           String heroTag, ApplicationStore appStore) =>
       Navigator.push(
           context,
           CupertinoPageRoute(
-            builder: (context) => Provider<AnimeDetailsStore>(
-              create: (_) => AnimeDetailsStore(appStore, anime),
-              child: AnimeDetailsScreen(
-                heroTag: heroTag,
-              ),
+            builder: (context) => AnimeDetailsScreen(
+              heroTag: heroTag,
+              applicationStore: appStore,
+              detailsStore: AnimeDetailsStore(appStore.appSettings, anime,
+                  getIt<AnitubeAnimeDetailsDatasourceImpl>()),
             ),
           ));
 

@@ -77,13 +77,13 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
       Atom(name: '_AnimeDetailsStore.relatedAnimes', context: context);
 
   @override
-  ObservableList<AnimeItem>? get relatedAnimes {
+  ObservableList<AnimestoreContentItem>? get relatedAnimes {
     _$relatedAnimesAtom.reportRead();
     return super.relatedAnimes;
   }
 
   @override
-  set relatedAnimes(ObservableList<AnimeItem>? value) {
+  set relatedAnimes(ObservableList<AnimestoreContentItem>? value) {
     _$relatedAnimesAtom.reportWrite(value, super.relatedAnimes, () {
       super.relatedAnimes = value;
     });
@@ -131,17 +131,6 @@ mixin _$AnimeDetailsStore on _AnimeDetailsStore, Store {
         name: '_AnimeDetailsStore.setTabChoice');
     try {
       return super.setTabChoice(choice);
-    } finally {
-      _$_AnimeDetailsStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic setRelatedAnimes(List<AnimeItem> data) {
-    final _$actionInfo = _$_AnimeDetailsStoreActionController.startAction(
-        name: '_AnimeDetailsStore.setRelatedAnimes');
-    try {
-      return super.setRelatedAnimes(data);
     } finally {
       _$_AnimeDetailsStoreActionController.endAction(_$actionInfo);
     }

@@ -16,6 +16,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'generated/l10n.dart';
+import 'src/core/external/di/animestore_core_depedency_injector.dart';
+import 'src/features/anitube/external/di/anitube_dependency_injector.impl.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -85,5 +87,8 @@ class MyApp extends StatelessWidget {
 }
 
 void _registerDependencies() {
+  AnimestoreCoreDepedencyInjector(getIt).inject();
   AnimestoreSettingsDependencyInjectorImp(getIt).inject();
+
+  AnitubeDependencyInjector(getIt).inject();
 }

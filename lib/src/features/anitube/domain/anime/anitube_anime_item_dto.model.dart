@@ -43,8 +43,11 @@ class AnitubeAnimeItemDtoImpl extends ContentItem {
     if (url.isEmpty) return '';
 
     final uri = Uri.tryParse(url);
-    if (uri == null || uri.pathSegments.isEmpty) return '';
+    if (uri == null) return '';
 
-    return uri.pathSegments.last;
+    final segments = uri.pathSegments.where((s) => s.isNotEmpty).toList();
+    if (segments.isEmpty) return '';
+
+    return segments.last;
   }
 }

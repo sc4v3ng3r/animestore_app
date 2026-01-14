@@ -1,8 +1,8 @@
-import '../../../../core/domain/models/anime_details.model.dart';
-import '../../../../core/domain/models/content_item.model.dart';
+import '../../../../core/domain/models/animestore_anime_details.model.dart';
+import '../../../../core/domain/models/animestore_content_item.model.dart';
 import '../episode/anitube_episode_item_dto.model.dart';
 
-class AnitubeAnimeDetailsDto extends AnimeDetails {
+class AnitubeAnimeDetailsDto extends AnimestoreAnimeDetails {
   AnitubeAnimeDetailsDto({
     required super.title,
     required super.imageUrl,
@@ -35,11 +35,11 @@ class AnitubeAnimeDetailsDto extends AnimeDetails {
     return attrs?[attr]?.toString() ?? '';
   }
 
-  static List<ContentItem> _readEpisodes(Map<String, dynamic> map) {
+  static List<AnimestoreContentItem> _readEpisodes(Map<String, dynamic> map) {
     final list = map['anime-episodes'] as List?;
     if (list == null) return [];
 
-    return list.map<ContentItem>((node) {
+    return list.map<AnimestoreContentItem>((node) {
       return AnitubeEpisodeItemDtoImpl.fromJson(node);
     }).toList();
   }

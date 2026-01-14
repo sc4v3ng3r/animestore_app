@@ -1,9 +1,7 @@
-//part of anitube_crawler_api;
-
 /// This class holds read only info about an episode. All
 /// the information are provided by animetube.site brazilian website
 /// and some of them infos can be wrong or even unavailable.
-abstract class EpisodeDetails {
+abstract class AnimestoreVideoDetails {
   static const TITLE = "title";
   static const STREAM_URL = 'streamURL';
   static const PREVIOUS = "previous";
@@ -33,7 +31,7 @@ abstract class EpisodeDetails {
   /// Anime id.
   final String animeId;
 
-  EpisodeDetails({
+  AnimestoreVideoDetails({
     required this.title,
     required this.referer,
     required this.animeId,

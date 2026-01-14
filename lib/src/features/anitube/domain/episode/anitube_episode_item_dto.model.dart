@@ -1,6 +1,6 @@
-import '../../../../core/domain/models/content_item.model.dart';
+import '../../../../core/domain/models/animestore_content_item.model.dart';
 
-class AnitubeEpisodeItemDtoImpl extends ContentItem {
+class AnitubeEpisodeItemDtoImpl extends AnimestoreContentItem {
   const AnitubeEpisodeItemDtoImpl(
       {required super.id,
       required super.pageUrl,

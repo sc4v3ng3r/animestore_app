@@ -1,5 +1,5 @@
 import '../../../../core/domain/models/content/animestore_content_settings.model.dart';
-import '../../../../core/domain/models/content_item.model.dart';
+import '../../../../core/domain/models/animestore_content_item.model.dart';
 import '../../../../core/infrastructure/datasource/animestore_content_datasource.dart';
 import '../../../../core/infrastructure/http/animestore_http_client.dart';
 import '../../../../core/infrastructure/parser/animestore_content_parser.dart';
@@ -49,9 +49,9 @@ class AnitubeHomeDatasourceImpl
     );
   }
 
-  ContentItem _mapToAnimeItem(Map<String, dynamic> element) =>
+  AnimestoreContentItem _mapToAnimeItem(Map<String, dynamic> element) =>
       AnitubeAnimeItemDtoImpl.fromJson(element);
 
-  ContentItem _mapToEpisodeItem(Map<String, dynamic> element) =>
+  AnimestoreContentItem _mapToEpisodeItem(Map<String, dynamic> element) =>
       AnitubeEpisodeItemDtoImpl.fromJson(element);
 }

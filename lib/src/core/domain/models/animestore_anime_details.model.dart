@@ -1,11 +1,11 @@
-import 'content_item.model.dart';
+import 'animestore_content_item.model.dart';
 
 /// This class holds read only details information
 /// about a specific anime. All these information are
 /// provided by animetube.site brazilian website and some of
 /// them could be wrong or even not available.
 
-abstract class AnimeDetails {
+abstract class AnimestoreAnimeDetails {
   static const TITLE = "titulo";
   static const AUTHOR = "Autor";
   static const FORMAT = "Formato";
@@ -25,7 +25,7 @@ abstract class AnimeDetails {
   // final Map<String, dynamic> _data;
 
   /// The list of anime episode Items.
-  final List<ContentItem> episodes;
+  final List<AnimestoreContentItem> episodes;
 
   /// The anime title
   final String title;
@@ -65,7 +65,7 @@ abstract class AnimeDetails {
   /// The number of episodes
   final String episodesNumber;
 
-  AnimeDetails(
+  const AnimestoreAnimeDetails(
       {required this.title,
       this.episodes = const [],
       this.author = '',

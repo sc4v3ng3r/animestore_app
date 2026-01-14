@@ -1,10 +1,10 @@
-import '../content_item.model.dart';
+import '../animestore_content_item.model.dart';
 
 abstract class AnimestoreHomeContent {
-  final List<ContentItem> topAnimes;
-  final List<ContentItem> mostViewedAnimes;
-  final List<ContentItem> dailyAnimeReleases;
-  final List<ContentItem> recentEpisodes;
+  final List<AnimestoreContentItem> topAnimes;
+  final List<AnimestoreContentItem> mostViewedAnimes;
+  final List<AnimestoreContentItem> dailyAnimeReleases;
+  final List<AnimestoreContentItem> recentEpisodes;
   final List<String> genres;
 
   const AnimestoreHomeContent(

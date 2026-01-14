@@ -1,7 +1,7 @@
-import '../../../../core/domain/models/episode_detail.model.dart';
+import '../../../../core/domain/models/animestore_video_detail.model.dart';
 
-class AnitubeEpisodeVideoDetailDtoImpl extends EpisodeDetails {
-  AnitubeEpisodeVideoDetailDtoImpl({
+class AnitubeVideoDetailDtoImpl extends AnimestoreVideoDetails {
+  AnitubeVideoDetailDtoImpl({
     required String title,
     required String referer,
     required String animeId,
@@ -19,14 +19,14 @@ class AnitubeEpisodeVideoDetailDtoImpl extends EpisodeDetails {
           description: description,
         );
 
-  AnitubeEpisodeVideoDetailDtoImpl.fromJson(Map<String, dynamic> json)
+  AnitubeVideoDetailDtoImpl.fromJson(Map<String, dynamic> json)
       : super(
-          title: json[EpisodeDetails.TITLE] ?? '',
-          streamingUrl: json[EpisodeDetails.STREAM_URL] ?? '',
-          previousEpisodeId: json[EpisodeDetails.PREVIOUS] ?? '',
-          nextEpisodeId: json[EpisodeDetails.NEXT] ?? '',
-          description: json[EpisodeDetails.DESCRIPTION] ?? '',
-          referer: json[EpisodeDetails.REFERER] ?? '',
-          animeId: json[EpisodeDetails.ANIME_ID] ?? '',
+          title: json[AnimestoreVideoDetails.TITLE] ?? '',
+          streamingUrl: json[AnimestoreVideoDetails.STREAM_URL] ?? '',
+          previousEpisodeId: json[AnimestoreVideoDetails.PREVIOUS] ?? '',
+          nextEpisodeId: json[AnimestoreVideoDetails.NEXT] ?? '',
+          description: json[AnimestoreVideoDetails.DESCRIPTION] ?? '',
+          referer: json[AnimestoreVideoDetails.REFERER] ?? '',
+          animeId: json[AnimestoreVideoDetails.ANIME_ID] ?? '',
         );
 }

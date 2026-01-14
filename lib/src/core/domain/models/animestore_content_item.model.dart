@@ -1,7 +1,7 @@
 /// This is the base class for AnimeItem and EpisodeItem implementation.
 /// actually both classes are equals to Item class only the name is different
 /// to be more legible.
-abstract class ContentItem {
+abstract class AnimestoreContentItem {
   /// The item id
   final String id;
 
@@ -17,7 +17,7 @@ abstract class ContentItem {
   /// Item closed caption type.
   final String closeCaptionType;
 
-  const ContentItem(
+  const AnimestoreContentItem(
       {required this.id,
       required this.pageUrl,
       required this.imageUrl,

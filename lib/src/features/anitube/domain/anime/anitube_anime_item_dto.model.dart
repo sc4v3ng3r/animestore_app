@@ -1,7 +1,7 @@
-import '../../../../core/domain/models/content_item.model.dart';
+import '../../../../core/domain/models/animestore_content_item.model.dart';
 
 /// Item representation for an anime.
-class AnitubeAnimeItemDtoImpl extends ContentItem {
+class AnitubeAnimeItemDtoImpl extends AnimestoreContentItem {
   const AnitubeAnimeItemDtoImpl(
       {required super.id,
       required super.pageUrl,

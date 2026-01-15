@@ -15,7 +15,6 @@ import 'package:anime_app/ui/pages/RecentEpisodeGridPage.dart';
 import 'package:anime_app/ui/pages/VideoPlayerScreen.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:anime_app/ui/utils/HeroTags.dart';
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:carousel_slider/carousel_slider.dart' as carousel_slider;
 
 import 'package:flutter/cupertino.dart';
@@ -142,8 +141,8 @@ class _HomePageState extends State<HomePage>
       iconColor: Colors.amberAccent,
       heroTag: HeroTags.TAG_TOP_ANIMES,
       onTap: () {
-        // _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes',
-        //     HeroTags.TAG_TOP_ANIMES);
+        _openAnimeItemGridPage(context, appStore.topAnimeList, 'Top Animes',
+            HeroTags.TAG_TOP_ANIMES);
       },
     );
 
@@ -179,6 +178,7 @@ class _HomePageState extends State<HomePage>
                 context,
                 CupertinoPageRoute(
                     builder: (context) => MyAnimeListPage(
+                          applicationStore: appStore,
                           heroTag: HeroTags.TAG_MY_LIST,
                         )),
               ),
@@ -192,12 +192,12 @@ class _HomePageState extends State<HomePage>
       iconColor: accentColor,
       title: locale.recentlyUpdated,
       heroTag: HeroTags.TAG_RECENTLY_UPLOADED,
-      // onTap: () => _openAnimeItemGridPage(
-      //   context,
-      //   appStore.mostRecentAnimeList,
-      //   locale.recentlyUpdated,
-      //   HeroTags.TAG_RECENTLY_UPLOADED,
-      // ),
+      onTap: () => _openAnimeItemGridPage(
+        context,
+        appStore.mostRecentAnimeList,
+        locale.recentlyUpdated,
+        HeroTags.TAG_RECENTLY_UPLOADED,
+      ),
     );
 
     final latestEpisodesHeader = _createHeaderSection(
@@ -520,15 +520,15 @@ class _HomePageState extends State<HomePage>
               width: width,
               imageHeroTag: heroTag,
               height: height,
-              // onTap: () => _openAnimeDetailsPage(
-              //     context, appStore.dayReleaseList[index], heroTag, appStore),
+              onTap: () => _openAnimeDetailsPage(
+                  context, appStore.dayReleaseList[index], heroTag, appStore),
             );
           }),
         );
       });
 
-  void _openAnimeItemGridPage(
-      BuildContext context, List<AnimeItem> data, String title, String heroTag,
+  void _openAnimeItemGridPage(BuildContext context,
+      List<AnimestoreContentItem> data, String title, String heroTag,
       {List<Widget>? actions}) {
     Navigator.push(
         context,
@@ -538,6 +538,8 @@ class _HomePageState extends State<HomePage>
             gridItems: data,
             heroTag: heroTag,
             actions: actions,
+            onItemTap: (animeContentItem) => _openAnimeDetailsPage(
+                context, animeContentItem, heroTag, appStore),
           ),
         ));
   }

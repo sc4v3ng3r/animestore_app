@@ -1,21 +1,16 @@
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
-import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/app_bar/AnimeStoreHeroAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
-import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-typedef OnTap = void Function();
+import '../../src/core/domain/models/animestore_content_item.model.dart';
 
 class DefaultAnimeItemGridPage extends StatelessWidget {
-  final List<AnimeItem> gridItems;
+  final List<AnimestoreContentItem> gridItems;
   final String title;
   final String? heroTag;
   final List<Widget>? actions;
+  final ValueChanged<AnimestoreContentItem>? onItemTap;
 
   const DefaultAnimeItemGridPage({
     Key? key,
@@ -23,6 +18,7 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
     required this.title,
     this.actions,
     this.heroTag,
+    this.onItemTap,
   }) : super(key: key);
 
   @override
@@ -54,19 +50,7 @@ class DefaultAnimeItemGridPage extends StatelessWidget {
                     imageUrl: gridItems[index].imageUrl,
                     imageHeroTag: gridItems[index].id,
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     CupertinoPageRoute(
-                      //       builder: (context) => Provider<AnimeDetailsStore>(
-                      //         create: (_) => AnimeDetailsStore(
-                      //           Provider.of<ApplicationStore>(context),
-                      //           gridItems[index],
-                      //         ),
-                      //         child: AnimeDetailsScreen(
-                      //           heroTag: gridItems[index].id,
-                      //         ),
-                      //       ),
-                      //     ));
+                      onItemTap?.call(gridItems[index]);
                     },
                   ),
                 );

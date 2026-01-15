@@ -1,29 +1,26 @@
 import 'package:anime_app/generated/l10n.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/app_bar/AnimeStoreHeroAppBar.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
 import 'package:anime_app/ui/component/dialog/AnimeStoreAcceptDialog.dart';
-import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 
 class MyAnimeListPage extends StatelessWidget {
   final String? heroTag;
+  final ApplicationStore applicationStore;
 
   const MyAnimeListPage({
-    Key? key,
+    required this.applicationStore,
+    super.key,
     this.heroTag,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final locale = S.of(context);
-    final appStore = Provider.of<ApplicationStore>(context, listen: false);
 
     /*24 is for notification bar on Android*/
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2.5;
@@ -38,7 +35,7 @@ class MyAnimeListPage extends StatelessWidget {
                     title: locale.titleClearList,
                     bodyMessage: locale.messageClearList,
                     onConfirm: () {
-                      appStore.clearMyList();
+                      applicationStore.clearMyList();
                       Navigator.popUntil(
                           context, (Route<dynamic> route) => route.isFirst);
                     },
@@ -59,7 +56,7 @@ class MyAnimeListPage extends StatelessWidget {
             actions: appBarActions,
           ),
           Observer(builder: (context) {
-            var animeList = appStore.myAnimeMap.values.toList();
+            var animeList = applicationStore.myAnimeMap.values.toList();
 
             return SliverGridItemView(
               childAspectRatio: (itemWidth / itemHeight),

@@ -2,14 +2,6 @@
 /// the information are provided by animetube.site brazilian website
 /// and some of them infos can be wrong or even unavailable.
 abstract class AnimestoreVideoDetails {
-  static const TITLE = "title";
-  static const STREAM_URL = 'streamURL';
-  static const PREVIOUS = "previous";
-  static const NEXT = "next";
-  static const DESCRIPTION = "description";
-  static const REFERER = "referer";
-  static const ANIME_ID = 'animeId';
-
   /// The episode title.
   final String title;
 

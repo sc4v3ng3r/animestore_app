@@ -4,6 +4,7 @@ import '../../../../core/external/http/animestore_http_client.impl.dart';
 import '../../../../core/external/parser/animestore_html_parser.impl.dart';
 import '../../../../core/infrastructure/di/animestore_dependecy_injector.dart';
 import '../datasource/anitube_anime_details_datasource.impl.dart';
+import '../datasource/anitube_episode_video_datasource.impl.dart';
 import '../datasource/anitube_home_datasource.impl.dart';
 
 class AnitubeDependencyInjector extends AnimestoreDependecyInjector {
@@ -22,6 +23,12 @@ class AnitubeDependencyInjector extends AnimestoreDependecyInjector {
     if (!_getIt.isRegistered<AnitubeAnimeDetailsDatasourceImpl>()) {
       _getIt.registerFactory<AnitubeAnimeDetailsDatasourceImpl>(() =>
           AnitubeAnimeDetailsDatasourceImpl(_getIt<AnimestoreHttpClientImpl>(),
+              _getIt<AnimestoreHtmlParserImpl>()));
+    }
+
+    if (!_getIt.isRegistered<AnitubeEpisodeVideoDatasourceImpl>()) {
+      _getIt.registerFactory<AnitubeEpisodeVideoDatasourceImpl>(() =>
+          AnitubeEpisodeVideoDatasourceImpl(_getIt<AnimestoreHttpClientImpl>(),
               _getIt<AnimestoreHtmlParserImpl>()));
     }
   }

@@ -28,17 +28,34 @@ class AnitubeEpisodeVideoDetailsDto extends AnimestoreVideoDetails {
 
     final title = extractText('video-titulo');
     final streamingUrl = extractAttr('video-link', 'src');
+    final animeId = extractAttr('video-anime-detalhe', 'href');
 
     final previousHref = extractAttr('video-anterior-detalhe', 'href');
     final nextHref = extractAttr('video-seguinte-detalhe', 'href');
 
+    final streamUrl = _normalizeStreamingUrl(streamingUrl);
     return AnitubeEpisodeVideoDetailsDto(
       title: title,
-      streamingUrl: streamingUrl,
-      referer: map['referer']?.toString() ?? '',
-      animeId: map['animeId']?.toString() ?? '',
+      streamingUrl: streamUrl,
+      referer: map['referer']?.toString() ?? streamingUrl,
+      animeId: animeId.extractIdFromUrl(),
       previousEpisodeId: previousHref.extractIdFromUrl(),
       nextEpisodeId: nextHref.extractIdFromUrl(),
     );
+  }
+
+  static String _normalizeStreamingUrl(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null) return url;
+
+    if (uri.host.contains('api.anivideo.net') &&
+        uri.path.contains('videohls.php')) {
+      final real = uri.queryParameters['d'];
+      if (real != null && real.isNotEmpty) {
+        return real;
+      }
+    }
+
+    return url;
   }
 }

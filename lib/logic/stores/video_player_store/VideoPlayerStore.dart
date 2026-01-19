@@ -5,6 +5,12 @@ import 'package:mobx/mobx.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async' as NativeAsync;
 
+import '../../../src/core/domain/models/animestore_video_detail.model.dart';
+import '../../../src/core/domain/models/content/animestore_content_settings.model.dart';
+import '../../../src/core/domain/models/http/animestore_http_request.model.dart';
+import '../../../src/core/external/global_declarations.dart';
+import '../../../src/features/anitube/external/datasource/anitube_episode_video_datasource.impl.dart';
+
 part 'VideoPlayerStore.g.dart';
 
 class VideoPlayerStore = _VideoPlayerStore with _$VideoPlayerStore;
@@ -27,7 +33,7 @@ abstract class _VideoPlayerStore with Store {
   @observable
   EpisodeStatus episodeLoadingStatus = EpisodeStatus.NONE;
 
-  late EpisodeDetails? currentEpisode;
+  late AnimestoreVideoDetails? currentEpisode;
 
   VideoPlayerController? controller;
 
@@ -67,25 +73,35 @@ abstract class _VideoPlayerStore with Store {
       print('Loading episode $episodeId');
       setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING);
 
-      currentEpisode = await appStore.api.getEpisodeDetails(
-        episodeId,
-      );
+      final feat = appStore.appSettings.features['anime-video-details'];
+      if (feat != null) {
+        final dataSource = getIt<AnitubeEpisodeVideoDatasourceImpl>();
+        final httpRequest = AnimeStoreRequestParametrizedBuilder.build(
+            setting: feat.apiSettings, pathParams: [episodeId]);
 
+        currentEpisode = await dataSource.exec(AnimeStoreContentSettingsImpl(
+            declaration: feat.parserDeclaration, request: httpRequest));
+
+        print('Video: ${currentEpisode?.streamingUrl}');
+        print('Anime: ${currentEpisode?.animeId}');
+      }
       if (episodeLoadingStatus == EpisodeStatus.CANCELED) {
         currentEpisode = null;
         return;
       }
 
-      if (episodeLoadingStatus != EpisodeStatus.ERROR) {
+      if (currentEpisode != null &&
+          episodeLoadingStatus != EpisodeStatus.ERROR) {
         // must be buffering...
         setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING_DONE);
         controller?.dispose();
         print('The url will be ${currentEpisode!.streamingUrl}');
-        controller = VideoPlayerController.network(
-          currentEpisode!.streamingUrl,
-          httpHeaders: {'Referer': currentEpisode!.referer},
-          // old http headers of custom plugin version hosted in sc4v3ng3r github repository
-          // httpHeaders: {'Referer': currentEpisode.referer}
+        controller = VideoPlayerController.networkUrl(
+          Uri.parse(currentEpisode!.streamingUrl),
+          httpHeaders: {
+            'Referer': currentEpisode!.referer,
+            'User-Agent': 'Mozilla/5.0',
+          },
         );
 
         await controller!.initialize().timeout(

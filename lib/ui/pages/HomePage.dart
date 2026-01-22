@@ -1,6 +1,5 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/Constants.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
@@ -24,8 +23,6 @@ import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
 
 import '../../src/core/domain/models/animestore_content_item.model.dart';
-import '../../src/core/external/global_declarations.dart';
-import '../../src/features/anitube/external/datasource/anitube_anime_details_datasource.impl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -487,8 +484,7 @@ class _HomePageState extends State<HomePage>
             builder: (context) => AnimeDetailsScreen(
               heroTag: heroTag,
               applicationStore: appStore,
-              detailsStore: AnimeDetailsStore(appStore.appSettings, anime,
-                  getIt<AnitubeAnimeDetailsDatasourceImpl>()),
+              currentAnime: anime,
             ),
           ));
 

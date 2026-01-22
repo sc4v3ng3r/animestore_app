@@ -73,14 +73,10 @@ class MyAnimeListPage extends StatelessWidget {
                         // Navigator.push(
                         //     context,
                         //     CupertinoPageRoute(
-                        //       builder: (context) => Provider<AnimeDetailsStore>(
-                        //         create: (_) => AnimeDetailsStore(
-                        //           appStore,
-                        //           animeList[index],
-                        //         ),
-                        //         child: AnimeDetailsScreen(
-                        //           heroTag: animeList[index].id,
-                        //         ),
+                        //       builder: (context) => AnimeDetailsScreen(
+                        //         heroTag: animeList[index].id,
+                        //         applicationStore: applicationStore,
+                        //         currentAnime: animeList[index],
                         //       ),
                         //     ));
                       },

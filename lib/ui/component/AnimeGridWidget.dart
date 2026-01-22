@@ -1,13 +1,12 @@
 import 'package:anime_app/logic/stores/StoreUtils.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/SliverGridViewWidget.dart';
-import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import '../pages/AnimeDetailsScreen.dart';
 import '../utils/UiUtils.dart';
 
 class AnimeGridWidget extends StatefulWidget {
@@ -56,27 +55,24 @@ class _AnimeGridWidgetState extends State<AnimeGridWidget> {
             childAspectRatio: (itemWidth / itemHeight),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
+                final animeItem = appStore.feedAnimeList[index];
                 return Tooltip(
-                  message: appStore.feedAnimeList[index].title,
+                  message: animeItem.title,
                   child: ItemView(
                     width: itemWidth,
                     height: itemHeight,
-                    imageUrl: appStore.feedAnimeList[index].imageUrl,
-                    imageHeroTag: appStore.feedAnimeList[index].id,
+                    imageUrl: animeItem.imageUrl,
+                    imageHeroTag: animeItem.id,
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     CupertinoPageRoute(
-                      //       builder: (context) => Provider<AnimeDetailsStore>(
-                      //         create: (_) => AnimeDetailsStore(
-                      //           Provider.of<ApplicationStore>(context),
-                      //           appStore.feedAnimeList[index],
-                      //         ),
-                      //         child: AnimeDetailsScreen(
-                      //           heroTag: appStore.feedAnimeList[index].id,
-                      //         ),
-                      //       ),
-                      //     ));
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => AnimeDetailsScreen(
+                              heroTag: animeItem.id,
+                              applicationStore: appStore,
+                              currentAnime: animeItem,
+                            ),
+                          ));
                     },
                   ),
                 );

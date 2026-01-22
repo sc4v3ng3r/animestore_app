@@ -17,6 +17,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'generated/l10n.dart';
 import 'src/core/external/di/animestore_core_depedency_injector.dart';
+import 'src/features/anime_details/external/anime_details_dependency_injector.impl.dart';
 import 'src/features/anitube/external/di/anitube_dependency_injector.impl.dart';
 
 void main() async {
@@ -91,4 +92,5 @@ void _registerDependencies() {
   AnimestoreSettingsDependencyInjectorImp(getIt).inject();
 
   AnitubeDependencyInjector(getIt).inject();
+  AnimeDetailsDepdencyInjector(getIt).inject();
 }

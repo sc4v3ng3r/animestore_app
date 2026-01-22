@@ -2,7 +2,7 @@ import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/src/core/domain/models/animestore_content_item.model.dart';
 import 'package:anime_app/src/core/domain/models/content/animestore_content_settings.model.dart';
-import 'package:anime_app/src/features/animestore_settings/domain/model/animestore_app_settings.model.dart';
+import 'package:anime_app/src/features/animestore_settings/domain/model/animestore_feature_settings.model.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -17,13 +17,8 @@ enum TabChoice { EPISODES, RESUME }
 class AnimeDetailsStore = _AnimeDetailsStore with _$AnimeDetailsStore;
 
 abstract class _AnimeDetailsStore with Store {
-  static const _localFeatureName = 'anime-details';
-  final AnimestoreAppSettings appSettings;
-  final AnimestoreContentItem currentAnimeItem;
+  late AnimestoreContentItem currentAnimeItem;
   final AnimestoreContentDatasource animeDetailsDatasource;
-
-  /// if the component should load anime suggestions
-  final bool shouldLoadSuggestions;
 
   @observable
   Color backgroundColor = imageBackgroundColor!;
@@ -42,9 +37,7 @@ abstract class _AnimeDetailsStore with Store {
   @observable
   ObservableList<AnimestoreContentItem>? relatedAnimes;
 
-  _AnimeDetailsStore(
-      this.appSettings, this.currentAnimeItem, this.animeDetailsDatasource,
-      {this.shouldLoadSuggestions = false});
+  _AnimeDetailsStore(this.animeDetailsDatasource);
 
   @action
   setLoadingStatus(LoadingStatus data) => loadingStatus = data;
@@ -62,29 +55,29 @@ abstract class _AnimeDetailsStore with Store {
   // setRelatedAnimes(List<AnimeItem> data) => relatedAnimes = ObservableList.of(
   //     data..removeWhere((item) => item.id.compareTo(currentAnimeItem.id) == 0));
 
-  void loadAnimeDetails() async {
+  void loadAnimeDetails({
+    required AnimestoreFeatureSettings featureSettings,
+    required AnimestoreContentItem currentAnime,
+    bool shouldLoadSuggestions = false,
+  }) async {
     if (loadingStatus == LoadingStatus.LOADING) return;
 
     try {
       setLoadingStatus(LoadingStatus.LOADING);
-      final animeDetailsFeatureSettings =
-          appSettings.features[_localFeatureName];
+      this.currentAnimeItem = currentAnime;
 
-      if (animeDetailsFeatureSettings != null) {
-        final requestSettings = AnimeStoreRequestParametrizedBuilder.build(
-            setting: animeDetailsFeatureSettings.apiSettings,
-            pathParams: [currentAnimeItem.id]);
+      final requestSettings = AnimeStoreRequestParametrizedBuilder.build(
+          setting: featureSettings.apiSettings,
+          pathParams: [currentAnimeItem.id]);
 
-        animeDetails = await animeDetailsDatasource.exec(
-            AnimeStoreContentSettingsImpl(
-                declaration: animeDetailsFeatureSettings.parserDeclaration,
-                request: requestSettings));
-        setLoadingStatus(LoadingStatus.DONE);
-        return;
-      }
+      animeDetails = await animeDetailsDatasource.exec(
+          AnimeStoreContentSettingsImpl(
+              declaration: featureSettings.parserDeclaration,
+              request: requestSettings));
+      setLoadingStatus(LoadingStatus.DONE);
+      return;
       // animeDetails =
       //     await applicationStore.getAnimeDetails(currentAnimeItem.id);
-
       // if (shouldLoadSuggestions) _loadAnimeSuggestions();
     } on Exception catch (ex) {
       print(ex);

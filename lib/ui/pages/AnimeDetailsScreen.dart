@@ -3,6 +3,8 @@ import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/src/core/domain/models/animestore_anime_details.model.dart';
+import 'package:anime_app/src/core/domain/models/animestore_content_item.model.dart';
+import 'package:anime_app/src/core/domain/models/features/animestore_features.dart';
 import 'package:anime_app/ui/component/notification/CustomListNotification.dart';
 import 'package:anime_app/ui/component/video/VideoWidget.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
@@ -12,16 +14,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+import '../../src/core/external/global_declarations.dart';
 import '../utils/UiUtils.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
   final String? heroTag;
   final ApplicationStore applicationStore;
-  final AnimeDetailsStore detailsStore;
-
+  final AnimestoreContentItem currentAnime;
   const AnimeDetailsScreen(
       {required this.applicationStore,
-      required this.detailsStore,
+      required this.currentAnime,
       super.key,
       this.heroTag});
 
@@ -33,7 +35,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
     with SingleTickerProviderStateMixin {
   static const _RELATED_TAG = 'RELATED_TAG';
   late ApplicationStore applicationStore;
-  late AnimeDetailsStore detailsStore;
+  final AnimeDetailsStore detailsStore = getIt();
   late S locale;
   late AnimationController animationController;
   late Animation<Offset> slideAnimation;
@@ -53,8 +55,7 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
 
   @override
   void didUpdateWidget(covariant AnimeDetailsScreen oldWidget) {
-    super.didUpdateWidget(widget.detailsStore.currentAnimeItem.id ==
-            oldWidget.detailsStore.currentAnimeItem.id
+    super.didUpdateWidget(widget.currentAnime.id == oldWidget.currentAnime.id
         ? oldWidget
         : widget);
   }
@@ -63,9 +64,13 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
   void initState() {
     super.initState();
     applicationStore = widget.applicationStore;
-    detailsStore = widget.detailsStore;
 
-    detailsStore.loadAnimeDetails();
+    detailsStore.loadAnimeDetails(
+      featureSettings:
+          applicationStore.getFeatureSettings(AnimestoreFeature.animeDetails),
+      currentAnime: widget.currentAnime,
+      shouldLoadSuggestions: false,
+    );
 
     animationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 2000));
@@ -339,9 +344,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               [
                 buildDetailsSection(detailsStore.animeDetails),
                 buildResumeSection(detailsStore.animeDetails.resume),
-                (detailsStore.shouldLoadSuggestions)
-                    ? buildAnimeSuggestionSection()
-                    : Container(),
+                // (detailsStore.shouldLoadSuggestions)
+                //     ? buildAnimeSuggestionSection()
+                // : Container(),
                 Container(
                   height: 56.0,
                 ),
@@ -589,7 +594,11 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
               Container(
                 margin: const EdgeInsets.only(top: 16),
                 child: ElevatedButton.icon(
-                  onPressed: detailsStore.loadAnimeDetails,
+                  onPressed: () => detailsStore.loadAnimeDetails(
+                    currentAnime: widget.currentAnime,
+                    featureSettings: applicationStore
+                        .getFeatureSettings(AnimestoreFeature.animeDetails),
+                  ),
                   icon: Icon(
                     Icons.refresh,
                     color: Colors.white,

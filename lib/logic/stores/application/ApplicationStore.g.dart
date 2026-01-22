@@ -13,13 +13,13 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       Atom(name: '_ApplicationStore.feedAnimeList', context: context);
 
   @override
-  ObservableList<AnimeItem> get feedAnimeList {
+  ObservableList<AnimestoreContentItem> get feedAnimeList {
     _$feedAnimeListAtom.reportRead();
     return super.feedAnimeList;
   }
 
   @override
-  set feedAnimeList(ObservableList<AnimeItem> value) {
+  set feedAnimeList(ObservableList<AnimestoreContentItem> value) {
     _$feedAnimeListAtom.reportWrite(value, super.feedAnimeList, () {
       super.feedAnimeList = value;
     });
@@ -253,7 +253,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic addAnimeItem(List<AnimeItem> data) {
+  dynamic addAnimeItem(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.addAnimeItem');
     try {

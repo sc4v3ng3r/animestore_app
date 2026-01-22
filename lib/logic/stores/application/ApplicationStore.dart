@@ -1,6 +1,7 @@
 import 'package:anime_app/database/DatabaseProvider.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/model/AppInfo.dart';
+import 'package:anime_app/src/features/animestore_settings/domain/model/animestore_feature_settings.model.dart';
 import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
@@ -9,10 +10,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../src/core/domain/models/content/animestore_content_settings.model.dart';
 import '../../../src/core/domain/models/animestore_content_item.model.dart';
+import '../../../src/core/domain/models/features/animestore_features.dart';
 import '../../../src/core/external/global_declarations.dart';
 import '../../../src/core/domain/models/http/animestore_http_request.model.dart';
 import '../../../src/features/animestore_settings/domain/model/animestore_app_settings.model.dart';
 import '../../../src/features/animestore_settings/infrastructure/repository/animestore_remote_app_settings.repo.impl.dart';
+import '../../../src/features/anitube/external/datasource/anitube_anime_feed_datasource.impl.dart';
 import '../../../src/features/anitube/external/datasource/anitube_home_datasource.impl.dart';
 
 part 'ApplicationStore.g.dart';
@@ -23,10 +26,13 @@ abstract class _ApplicationStore with Store {
   final AniTubeApi api = AniTubeApi(Dio());
   final DatabaseProvider databaseProvider = DatabaseProvider();
 
-  static const DEFAULT_PAGES_LOADING = 4;
+  static const DEFAULT_PAGES_LOADING = 3;
   late AppInfo _appInfo;
   late AnimestoreAppSettings _appSettings;
   AnimestoreAppSettings get appSettings => _appSettings;
+
+  AnimestoreFeatureSettings getFeatureSettings(AnimestoreFeature feature) =>
+      appSettings.features[feature.featureName]!;
 
   double topAnimeOffset = 0,
       myListOffset = 0,
@@ -38,7 +44,7 @@ abstract class _ApplicationStore with Store {
 
   // This list holds the anime feed list.
   @observable
-  ObservableList<AnimeItem> feedAnimeList = ObservableList();
+  ObservableList<AnimestoreContentItem> feedAnimeList = ObservableList();
 
   @observable
   ObservableList<AnimestoreContentItem> mostRecentAnimeList = ObservableList();
@@ -120,7 +126,7 @@ abstract class _ApplicationStore with Store {
       animeListLoadingStatus = status;
 
   @action
-  addAnimeItem(List<AnimeItem> data) => feedAnimeList.addAll(data);
+  addAnimeItem(List<AnimestoreContentItem> data) => feedAnimeList.addAll(data);
 
   @action
   setAppInitialization(AppInitStatus status) => appInitStatus = status;
@@ -203,21 +209,27 @@ abstract class _ApplicationStore with Store {
   Future<void> loadAnimeList() async {
     if (animeListLoadingStatus == LoadingStatus.LOADING) return;
 
-    var cacheList = <AnimeItem>[];
+    var cacheList = <AnimestoreContentItem>[];
+    final dataSource = getIt<AnitubeAnimeFeedDatasourceImpl>();
+    final feedFeatureSettings = _appSettings.features['anime-list'];
 
     if (mainAnimesPageCounter <= maxMainAnimesPageNumber) {
       setAnimeListLoadingStatus(LoadingStatus.LOADING);
 
-      for (int i = 0; i < DEFAULT_PAGES_LOADING; i++) {
+      for (int i = 1; i <= DEFAULT_PAGES_LOADING; i++) {
         try {
-          var data =
-              await api.getAnimeListPageData(pageNumber: mainAnimesPageCounter);
+          var data = await dataSource.exec(AnimeStoreContentSettingsImpl(
+              declaration: feedFeatureSettings!.parserDeclaration,
+              request: AnimeStoreRequestParametrizedBuilder.build(
+                setting: feedFeatureSettings.apiSettings,
+                pathParams: ['$mainAnimesPageCounter'],
+              )));
 
-          cacheList.addAll(data.animes);
+          cacheList.addAll(data.content);
 
-          maxMainAnimesPageNumber = int.parse(data.maxPageNumber);
+          maxMainAnimesPageNumber = data.maxPage;
           mainAnimesPageCounter++;
-        } on CrawlerApiException catch (ex) {
+        } catch (ex) {
           print('Fail loding page number $mainAnimesPageCounter $ex');
           mainAnimesPageCounter++;
         }
@@ -257,8 +269,7 @@ abstract class _ApplicationStore with Store {
           method: homeFeatureSettings.apiSettings.method),
     ));
 
-    var homePageData =
-        setMostRecentAnimeList(basicHomeContent.mostViewedAnimes);
+    setMostRecentAnimeList(basicHomeContent.mostViewedAnimes);
     setTopAnimeList(basicHomeContent.topAnimes);
     setDailyReleases(basicHomeContent.dailyAnimeReleases);
 

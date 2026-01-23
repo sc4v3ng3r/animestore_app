@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'AnimeDetailsStore.dart';
+part of 'anime_details_store.dart';
 
 // **************************************************************************
 // StoreGenerator

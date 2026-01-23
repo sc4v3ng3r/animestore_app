@@ -5,7 +5,7 @@ import 'package:anime_app/ui/component/EpisodeItemView.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/component/TapableText.dart';
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
-import 'package:anime_app/ui/pages/AnimeDetailsScreen.dart';
+import 'package:anime_app/src/features/anime_details/presenter/screen/anime_details_screen.dart';
 import 'package:anime_app/ui/pages/DefaultAnimeItemGridPage.dart';
 import 'package:anime_app/ui/pages/GenreAnimePage.dart';
 import 'package:anime_app/ui/pages/GenreGridPage.dart';

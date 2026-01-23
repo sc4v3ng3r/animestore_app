@@ -1,6 +1,6 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
-import 'package:anime_app/logic/stores/anime_details_store/AnimeDetailsStore.dart';
+import 'package:anime_app/src/features/anime_details/presenter/controller/anime_details_store.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/src/core/domain/models/animestore_anime_details.model.dart';
 import 'package:anime_app/src/core/domain/models/animestore_content_item.model.dart';
@@ -14,8 +14,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
-import '../../src/core/external/global_declarations.dart';
-import '../utils/UiUtils.dart';
+import '../../../../core/external/global_declarations.dart';
+import '../../../../../ui/utils/UiUtils.dart';
 
 class AnimeDetailsScreen extends StatefulWidget {
   final String? heroTag;

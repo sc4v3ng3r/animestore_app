@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import '../pages/AnimeDetailsScreen.dart';
+import '../../src/features/anime_details/presenter/screen/anime_details_screen.dart';
 import '../utils/UiUtils.dart';
 
 class AnimeGridWidget extends StatefulWidget {

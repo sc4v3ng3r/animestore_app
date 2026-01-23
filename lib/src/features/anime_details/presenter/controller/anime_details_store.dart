@@ -6,11 +6,11 @@ import 'package:anime_app/src/features/animestore_settings/domain/model/animesto
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../src/core/domain/models/animestore_anime_details.model.dart';
-import '../../../src/core/domain/models/http/animestore_http_request.model.dart';
-import '../../../src/core/infrastructure/datasource/animestore_content_datasource.dart';
+import '../../../../core/domain/models/animestore_anime_details.model.dart';
+import '../../../../core/domain/models/http/animestore_http_request.model.dart';
+import '../../../../core/infrastructure/datasource/animestore_content_datasource.dart';
 
-part 'AnimeDetailsStore.g.dart';
+part 'anime_details_store.g.dart';
 
 enum TabChoice { EPISODES, RESUME }
 

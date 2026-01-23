@@ -1,6 +1,7 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/ui/component/AnimeGridWidget.dart';
+import 'package:anime_app/src/core/domain/models/features/animestore_features.dart';
+import 'package:anime_app/ui/component/anime_feed_list_screen.dart';
 import 'package:anime_app/ui/component/SearchWidget.dart';
 import 'package:anime_app/ui/component/AboutListWidget.dart';
 import 'package:anime_app/ui/pages/HomePage.dart';
@@ -54,7 +55,10 @@ class _MainScreenState extends State<MainScreen> {
         widget = HomePage();
         break;
       case MainScreenNavigation.ANIME_LIST:
-        widget = AnimeGridWidget();
+        widget = AnimeFeedListWidget(
+          featureSettings:
+              appStore.getFeatureSettings(AnimestoreFeature.animeFeed),
+        );
         break;
       case MainScreenNavigation.SEARCH:
         widget = SearchWidget();

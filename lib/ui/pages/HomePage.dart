@@ -51,20 +51,19 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     appStore = Provider.of<ApplicationStore>(context, listen: false);
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+
+    carouselAnimation = Tween<Offset>(begin: Offset(50, .0), end: Offset.zero)
+        .animate(CurvedAnimation(
+            curve: Curves.fastLinearToSlowEaseIn, parent: controller));
+
+    headerAnimation = Tween<Offset>(begin: Offset(-50, .0), end: Offset.zero)
+        .animate(CurvedAnimation(
+            curve: Curves.fastLinearToSlowEaseIn, parent: controller));
     if (appStore.isFirstHomePageView) {
-      controller = AnimationController(
-        vsync: this,
-        duration: Duration(milliseconds: 1000),
-      );
-
-      carouselAnimation = Tween<Offset>(begin: Offset(50, .0), end: Offset.zero)
-          .animate(CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: controller));
-
-      headerAnimation = Tween<Offset>(begin: Offset(-50, .0), end: Offset.zero)
-          .animate(CurvedAnimation(
-              curve: Curves.fastLinearToSlowEaseIn, parent: controller));
-
       controller.forward();
     }
   }

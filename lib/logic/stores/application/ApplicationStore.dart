@@ -15,7 +15,6 @@ import '../../../src/core/external/global_declarations.dart';
 import '../../../src/core/domain/models/http/animestore_http_request.model.dart';
 import '../../../src/features/animestore_settings/domain/model/animestore_app_settings.model.dart';
 import '../../../src/features/animestore_settings/infrastructure/repository/animestore_remote_app_settings.repo.impl.dart';
-import '../../../src/features/anitube/external/datasource/anitube_anime_feed_datasource.impl.dart';
 import '../../../src/features/anitube/external/datasource/anitube_home_datasource.impl.dart';
 
 part 'ApplicationStore.g.dart';
@@ -26,7 +25,6 @@ abstract class _ApplicationStore with Store {
   final AniTubeApi api = AniTubeApi(Dio());
   final DatabaseProvider databaseProvider = DatabaseProvider();
 
-  static const DEFAULT_PAGES_LOADING = 3;
   late AppInfo _appInfo;
   late AnimestoreAppSettings _appSettings;
   AnimestoreAppSettings get appSettings => _appSettings;
@@ -36,7 +34,6 @@ abstract class _ApplicationStore with Store {
 
   double topAnimeOffset = 0,
       myListOffset = 0,
-      mainAnimeListOffset = 0,
       mostRecentOffset = 0,
       genreListOffset = .0;
 
@@ -60,7 +57,7 @@ abstract class _ApplicationStore with Store {
 
   /// Animes which the user has added to list. The map holds <animeId, AnimeItem>.
   @observable
-  ObservableMap<String, AnimeItem> myAnimeMap = ObservableMap();
+  ObservableMap<String, AnimestoreContentItem> myAnimeMap = ObservableMap();
 
   @observable
   ObservableMap<String, EpisodeWatched> watchedEpisodeMap = ObservableMap();
@@ -72,9 +69,6 @@ abstract class _ApplicationStore with Store {
   int mainAnimesPageCounter = 1;
   int maxMainAnimesPageNumber = 1;
   int mainCarouselCurrentPosition = 1;
-
-  @observable
-  LoadingStatus animeListLoadingStatus = LoadingStatus.NONE;
 
   @observable
   AppInitStatus appInitStatus = AppInitStatus.INITIALIZING;
@@ -122,10 +116,6 @@ abstract class _ApplicationStore with Store {
       latestEpisodes = ObservableList.of(data);
 
   @action
-  setAnimeListLoadingStatus(LoadingStatus status) =>
-      animeListLoadingStatus = status;
-
-  @action
   addAnimeItem(List<AnimestoreContentItem> data) => feedAnimeList.addAll(data);
 
   @action
@@ -147,11 +137,12 @@ abstract class _ApplicationStore with Store {
   setGenreList(List<String> data) => genreList = ObservableList.of(data);
 
   @action
-  setMyAnimeMap(Map<String, AnimeItem> data) =>
+  setMyAnimeMap(Map<String, AnimestoreContentItem> data) =>
       myAnimeMap = ObservableMap.of(data);
 
   @action
-  addToAnimeMap(String key, AnimeItem data) => myAnimeMap.putIfAbsent(key, () {
+  addToAnimeMap(String key, AnimestoreContentItem data) =>
+      myAnimeMap.putIfAbsent(key, () {
         databaseProvider.insertAnimeToList(key, data);
         return data;
       });
@@ -184,10 +175,9 @@ abstract class _ApplicationStore with Store {
   }
 
   Future<void> _initDataFromNetwork() async {
-    await loadMyAnimeMap();
+    // await loadMyAnimeMap();
     await loadWatchedEpisodes();
     await getHomePageInfo();
-    await loadAnimeList();
     await getGenresAvailable();
   }
 
@@ -206,50 +196,9 @@ abstract class _ApplicationStore with Store {
 
   // This method load the main anime list and handles also the pagination.
   // We must always load main anime list data with this method.
-  Future<void> loadAnimeList() async {
-    if (animeListLoadingStatus == LoadingStatus.LOADING) return;
-
-    var cacheList = <AnimestoreContentItem>[];
-    final dataSource = getIt<AnitubeAnimeFeedDatasourceImpl>();
-    final feedFeatureSettings = _appSettings.features['anime-list'];
-
-    if (mainAnimesPageCounter <= maxMainAnimesPageNumber) {
-      setAnimeListLoadingStatus(LoadingStatus.LOADING);
-
-      for (int i = 1; i <= DEFAULT_PAGES_LOADING; i++) {
-        try {
-          var data = await dataSource.exec(AnimeStoreContentSettingsImpl(
-              declaration: feedFeatureSettings!.parserDeclaration,
-              request: AnimeStoreRequestParametrizedBuilder.build(
-                setting: feedFeatureSettings.apiSettings,
-                pathParams: ['$mainAnimesPageCounter'],
-              )));
-
-          cacheList.addAll(data.content);
-
-          maxMainAnimesPageNumber = data.maxPage;
-          mainAnimesPageCounter++;
-        } catch (ex) {
-          print('Fail loding page number $mainAnimesPageCounter $ex');
-          mainAnimesPageCounter++;
-        }
-      }
-    }
-
-    addAnimeItem(cacheList);
-    setAnimeListLoadingStatus(LoadingStatus.DONE);
-  }
-
-  Future<AnimeDetails> getAnimeDetails(
-    String id,
-  ) =>
-      api.getAnimeDetails(
-        id,
-      );
 
   Future<void> refreshHome() async {
     await getHomePageInfo();
-    //await loadAnimeList();
     await getGenresAvailable();
   }
 
@@ -282,10 +231,10 @@ abstract class _ApplicationStore with Store {
     setGenreList(data.map((e) => e.title).toList());
   }
 
-  Future<void> loadMyAnimeMap() async {
-    Map<String, AnimeItem> data = await databaseProvider.loadMyAnimeList();
-    setMyAnimeMap(data);
-  }
+  // Future<void> loadMyAnimeMap() async {
+  //   Map<String, AnimeItem> data = await databaseProvider.loadMyAnimeList();
+  //   setMyAnimeMap(data);
+  // }
 
   Future<void> _getAppInfo() async {
     try {

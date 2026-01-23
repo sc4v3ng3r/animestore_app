@@ -93,13 +93,13 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
       Atom(name: '_ApplicationStore.myAnimeMap', context: context);
 
   @override
-  ObservableMap<String, AnimeItem> get myAnimeMap {
+  ObservableMap<String, AnimestoreContentItem> get myAnimeMap {
     _$myAnimeMapAtom.reportRead();
     return super.myAnimeMap;
   }
 
   @override
-  set myAnimeMap(ObservableMap<String, AnimeItem> value) {
+  set myAnimeMap(ObservableMap<String, AnimestoreContentItem> value) {
     _$myAnimeMapAtom.reportWrite(value, super.myAnimeMap, () {
       super.myAnimeMap = value;
     });
@@ -134,23 +134,6 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   set latestEpisodes(ObservableList<AnimestoreContentItem> value) {
     _$latestEpisodesAtom.reportWrite(value, super.latestEpisodes, () {
       super.latestEpisodes = value;
-    });
-  }
-
-  late final _$animeListLoadingStatusAtom =
-      Atom(name: '_ApplicationStore.animeListLoadingStatus', context: context);
-
-  @override
-  LoadingStatus get animeListLoadingStatus {
-    _$animeListLoadingStatusAtom.reportRead();
-    return super.animeListLoadingStatus;
-  }
-
-  @override
-  set animeListLoadingStatus(LoadingStatus value) {
-    _$animeListLoadingStatusAtom
-        .reportWrite(value, super.animeListLoadingStatus, () {
-      super.animeListLoadingStatus = value;
     });
   }
 
@@ -242,17 +225,6 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic setAnimeListLoadingStatus(LoadingStatus status) {
-    final _$actionInfo = _$_ApplicationStoreActionController.startAction(
-        name: '_ApplicationStore.setAnimeListLoadingStatus');
-    try {
-      return super.setAnimeListLoadingStatus(status);
-    } finally {
-      _$_ApplicationStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic addAnimeItem(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.addAnimeItem');
@@ -319,7 +291,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic setMyAnimeMap(Map<String, AnimeItem> data) {
+  dynamic setMyAnimeMap(Map<String, AnimestoreContentItem> data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.setMyAnimeMap');
     try {
@@ -330,7 +302,7 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic addToAnimeMap(String key, AnimeItem data) {
+  dynamic addToAnimeMap(String key, AnimestoreContentItem data) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.addToAnimeMap');
     try {
@@ -362,7 +334,6 @@ genreList: ${genreList},
 myAnimeMap: ${myAnimeMap},
 watchedEpisodeMap: ${watchedEpisodeMap},
 latestEpisodes: ${latestEpisodes},
-animeListLoadingStatus: ${animeListLoadingStatus},
 appInitStatus: ${appInitStatus}
     ''';
   }

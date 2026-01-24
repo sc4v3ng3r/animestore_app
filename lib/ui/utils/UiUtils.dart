@@ -1,5 +1,4 @@
 import 'package:anime_app/ui/component/TitleHeaderWidget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:anime_app/ui/component/DotSpinner.dart';

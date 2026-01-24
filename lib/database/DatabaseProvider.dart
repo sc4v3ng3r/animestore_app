@@ -1,6 +1,5 @@
 import 'dart:convert' as json;
 
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:anime_app/model/EpisodeWatched.dart';

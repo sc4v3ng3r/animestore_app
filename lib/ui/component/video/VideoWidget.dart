@@ -13,9 +13,9 @@ import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class VideoWidget extends StatefulWidget {
-  final String episodeId;
+  final String episodeUri;
 
-  const VideoWidget({Key? key, required this.episodeId}) : super(key: key);
+  const VideoWidget({Key? key, required this.episodeUri}) : super(key: key);
   @override
   _VideoWidgetState createState() => _VideoWidgetState();
 }
@@ -47,7 +47,7 @@ class _VideoWidgetState extends State<VideoWidget>
 
     appStore = Provider.of<ApplicationStore>(context, listen: false);
     videoPlayerStore = VideoPlayerStore(appStore);
-    videoPlayerStore.loadEpisodeDetails(widget.episodeId);
+    videoPlayerStore.loadEpisodeDetails(widget.episodeUri);
 
     animationController = AnimationController(
       vsync: this,
@@ -129,7 +129,7 @@ class _VideoWidgetState extends State<VideoWidget>
                 case EpisodeStatus.ERROR:
                   currentWidget = UnavailableVideoWidget(
                     retryCallback: () => videoPlayerStore.loadEpisodeDetails(
-                      this.widget.episodeId,
+                      this.widget.episodeUri,
                     ),
                     onBackCallback: () async {
                       await _prepareToLeave();

@@ -1,8 +1,8 @@
 import 'package:anime_app/generated/l10n.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
 import 'package:anime_app/src/core/domain/models/features/animestore_features.dart';
-import 'package:anime_app/ui/component/anime_feed_list_screen.dart';
-import 'package:anime_app/ui/component/SearchWidget.dart';
+import 'package:anime_app/src/features/anime_feed/presenter/screen/anime_feed_list_screen.dart';
+import 'package:anime_app/src/features/anime_search/presenter/widget/animestore_search_widget.dart';
 import 'package:anime_app/ui/component/AboutListWidget.dart';
 import 'package:anime_app/ui/pages/HomePage.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
         );
         break;
       case MainScreenNavigation.SEARCH:
-        widget = SearchWidget();
+        widget = AnimestoreSearchWidget();
         break;
 
       case MainScreenNavigation.SETTINGS:

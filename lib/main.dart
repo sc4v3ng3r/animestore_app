@@ -1,7 +1,6 @@
 import 'package:anime_app/firebase_options.dart';
 import 'package:anime_app/logic/stores/StoreUtils.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
 import 'package:anime_app/src/core/external/global_declarations.dart';
 import 'package:anime_app/src/features/animestore_settings/external/di/animestore_settings_dependency_injector.impl.dart';
 import 'package:anime_app/ui/pages/MainScreen.dart';
@@ -18,6 +17,8 @@ import 'package:provider/provider.dart';
 import 'generated/l10n.dart';
 import 'src/core/external/di/animestore_core_depedency_injector.dart';
 import 'src/features/anime_details/external/anime_details_dependency_injector.impl.dart';
+import 'src/features/anime_feed/external/anime_feed_dependency_injector.dart';
+import 'src/features/anime_search/external/search_dependency_injector.dart';
 import 'src/features/anitube/external/di/anitube_dependency_injector.impl.dart';
 
 void main() async {
@@ -37,13 +38,12 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final ApplicationStore appStore = ApplicationStore();
+  final ApplicationStore appStore = getIt();
 
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: [
           Provider<ApplicationStore>.value(value: appStore),
-          Provider<SearchStore>.value(value: SearchStore(appStore)),
         ],
         child: MaterialApp(
             title: 'AniStore',
@@ -92,5 +92,12 @@ void _registerDependencies() {
   AnimestoreSettingsDependencyInjectorImp(getIt).inject();
 
   AnitubeDependencyInjector(getIt).inject();
+
+  if (!getIt.isRegistered<ApplicationStore>()) {
+    getIt.registerSingleton(ApplicationStore());
+  }
+  // Home dependency injector
+  AnimeFeedDependencyInjector(getIt).inject();
   AnimeDetailsDepdencyInjector(getIt).inject();
+  SearchDependencyInjector(getIt).inject();
 }

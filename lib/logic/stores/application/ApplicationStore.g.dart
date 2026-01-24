@@ -9,22 +9,6 @@ part of 'ApplicationStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$ApplicationStore on _ApplicationStore, Store {
-  late final _$feedAnimeListAtom =
-      Atom(name: '_ApplicationStore.feedAnimeList', context: context);
-
-  @override
-  ObservableList<AnimestoreContentItem> get feedAnimeList {
-    _$feedAnimeListAtom.reportRead();
-    return super.feedAnimeList;
-  }
-
-  @override
-  set feedAnimeList(ObservableList<AnimestoreContentItem> value) {
-    _$feedAnimeListAtom.reportWrite(value, super.feedAnimeList, () {
-      super.feedAnimeList = value;
-    });
-  }
-
   late final _$mostRecentAnimeListAtom =
       Atom(name: '_ApplicationStore.mostRecentAnimeList', context: context);
 
@@ -225,17 +209,6 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   }
 
   @override
-  dynamic addAnimeItem(List<AnimestoreContentItem> data) {
-    final _$actionInfo = _$_ApplicationStoreActionController.startAction(
-        name: '_ApplicationStore.addAnimeItem');
-    try {
-      return super.addAnimeItem(data);
-    } finally {
-      _$_ApplicationStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   dynamic setAppInitialization(AppInitStatus status) {
     final _$actionInfo = _$_ApplicationStoreActionController.startAction(
         name: '_ApplicationStore.setAppInitialization');
@@ -326,7 +299,6 @@ mixin _$ApplicationStore on _ApplicationStore, Store {
   @override
   String toString() {
     return '''
-feedAnimeList: ${feedAnimeList},
 mostRecentAnimeList: ${mostRecentAnimeList},
 topAnimeList: ${topAnimeList},
 dayReleaseList: ${dayReleaseList},

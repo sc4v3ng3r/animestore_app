@@ -76,9 +76,6 @@ abstract class _AnimeDetailsStore with Store {
               request: requestSettings));
       setLoadingStatus(LoadingStatus.DONE);
       return;
-      // animeDetails =
-      //     await applicationStore.getAnimeDetails(currentAnimeItem.id);
-      // if (shouldLoadSuggestions) _loadAnimeSuggestions();
     } on Exception catch (ex) {
       print(ex);
     }

@@ -463,7 +463,7 @@ class _HomePageState extends State<HomePage>
                   height: width * .9,
                   imageUrl: data[index].imageUrl,
                   title: data[index].title,
-                  onTap: () => _playEpisode(context, data[index].id),
+                  onTap: () => _playEpisode(context, data[index].pageUrl),
                 ),
               );
             },
@@ -544,7 +544,7 @@ class _HomePageState extends State<HomePage>
         context,
         CupertinoPageRoute(
             builder: (context) => VideoPlayerScreen(
-                  episodeId: episodeId,
+                  episodeUri: episodeId,
                 )));
   }
 }

@@ -1,33 +1,429 @@
 {
-  "animestore-app-settings": {
-    "features": {
-      "home": {
-        "isEnable": true,
-        "parser-declaration": {},
-        "api-settings": {
-          "baseUrl": "https://www.anitube.news/",
-          "path": "",
-          "method": "get",
-          "headers": {
-            "Accept": "application/json"
+  "features": {
+    "home": {
+      "isEnable": true,
+      "parser-declaration": {
+        "schema": {
+          "version": "0.0.1"
+        },
+        "body": {
+          "lista-mais-vistos": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              ".main-carousel .aniItem > a"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ],
+            "children": {
+              "anime-imagem": {
+                "id": null,
+                "tag": "img",
+                "selectors": [
+                  "img"
+                ],
+                "attributes": [
+                  "src",
+                  "alt"
+                ]
+              },
+              "anime-legenda": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniCC"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              },
+              "anime-nome": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniItemNome"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              }
+            }
           },
-          "queryParams": {},
-          "body": {}
-        }
+          "lista-recentes": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              ".main-carousel-an .aniItem > a"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ],
+            "children": {
+              "anime-imagem": {
+                "id": null,
+                "tag": "img",
+                "selectors": [
+                  "img"
+                ],
+                "attributes": [
+                  "src",
+                  "alt"
+                ]
+              },
+              "anime-legenda": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniCC"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              },
+              "anime-nome": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniItemNome"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              }
+            }
+          },
+          "lista-lancamentos": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              ".main-carousel-lan .aniItem > a"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ],
+            "children": {
+              "anime-imagem": {
+                "id": null,
+                "tag": "img",
+                "selectors": [
+                  "img"
+                ],
+                "attributes": [
+                  "src",
+                  "alt"
+                ]
+              },
+              "anime-legenda": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniCC"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              },
+              "anime-nome": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniItemNome"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              }
+            }
+          },
+          "lista-episodios": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              ".epiContainer .epiItem > a"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ],
+            "children": {
+              "episodio-imagem": {
+                "id": null,
+                "tag": "img",
+                "selectors": [
+                  "img"
+                ],
+                "attributes": [
+                  "src",
+                  "alt"
+                ]
+              },
+              "episodio-legenda": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".epiCC"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              },
+              "episodio-nome": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".epiItemNome"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        "head": {}
       },
-      "anime-details": {
-        "isEnable": true,
-        "parser-declaration": {},
-        "api-settings": {
-          "baseUrl": "https://www.anitube.news",
-          "path": "/video/{%1%}/",
-          "headers": {
-            "Accept": "application/json"
+      "api-settings": {
+        "baseUrl": "https://www.anitube.news/",
+        "path": "",
+        "method": "get",
+        "headers": {
+          "Accept": "application/json"
+        },
+        "queryParams": {},
+        "body": {}
+      }
+    },
+    "anime-details": {
+      "isEnable": true,
+      "parser-declaration": {
+        "schema": {
+          "version": "0.0.1"
+        },
+        "body": {
+          "anime-title": {
+            "id": null,
+            "tag": "h1",
+            "selectors": [
+              ".pagAniTitulo h1"
+            ],
+            "attributes": [
+              "text"
+            ]
           },
-          "queryParams": {},
-          "body": {}
+          "anime-capa": {
+            "id": null,
+            "tag": "img",
+            "selectors": [
+              "div.animeFlexContainer div.left img"
+            ],
+            "attributes": [
+              "src"
+            ],
+            "children": {}
+          },
+          "anime-sinopse": {
+            "id": "sinopse2",
+            "tag": "div",
+            "selectors": [
+              "sinopse2"
+            ],
+            "attributes": [
+              "text"
+            ]
+          },
+          "anime-episodes": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              "div.pagAniLista div.targetClose a"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ]
+          }
+        },
+        "head": {}
+      },
+      "api-settings": {
+        "baseUrl": "https://www.anitube.news",
+        "path": "/%1%",
+        "method": "get",
+        "headers": {
+          "Accept": "application/json"
+        },
+        "queryParams": {},
+        "body": {}
+      }
+    },
+    "anime-video-details": {
+      "isEnable": true,
+      "parser-declaration": {
+        "schema": {
+          "version": "0.0.1"
+        },
+        "body": {
+          "video-titulo": {
+            "id": null,
+            "tag": "h1",
+            "selectors": [
+              "div.pagEpiTitulo h1"
+            ],
+            "attributes": [
+              "text"
+            ]
+          },
+          "video-link": {
+            "id": null,
+            "tag": "iframe",
+            "selectors": [
+              "iframe.metaframe.rptss.no-lazy"
+            ],
+            "attributes": [
+              "src"
+            ]
+          },
+          "video-anterior-detalhe": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              ".pagEpiGroupControles > a:not([id]):not(.listaPagAni)"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ]
+          },
+          "video-seguinte-detalhe": {
+            "id": "proximoEPLink",
+            "tag": "a",
+            "selectors": [
+              "a"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ]
+          },
+          "video-anime-detalhe": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              "a.listaPagAni"
+            ],
+            "attributes": [
+              "href"
+            ]
+          }
+        },
+        "head": {}
+      },
+      "api-settings": {
+        "baseUrl": "https://www.anitube.news",
+        "path": "/video/%1%",
+        "method": "get",
+        "headers": {
+          "Accept": "application/json"
+        },
+        "queryParams": {},
+        "body": {}
+      }
+    },
+    "anime-list": {
+      "isEnable": true,
+      "api-settings": {
+        "baseUrl": "https://www.anitube.news",
+        "path": "/page/%1%",
+        "method": "get",
+        "headers": {
+          "Accept": "application/json"
+        },
+        "queryParams": {},
+        "body": {}
+      },
+      "parser-declaration": {
+        "schema": {
+          "version": "0.0.1"
+        },
+        "body": {
+          "lista-animes": {
+            "id": null,
+            "tag": "a",
+            "selectors": [
+              ".aniItem > a"
+            ],
+            "attributes": [
+              "href",
+              "title"
+            ],
+            "children": {
+              "anime-imagem": {
+                "id": null,
+                "tag": "img",
+                "selectors": [
+                  "img"
+                ],
+                "attributes": [
+                  "src",
+                  "alt"
+                ]
+              },
+              "anime-nome": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniItemNome"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              },
+              "anime-legenda": {
+                "id": null,
+                "tag": null,
+                "selectors": [
+                  ".aniCC"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              }
+            }
+          },
+          "paginacao": {
+            "id": null,
+            "tag": "div",
+            "selectors": [
+              "div.paginacao "
+            ],
+            "attributes": [],
+            "children": {
+              "pagina-atual": {
+                "id": null,
+                "tag": "span",
+                "selectors": [
+                  "span.page-numbers.current"
+                ],
+                "attributes": [
+                  "text"
+                ]
+              },
+              "paginas-disponiveis": {
+                "selectors": [
+                  ".paginacao a.page-numbers:not(.prev):not(.next)"
+                ],
+                "attributes": [
+                  "text",
+                  "href"
+                ]
+              }
+            }
+          }
         }
-        
       }
     }
   }

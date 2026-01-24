@@ -1,8 +1,14 @@
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
+import 'package:anime_app/src/core/domain/models/content/animestore_content_settings.model.dart';
+import 'package:anime_app/src/core/domain/models/features/animestore_features.dart';
 import 'package:mobx/mobx.dart';
 
-part 'SearchStore.g.dart';
+import '../../../../core/domain/models/animestore_content_item.model.dart';
+import '../../../../core/domain/models/content/animestore_content_feed_page.model.dart';
+import '../../../../core/domain/models/http/animestore_http_request.model.dart';
+import '../../../../core/infrastructure/datasource/animestore_content_datasource.dart';
+
+part 'search_store.g.dart';
 
 enum SearchState { SEARCHING, DONE, ERROR, NONE }
 
@@ -12,6 +18,9 @@ abstract class _SearchStore with Store {
   static const PAGE_LOAD_NUMBER = 2;
 
   final ApplicationStore applicationStore;
+  final AnimestoreContentDatasource<
+          Future<AnimestoreContentFeedPage<List<AnimestoreContentItem>>>>
+      _animesDataSource;
 
   String currentQuery = '';
 
@@ -23,12 +32,12 @@ abstract class _SearchStore with Store {
   bool isLoadingMore = false;
 
   @observable
-  ObservableList<AnimeItem> searchItemList = ObservableList();
+  ObservableList<AnimestoreContentItem> searchItemList = ObservableList();
 
   @observable
   SearchState searchState = SearchState.NONE;
 
-  _SearchStore(this.applicationStore);
+  _SearchStore(this.applicationStore, this._animesDataSource);
 
   //@action setQueryText(String text) => currentQuery = text;
 
@@ -36,10 +45,11 @@ abstract class _SearchStore with Store {
   setLoadingMore(bool flag) => isLoadingMore = flag;
 
   @action
-  addSearchItemList(List<AnimeItem> data) => searchItemList.addAll(data);
+  addSearchItemList(List<AnimestoreContentItem> data) =>
+      searchItemList.addAll(data);
 
   @action
-  setSearchItems(List<AnimeItem> data) =>
+  setSearchItems(List<AnimestoreContentItem> data) =>
       searchItemList = ObservableList.of(data);
 
   @action
@@ -68,27 +78,27 @@ abstract class _SearchStore with Store {
 
     try {
       setSearchStatus(SearchState.SEARCHING);
-      List<AnimeItem> results = [];
+      List<AnimestoreContentItem> results = [];
 
       if (_pageNumberToLoad <= _maxPageNumber) {
         var pageInfo = await _loadData(currentQuery, _pageNumberToLoad);
         _pageNumberToLoad++;
-        _maxPageNumber = int.parse(pageInfo.maxPageNumber);
+        _maxPageNumber = pageInfo.maxPage;
 
-        results.addAll(pageInfo.animes);
+        results.addAll(pageInfo.content);
 
         if ((_pageNumberToLoad + PAGE_LOAD_NUMBER) <= _maxPageNumber) {
           for (var i = 0; i < PAGE_LOAD_NUMBER; i++) {
             var pageData = await _loadData(currentQuery, _pageNumberToLoad);
             _pageNumberToLoad++;
-            results.addAll(pageData.animes);
+            results.addAll(pageData.content);
           }
         }
         setSearchItems(results);
       }
 
       setSearchStatus(SearchState.DONE);
-    } on CrawlerApiException catch (ex) {
+    } on Exception catch (ex) {
       print(ex);
       setSearchStatus(SearchState.ERROR);
     }
@@ -100,32 +110,41 @@ abstract class _SearchStore with Store {
     if (_pageNumberToLoad <= _maxPageNumber) {
       try {
         setLoadingMore(true);
-        List<AnimeItem> results = [];
+        List<AnimestoreContentItem> results = [];
 
         for (var i = 0; i < 2; i++) {
           var pageData = await _loadData(currentQuery, _pageNumberToLoad);
           _pageNumberToLoad++;
-          results.addAll(pageData.animes);
+          results.addAll(pageData.content);
         }
         setLoadingMore(false);
         this.addSearchItemList(results);
-      } on CrawlerApiException catch (ex) {
+      } on Exception catch (ex) {
         print(ex);
         setLoadingMore(false);
       }
     }
   }
 
-  Future<AnimeListPageInfo> _loadData(String query, int number) async {
-    var searchPage;
-    if (query.length == 1)
-      searchPage = await applicationStore.api.getAnimeListPageData(
-        startsWith: query,
-        pageNumber: number,
-      );
-    else
-      searchPage = await applicationStore.api.search(query, pageNumber: number);
+  Future<AnimestoreContentFeedPage> _loadData(String query, int number) {
+    final featureSettings =
+        applicationStore.getFeatureSettings(AnimestoreFeature.animeSearch);
 
-    return searchPage;
+    return _animesDataSource.exec(AnimeStoreContentSettingsImpl(
+        declaration: featureSettings.parserDeclaration,
+        request: AnimeStoreRequestParametrizedBuilder.build(
+            setting: featureSettings.apiSettings,
+            queryParams: [query],
+            pathParams: ['$number'])));
+    // var searchPage;
+    // if (query.length == 1)
+    //   searchPage = await applicationStore.api.getAnimeListPageData(
+    //     startsWith: query,
+    //     pageNumber: number,
+    //   );
+    // else
+    //   searchPage = await applicationStore.api.search(query, pageNumber: number);
+
+    // return searchPage;
   }
 }

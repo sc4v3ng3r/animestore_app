@@ -1,4 +1,5 @@
 enum AnimestoreFeature {
+  animeSearch('anime-search'),
   animeFeed('anime-list'),
   animeDetails('anime-details');
 

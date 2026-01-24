@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'SearchStore.dart';
+part of 'search_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -29,13 +29,13 @@ mixin _$SearchStore on _SearchStore, Store {
       Atom(name: '_SearchStore.searchItemList', context: context);
 
   @override
-  ObservableList<AnimeItem> get searchItemList {
+  ObservableList<AnimestoreContentItem> get searchItemList {
     _$searchItemListAtom.reportRead();
     return super.searchItemList;
   }
 
   @override
-  set searchItemList(ObservableList<AnimeItem> value) {
+  set searchItemList(ObservableList<AnimestoreContentItem> value) {
     _$searchItemListAtom.reportWrite(value, super.searchItemList, () {
       super.searchItemList = value;
     });
@@ -72,7 +72,7 @@ mixin _$SearchStore on _SearchStore, Store {
   }
 
   @override
-  dynamic addSearchItemList(List<AnimeItem> data) {
+  dynamic addSearchItemList(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_SearchStoreActionController.startAction(
         name: '_SearchStore.addSearchItemList');
     try {
@@ -83,7 +83,7 @@ mixin _$SearchStore on _SearchStore, Store {
   }
 
   @override
-  dynamic setSearchItems(List<AnimeItem> data) {
+  dynamic setSearchItems(List<AnimestoreContentItem> data) {
     final _$actionInfo = _$_SearchStoreActionController.startAction(
         name: '_SearchStore.setSearchItems');
     try {

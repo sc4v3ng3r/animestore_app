@@ -1,29 +1,28 @@
 import 'package:anime_app/generated/l10n.dart';
-import 'package:anime_app/logic/stores/search_store/SearchStore.dart';
+import 'package:anime_app/src/features/anime_search/presenter/controller/search_store.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
-import '../utils/UiUtils.dart';
+import '../../../../core/domain/models/animestore_content_item.model.dart';
+import '../../../../core/external/global_declarations.dart';
+import '../../../../../ui/utils/UiUtils.dart';
 
-class SearchWidget extends StatefulWidget {
+class AnimestoreSearchWidget extends StatefulWidget {
   @override
-  _SearchWidgetState createState() => _SearchWidgetState();
+  _AnimestoreSearchWidgetState createState() => _AnimestoreSearchWidgetState();
 }
 
-class _SearchWidgetState extends State<SearchWidget> {
+class _AnimestoreSearchWidgetState extends State<AnimestoreSearchWidget> {
   late ScrollController _controller;
   final TextEditingController _searchController =
       TextEditingController(text: '');
-  late SearchStore searchStore;
+  final SearchStore searchStore = getIt();
   late S locale;
 
   @override
   void initState() {
     super.initState();
-    searchStore = Provider.of<SearchStore>(context, listen: false);
     _controller =
         ScrollController(initialScrollOffset: searchStore.searchListOffset);
     _controller.addListener(_pagination);
@@ -170,7 +169,7 @@ class _SearchWidgetState extends State<SearchWidget> {
         ),
       );
 
-  Widget _buildGrid(List<AnimeItem> items, Size size) {
+  Widget _buildGrid(List<AnimestoreContentItem> items, Size size) {
     final double itemHeight = (size.height - kToolbarHeight - 24) / 2.5;
     final double itemWidth = size.width / 2;
     return SliverPadding(

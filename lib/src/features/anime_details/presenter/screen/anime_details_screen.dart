@@ -6,7 +6,6 @@ import 'package:anime_app/src/core/domain/models/animestore_anime_details.model.
 import 'package:anime_app/src/core/domain/models/animestore_content_item.model.dart';
 import 'package:anime_app/src/core/domain/models/features/animestore_features.dart';
 import 'package:anime_app/ui/component/notification/CustomListNotification.dart';
-import 'package:anime_app/ui/component/video/VideoWidget.dart';
 import 'package:anime_app/ui/theme/ColorValues.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:anime_app/ui/component/ItemView.dart';
+import '../../../../../ui/pages/VideoPlayerScreen.dart';
 import '../../../../core/external/global_declarations.dart';
 import '../../../../../ui/utils/UiUtils.dart';
 
@@ -270,8 +270,9 @@ class _AnimeDetailsScreen extends State<AnimeDetailsScreen>
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => VideoWidget(
-                                          episodeId: episodeId,
+                                    builder: (context) => VideoPlayerScreen(
+                                          episodeUri: detailsStore.animeDetails
+                                              .episodes[index].pageUrl,
                                         )));
                           },
                           child: Observer(

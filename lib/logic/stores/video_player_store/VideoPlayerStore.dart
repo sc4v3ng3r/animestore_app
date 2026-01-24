@@ -1,6 +1,5 @@
 import 'package:anime_app/logic/Constants.dart';
 import 'package:anime_app/logic/stores/application/ApplicationStore.dart';
-import 'package:anitube_crawler_api/anitube_crawler_api.dart';
 import 'package:mobx/mobx.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async' as NativeAsync;
@@ -66,18 +65,19 @@ abstract class _VideoPlayerStore with Store {
     _setPlayingStatus(controller!.value.isPlaying);
   }
 
-  void loadEpisodeDetails(String episodeId) async {
+  void loadEpisodeDetails(String episodeUri) async {
     if (episodeLoadingStatus == EpisodeStatus.DOWNLOADING) return;
 
     try {
-      print('Loading episode $episodeId');
+      final uri = Uri.parse(episodeUri);
+      print('Loading episode ${uri.path}');
       setEpisodeLoadingStatus(EpisodeStatus.DOWNLOADING);
 
       final feat = appStore.appSettings.features['anime-video-details'];
       if (feat != null) {
         final dataSource = getIt<AnitubeEpisodeVideoDatasourceImpl>();
         final httpRequest = AnimeStoreRequestParametrizedBuilder.build(
-            setting: feat.apiSettings, pathParams: [episodeId]);
+            setting: feat.apiSettings, pathParams: [uri.path]);
 
         currentEpisode = await dataSource.exec(AnimeStoreContentSettingsImpl(
             declaration: feat.parserDeclaration, request: httpRequest));
@@ -114,18 +114,17 @@ abstract class _VideoPlayerStore with Store {
         playOrPause();
 
         appStore.addWatchedEpisode(
-          episodeId,
+          episodeUri,
           episodeTitle: currentEpisode!.title,
           viewedAt: DateTime.now().millisecond,
         );
       }
-    } on CrawlerApiException catch (ex) {
-      print(ex);
-      _handleVideoLoadingException();
     }
-
     // handling timeout exception
     on NativeAsync.TimeoutException catch (ex) {
+      print(ex);
+      _handleVideoLoadingException();
+    } catch (ex) {
       print(ex);
       _handleVideoLoadingException();
     }

@@ -46,8 +46,11 @@ class AnitubeFeedDto
       currentPage = int.tryParse(currentText ?? '') ?? -1;
 
       // 2) maxPage -> ultimo item de paginas-disponiveis
-      final List<dynamic> pages =
-          (children['paginas-disponiveis'] as List<dynamic>?) ?? const [];
+      final availablePages = children['paginas-disponiveis'];
+
+      final List<dynamic> pages = availablePages is Map
+          ? [availablePages]
+          : (availablePages as List<dynamic>?) ?? const [];
 
       if (pages.isNotEmpty) {
         final last = Map<String, dynamic>.from(pages.last);
@@ -55,11 +58,6 @@ class AnitubeFeedDto
         final lastText = last['attributes']?['text']?.toString();
 
         maxPage = int.tryParse(lastText ?? '') ?? currentPage;
-
-        // Se só houver 1 item, max = current
-        if (pages.length == 1) {
-          maxPage = currentPage;
-        }
       } else {
         // Sem paginas-disponiveis, mas com pagina-atual
         maxPage = currentPage;
@@ -69,7 +67,7 @@ class AnitubeFeedDto
     return AnitubeFeedDto(
       content: content,
       currentPage: currentPage,
-      maxPage: maxPage,
+      maxPage: maxPage < currentPage ? currentPage : maxPage,
     );
   }
 }

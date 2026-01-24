@@ -39,10 +39,6 @@ abstract class _ApplicationStore with Store {
 
   bool isFirstHomePageView = true;
 
-  // This list holds the anime feed list.
-  @observable
-  ObservableList<AnimestoreContentItem> feedAnimeList = ObservableList();
-
   @observable
   ObservableList<AnimestoreContentItem> mostRecentAnimeList = ObservableList();
 
@@ -66,8 +62,6 @@ abstract class _ApplicationStore with Store {
   ObservableList<AnimestoreContentItem> latestEpisodes = ObservableList();
 
   /// counter of main animes list pages.
-  int mainAnimesPageCounter = 1;
-  int maxMainAnimesPageNumber = 1;
   int mainCarouselCurrentPosition = 1;
 
   @observable
@@ -114,9 +108,6 @@ abstract class _ApplicationStore with Store {
   @action
   setLatestEpisodes(List<AnimestoreContentItem> data) =>
       latestEpisodes = ObservableList.of(data);
-
-  @action
-  addAnimeItem(List<AnimestoreContentItem> data) => feedAnimeList.addAll(data);
 
   @action
   setAppInitialization(AppInitStatus status) => appInitStatus = status;

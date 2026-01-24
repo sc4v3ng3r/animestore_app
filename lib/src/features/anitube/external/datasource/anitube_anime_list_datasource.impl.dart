@@ -6,12 +6,12 @@ import '../../../../core/infrastructure/http/animestore_http_client.dart';
 import '../../../../core/infrastructure/parser/animestore_content_parser.dart';
 import '../../domain/anime/anitube_feed_dto.model.dart';
 
-class AnitubeAnimeFeedDatasourceImpl extends AnimestoreContentDatasource<
+class AnitubeAnimeListDatasourceImpl extends AnimestoreContentDatasource<
     Future<AnimestoreContentFeedPage<List<AnimestoreContentItem>>>> {
   final AnimestoreHttpClient _httpClient;
   final AnimestoreContentParser _parser;
 
-  AnitubeAnimeFeedDatasourceImpl(this._httpClient, this._parser);
+  AnitubeAnimeListDatasourceImpl(this._httpClient, this._parser);
 
   @override
   Future<AnimestoreContentFeedPage<List<AnimestoreContentItem>>> exec(

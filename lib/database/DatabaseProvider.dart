@@ -5,6 +5,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:anime_app/model/EpisodeWatched.dart';
 
+import '../src/core/domain/models/animestore_content_item.model.dart';
+
 class DatabaseProvider {
   late Database _db;
   static const String _DB_NAME = 'AnimeAppDB.db';
@@ -117,7 +119,7 @@ class DatabaseProvider {
 
   Future<int> clearAllMyList() => _db.delete(_TABLE_MY_LIST);
 
-  Future<int> insertAnimeToList(String id, AnimeItem data) async {
+  Future<int> insertAnimeToList(String id, AnimestoreContentItem data) async {
     return _db.insert(
       _TABLE_MY_LIST,
       {_ID: id, _DATA: json.jsonEncode(dataToJson(data))},
@@ -129,18 +131,18 @@ class DatabaseProvider {
     return _db.delete(_TABLE_MY_LIST, where: '$_ID =?', whereArgs: [id]);
   }
 
-  Future<Map<String, AnimeItem>> loadMyAnimeList() async {
-    var list = await _db.query(_TABLE_MY_LIST);
-    Map<String, AnimeItem> dataMap = {};
+  // Future<Map<String, AnimeItem>> loadMyAnimeList() async {
+  //   var list = await _db.query(_TABLE_MY_LIST);
+  //   Map<String, AnimeItem> dataMap = {};
 
-    list.forEach((data) => dataMap.putIfAbsent(data[_ID].toString(), () {
-          Map<String, dynamic> map =
-              Map.from(json.jsonDecode(data[_DATA] as String));
-          map[ID] = '${map[ID]}';
-          return AnimeItem.fromJson(map);
-        }));
-    return dataMap;
-  }
+  //   list.forEach((data) => dataMap.putIfAbsent(data[_ID].toString(), () {
+  //         Map<String, dynamic> map =
+  //             Map.from(json.jsonDecode(data[_DATA] as String));
+  //         map[ID] = '${map[ID]}';
+  //         return AnimeItem.fromJson(map);
+  //       }));
+  //   return dataMap;
+  // }
 
   void deleteDb() async {
     var databasesPath = await getDatabasesPath();
@@ -154,7 +156,7 @@ class DatabaseProvider {
   static const TITLE = "title";
   static const CC = "closeCaption";
 
-  static Map<String, dynamic> dataToJson(AnimeItem item) => {
+  static Map<String, dynamic> dataToJson(AnimestoreContentItem item) => {
         ID: int.parse(item.id),
         PAGE_URL: item.pageUrl,
         IMAGE_URL: item.imageUrl,

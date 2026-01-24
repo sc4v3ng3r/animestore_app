@@ -68,7 +68,7 @@ class RecentEpisodeListPage extends StatelessWidget {
                     imageUrl: data[index].imageUrl,
                     fontSize: 18,
                     fontColor: Colors.white,
-                    onTap: () => _playEpisode(context, data[index].id),
+                    onTap: () => _playEpisode(context, data[index].pageUrl),
                   );
                 },
                 childCount: data.length,
@@ -85,7 +85,7 @@ class RecentEpisodeListPage extends StatelessWidget {
         context,
         CupertinoPageRoute(
             builder: (context) => VideoPlayerScreen(
-                  episodeId: episodeId,
+                  episodeUri: episodeId,
                 )));
   }
 }
